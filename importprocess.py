@@ -10,6 +10,8 @@ import java.lang.Exception
 
 from org.gvsig.fmap.dal import DALLocator
 
+from addons.RSUPAC2019Importer.dbwriter import DBWriter
+
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_EXPEDIENTES
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_EXPLOTACIONES
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_ORIGEN_ANIMALES
@@ -22,26 +24,71 @@ from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_RECINTOS_SIGPAC_AS
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_RECINTOS_SIGPAC_CH
 
+#
+# Quitar esta clase y sustituirla por el import de tu lector del xml
+# Ojo que preciso de los tres metodos.
+#from addons.RSUPAC2019Importer.xmlreader import XMLReader
+class XMLReader(object):
+  def __init__(self):
+    self.dbwriter = None
+    self.count = 0
+
+  def close(self):
+    pass
+
+  def getCount(self, xmlfile):
+    # xmlfile as File
+    self.count = 0
+    f = open(xmlfile.getAbsolutePath(),"r")
+    for line in f.xreadlines():
+      if "</rsu>" in line.lower():
+        self.count += 1
+    f.close()
+    return self.count
+  
+  def parse(self, dbwriter, xmlfile): 
+    # xmlfile as File
+    # Cada vez que encuentra el tag </RSU> llama a self.status.incrementCurrentValue()
+    self.dbwriter = dbwriter
+    v = dict()
+    v["CA_Expediente"] = "17"
+    v["ProvExpediente"] = "46"
+    v["CRExpediente"] = "000"
+    v["NumExpediente"] = "104622002446"
+    v["Fregistro"] = "2019-04-23"
+    v["Fmodificacion"] = "2019-04-23"
+    v["TitComp_Solicitante"] = "N"
+    v["Extran_Conyuge_Solicitud"] = "S"
+    for n in xrange(self.count):
+      v["CRExpediente"] = "%03d" % n
+      self.dbwriter.insert("RSUPAC2019_EXPEDIENTES", **v)
+      self.status.incrementCurrentValue()
+    
 
 class ImportProcess(Runnable):
   def __init__(self, source, target, status):
     self.source = source
     self.target = target
     self.status = status
+    
+    self.server = None
+    self.dbwriter = None
+    self.xmlreader = None
 
   def run(self):
     try:
-      count = 12+12
-      
-      self.status.setRangeOfValues(0,count)
-      self.status.setCurValue(0)
-      
       dataManager = DALLocator.getDataManager()
       self.workspace = dataManager.createDatabaseWorkspaceManager(self.target)
       self.server = dataManager.openServerExplorer(
           self.target.getExplorerName(),
           self.target
       )
+      self.xmlreader = XMLReader()
+
+      count = 12+12+self.xmlreader.getCount(self.source)
+      
+      self.status.setRangeOfValues(0,count)
+      self.status.setCurValue(0)
 
       self.status.message("Creando espacio de trabajo")
       self.workspace.create("SRUPAC2019","SRU PAC 2019 (db)")
@@ -49,50 +96,28 @@ class ImportProcess(Runnable):
       self.createTables()
       self.addTablesToWorkspace()
 
-      #
-      # Aqui:
-      # - Crear el escritor en BBDD
-      # - Crear el lector del XML 
-      # - que parsee 
-      #
-      # Por ejemplo:
-      #
-      # dbwriter = SRUPACDBWriter(self.server, self.status)
-      # xmlreader = SRUPACXMLReader()
-      # xmlreader.parse(dbwriter)
-      #
-      # El SRUPACDBWriter y SRUPACXMLReader los pasaria a modulos aparte 
-      # y arriba pondria los imports
-      # Cuidado en ellos que no estamos en el thread de swing, no podemos
-      # tocar el GUI.
-      #
-      # En el dbwriter puedes obtener los stores con:
-      # params = self.server.get("RSUPAC2019_R10_PARCELAS")
-      # store = dataManager.openStore(params.getProviderName(),params) 
-      #
-              
+      self.dbwriter = DBWriter(self.server, self.status)
+
+      self.dbwriter.edit()
+      self.status.message("Cargando...")
+      self.xmlreader.parse(self.dbwriter, self.source)
+      self.dbwriter.finishEditing()
+      
       self.status.message("Importacion completada")
       self.status.terminate()
 
-    except java.lang.Exception, ex:
-      print "Error creating tables", str(ex)
-      traceback.print_exc()
-      self.status.message("ERROR. " + self.status.getTitle())
-      self.status.abort()
-
-    except Exception, ex:
-      print "Error creating tables", str(ex)
-      traceback.print_exc()
-      
-      self.status.message("ERROR. " + self.status.getTitle())
-      self.status.abort()
     except:
-      print "Error creating tables"
+      print "Error importing data"
       traceback.print_exc()
-      self.status.message("ERROR. " + self.status.getTitle())
+      self.status.setTitle("ERROR. " + self.status.getTitle())
       self.status.abort()
+      if self.dbwriter!=None:
+        self.dbwriter.cancelEditing()
+
     finally:
-      pass
+      if self.xmlreader!=None:
+        self.xmlreader.close()
+      
 
   def createTables(self):
     for tableName, add_attributes in (
@@ -136,6 +161,6 @@ class ImportProcess(Runnable):
 
 def createImportProcess(source, target, status):
   return ImportProcess(source, target, status)
-  
+
 def main(*args):
     pass

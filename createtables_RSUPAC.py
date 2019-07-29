@@ -972,14 +972,14 @@ def add_fields_RSUPAC2019_EXPLOTACIONES(ft):
   # RSU/Solicitud/OtrosDatos/Explotaciones
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
-  add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
+  add_TipoNumExpdiente(ft, "NumExpediente")\
     .setIsIndexed(True)\
     .setLabel("Expediente")\
     .setAllowNull(False)\
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
-    .set("foreingkey.code","NUM_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.code","NumExpediente")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
 
   add_TipoCodREGA(ft, "CodREGA")
@@ -990,14 +990,14 @@ def add_fields_RSUPAC2019_ORIGEN_ANIMALES(ft):
   # RSU/Solicitud/OtrosDatos/OrigenAnimales
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
-  add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
+  add_TipoNumExpdiente(ft, "NumExpediente")\
     .setIsIndexed(True)\
     .setLabel("Expediente")\
     .setAllowNull(False)\
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
-    .set("foreingkey.code","NUM_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.code","NumExpediente")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
   add_TipoCodREGA(ft, "CodREGA")
 
@@ -1007,14 +1007,14 @@ def add_fields_RSUPAC2019_AYUDA_SOL_AD(ft):
   # RSU/Solicitud/ResumenSol/Linea_AyudaSolAD
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
-  add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
+  add_TipoNumExpdiente(ft, "NumExpediente")\
     .setIsIndexed(True)\
     .setLabel("Expediente")\
     .setAllowNull(False)\
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
-    .set("foreingkey.code","NUM_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.code","NumExpediente")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
   add_TipoLineaAD(ft, "Codigo_lineaAD")\
     .setLabel(u"Linea de ayuda AD solicitada")\
@@ -1029,14 +1029,14 @@ def add_fields_RSUPAC2019_AYUDA_SOL_PDR(ft):
   # RSU/Solicitud/ResumenSol/Linea_AyudaSolPDR
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
-  add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
+  add_TipoNumExpdiente(ft, "NumExpediente")\
     .setIsIndexed(True)\
     .setLabel("Expediente")\
     .setAllowNull(False)\
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
-    .set("foreingkey.code","NUM_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.code","NumExpediente")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
   add_TipoLineaPDR(ft, "Codigo_lineaPDR")\
     .setLabel(u"Linea de ayuda PDR solicitada")\
@@ -1055,7 +1055,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
   add_TipoCCAA(ft, "CA_Expediente")
   add_TipoProvincia(ft, "ProvExpediente")
   add_TipoCentroReceptor(ft, "CRExpediente")
-  add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
+  add_TipoNumExpdiente(ft, "NumExpediente")\
     .setIsPrimaryKey(True)\
     .setLabel("Num. expediente")
   add_TipoFecha(ft, "Fregistro")\
@@ -1191,7 +1191,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "RSUPAC2019_EXPEDIENTES_EXPLOTACIONES", 
     "ID", 
     ("ID", "CodREGA"), 
-    "FEATURES('RSUPAC2019_EXPEDIENTES_EXPLOTACIONES',FORMAT('NUM_EXPEDIENTE = ''%s''',NUM_EXPEDIENTE))"
+    "FEATURES('RSUPAC2019_EXPEDIENTES_EXPLOTACIONES',FORMAT('NumExpediente = ''%s''',NumExpediente))"
   )\
   .setGroup(u"REGA Explotacion")
   
@@ -1213,7 +1213,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "RSUPAC2019_ORIGEN_ANIMALES", 
     "ID", 
     ("ID", "CodREGA"), 
-    "FEATURES('RSUPAC2019_ORIGEN_ANIMALES',FORMAT('NUM_EXPEDIENTE = ''%s''',NUM_EXPEDIENTE))"
+    "FEATURES('RSUPAC2019_ORIGEN_ANIMALES',FORMAT('NumExpediente = ''%s''',NumExpediente))"
   )\
   .setGroup(u"REGA Explotacion (Orig. animales)")\
   .setDescription(u"Código REGA de la explotación origen de los animales")
@@ -1265,7 +1265,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "RSUPAC2019_AYUDA_SOL_AD", 
     "ID", 
     ("ID", "Codigo_LineaAD", "SupDeclarada_LineaAD"), 
-    "FEATURES('RSUPAC2019_AYUDA_SOL_AD',FORMAT('NUM_EXPEDIENTE = ''%s''',NUM_EXPEDIENTE))"
+    "FEATURES('RSUPAC2019_AYUDA_SOL_AD',FORMAT('NumExpediente = ''%s''',NumExpediente))"
   )\
   .setGroup("Ayudas AD")
 
@@ -1276,7 +1276,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "RSUPAC2019_AYUDA_SOL_PDR", 
     "ID", 
     ("ID", "Codigo_LineaPDR"), 
-    "FEATURES('RSUPAC2019_AYUDA_SOL_PDR',FORMAT('NUM_EXPEDIENTE = ''%s''',NUM_EXPEDIENTE))"
+    "FEATURES('RSUPAC2019_AYUDA_SOL_PDR',FORMAT('NumExpediente = ''%s''',NumExpediente))"
   )\
   .setGroup("Ayudas PDR")
 
@@ -1286,8 +1286,8 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "R10_Parcelas", 
     "RSUPAC2019_R10_PARCELAS", 
     "ID_PARCELA", 
-    ("NUM_EXPEDIENTE", "PA_NumOrdem", "PA_SupTotalDec", "PA_Producto"), 
-    "FEATURES('RSUPAC2019_R10_PARCEAS',FORMAT('NUM_EXPEDIENTE = ''%s''',NUM_EXPEDIENTE))"
+    ("NumExpediente", "PA_NumOrdem", "PA_SupTotalDec", "PA_Producto"), 
+    "FEATURES('RSUPAC2019_R10_PARCEAS',FORMAT('NumExpediente = ''%s''',NumExpediente))"
   )\
   .setGroup("Parcelas")
 
@@ -1301,18 +1301,18 @@ def add_fields_RSUPAC2019_R10_PARCELAS(ft):
   # RSU/Parcelas/R10_Parcelas
   # pag 12 - circular 2
   
-  # ID_PARCELA = "%20.20s%05d" % (NUM_EXPEDIENTE,PA_NumOrden)
+  # ID_PARCELA = "%20.20s%05d" % (NumExpediente,PA_NumOrden)
   ft.add("ID_PARCELA", "String", 25)\
     .setIsPrimaryKey(True)\
     .setLabel("Id. parcela")
-  add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
+  add_TipoNumExpdiente(ft, "NumExpediente")\
     .setIsIndexed(True)\
     .setLabel("Expediente")\
     .setAllowNull(False)\
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
-    .set("foreingkey.code","NUM_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.code","NumExpediente")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
 
   add_TipoNumeroOrden(ft, "PA_NumOrdem")\
