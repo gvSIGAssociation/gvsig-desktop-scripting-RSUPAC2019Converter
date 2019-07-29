@@ -29,7 +29,8 @@ from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_
 # Ojo que preciso de los tres metodos.
 #from addons.RSUPAC2019Importer.xmlreader import XMLReader
 class XMLReader(object):
-  def __init__(self):
+  def __init__(self, status):
+    self.status = status
     self.dbwriter = None
     self.count = 0
 
@@ -56,11 +57,12 @@ class XMLReader(object):
     v["CRExpediente"] = "000"
     v["NumExpediente"] = "104622002446"
     v["Fregistro"] = "2019-04-23"
-    v["Fmodificacion"] = "2019-04-23"
+    v["Fmodificacion"] = "2019-05-24"
     v["TitComp_Solicitante"] = "N"
     v["Extran_Conyuge_Solicitud"] = "S"
     for n in xrange(self.count):
       v["CRExpediente"] = "%03d" % n
+      v["NumExpediente"] = "10462200244%d" % n
       self.dbwriter.insert("RSUPAC2019_EXPEDIENTES", **v)
       self.status.incrementCurrentValue()
     
@@ -83,7 +85,7 @@ class ImportProcess(Runnable):
           self.target.getExplorerName(),
           self.target
       )
-      self.xmlreader = XMLReader()
+      self.xmlreader = XMLReader(self.status)
 
       count = 12+12+self.xmlreader.getCount(self.source)
       
