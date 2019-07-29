@@ -66,6 +66,10 @@ class ImportProcess(Runnable):
       # Cuidado en ellos que no estamos en el thread de swing, no podemos
       # tocar el GUI.
       #
+      # En el dbwriter puedes obtener los stores con:
+      # params = self.server.get("RSUPAC2019_R10_PARCELAS")
+      # store = dataManager.openStore(params.getProviderName(),params) 
+      #
               
       self.status.message("Importacion completada")
       self.status.terminate()
