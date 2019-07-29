@@ -30,6 +30,8 @@ Tablas a crear en el esquema "public":
 #
 from gvsig import geom
 
+from org.gvsig.fmap.geom import Geometry
+
 from org.gvsig.tools.dynobject import DynObjectValueItem
 
 def setAvailableValues(attr, *values):
@@ -50,7 +52,13 @@ def add_relatedFeatures(ft, name, table, tablekey, tablecolumns, expression):
   tags.set("DAL.RelatedFeatures.Unique.Field.Name",tablekey)
   return x
 
-
+def foreingkey(attr, table, code, label):
+  attr.set("foreingkey",True)
+  attr.set("foreingkey.table",table)
+  attr.set("foreingkey.code",code)
+  attr.set("foreingKey.Label",label)
+  attr.set("foreingkey.closedlist",False)
+  return attr
 #
 # ============================================
 #
@@ -331,10 +339,10 @@ def add_TipoLineaAD(ft, name):
     .setShortLabel(u"AD")\
     .setDescription(u"Codigo de la linea de ayuda AD")
   setAvailableValues(x, 
-    ( "1", u"1 Régimen de Pago Básico"),
-    ( "2", u"2 Pago para prácticas beneficiosas para el clima y el medio ambiente (Greening)"),
-    ( "6", u"6 Pago para jóvenes agricultores"),
-    ( "9", u"9 Régimen de Pequeños agricultores"),
+    (   "1", u"001 Régimen de Pago Básico"),
+    (   "2", u"002 Pago para prácticas beneficiosas para el clima y el medio ambiente (Greening)"),
+    (   "6", u"006 Pago para jóvenes agricultores"),
+    (   "9", u"009 Régimen de Pequeños agricultores"),
     ( "201", u"201 Ayuda asociada al cultivo del arroz"),
     ( "202", u"202 Ayuda asociada a los cultivos proteicos"),
     ( "203", u"203 Ayuda asociada a los frutos de cáscara y las algarrobas"),
@@ -411,8 +419,8 @@ def add_TipoRecintoCompleto(ft, name):
     .setShortLabel(u"Rec. Compl.")\
     .setDescription(u"Tipo Recinto Completo")
   setAvailableValues(x, 
-    (1, u"Linea de declaracion ocupa toda la extension del recinto"),
-    (0, u"Linea de declaracion ocupa parte de la extension del recinto")
+    (1, u"1 - Linea de declaracion ocupa toda la extension del recinto"),
+    (0, u"0 - Linea de declaracion ocupa parte de la extension del recinto")
   )
   return x 
     
@@ -423,11 +431,11 @@ def add_TipoDestinoProduccion(ft, name):
     .setShortLabel(u"Dest. prod.")\
     .setDescription(u"Destino de la produccion")
   setAvailableValues(x, 
-    ("1", u"Consumo en fresco"),
-    ("2", u"Procesamiento industrial"),
-    ("3", u"Semillas o plantulas con fines comerciales"),
-    ("4", u"Energias renovables"),
-    ("5", u"Abonado en verde")
+    ("1", u"1 - Consumo en fresco"),
+    ("2", u"2 - Procesamiento industrial"),
+    ("3", u"3 - Semillas o plantulas con fines comerciales"),
+    ("4", u"4 - Energias renovables"),
+    ("5", u"5 - Abonado en verde")
   )
   return x 
   
@@ -437,9 +445,9 @@ def add_TipoSistCultivoHorticolas(ft, name):
     .setShortLabel(u"Sist. cultivo")\
     .setDescription(u"Sistema de cultivo empleado")
   setAvailableValues(x, 
-    ("1", u"Aire libre"),
-    ("2", u"Malla"),
-    ("3", u"Cubierta bajo plastico o invernadero")
+    ("1", u"1 - Aire libre"),
+    ("2", u"2 - Malla"),
+    ("3", u"3 - Cubierta bajo plastico o invernadero")
   )
   return x 
     
@@ -470,12 +478,12 @@ def add_TipoRegimenTenencia(ft, name):
     .setShortLabel(u"Reg. tenencia")\
     .setDescription(u"Regimen de tTnencia")
   setAvailableValues(x, 
-    ("1", u"Propiedad"),
-    ("2", u"Arrendamiento"),
-    ("3", u"Aparceria"),
-    ("4", u"Usufructo"),
-    ("5", u"Asignacion de superficie por parte de un bien comunal"),
-    ("6", u"Aparceria comunal")
+    ("1", u"1 - Propiedad"),
+    ("2", u"2 - Arrendamiento"),
+    ("3", u"3 - Aparceria"),
+    ("4", u"4 - Usufructo"),
+    ("5", u"5 - Asignacion de superficie por parte de un bien comunal"),
+    ("6", u"6 - Aparceria comunal")
   )
   return x 
 
@@ -492,36 +500,36 @@ def add_TipoUsosSIGPAC(ft, name):
     .setShortLabel(u"Uso SIGPAC")\
     .setDescription(u"Uso SIGPAC")
   setAvailableValues(x, 
-    ("AG", u"CORRIENTES Y SUPERFICIES DE AGUA"),
-    ("CA", u"VIALES"),
-    ("CF", u"CITRICOS - FRUTAL"),
-    ("CI", u"CITRICOS"),
-    ("CS", u"CITRICOS - FRUTAL DE CASCARA"),
-    ("CV", u"CITRICOS - VINIEDO"),
-    ("ED", u"EDIFICACIONES"),
-    ("EP", u"ELEMENTO DEL PAISAJE"),
-    ("FF", u"FRUTAL DE CASCARA - FRUTAL"),
-    ("FL", u"ASOCIACION FRUTAL DE CASCARA-OLIVAR"),
-    ("FO", u"FORESTAL"),
-    ("FS", u"FRUTAL DE CASCARA"),
-    ("FV", u"ASOCIACION FRUTAL DE CASCARA-VINIEDO"),
-    ("FY", u"FRUTAL"),
-    ("IM", u"IMPRODUCTIVOS"),
-    ("IV", u"INVERNADEROS Y CULTIVOS BAJO PLASTICO"),
-    ("OC", u"OLIVAR - CITRICOS"),
-    ("OF", u"ASOCIACION OLIVAR-FRUTAL"),
-    ("OV", u"OLIVAR"),
-    ("PA", u"PASTO CON ARBOLADO"),
-    ("PR", u"PASTO ARBUSTIVO"),
-    ("PS", u"PASTIZAL"),
-    ("TA", u"TIERRA ARABLE"),
-    ("TH", u"HUERTA"),
-    ("VF", u"ASOCIACION FRUTAL-VINIEDO"),
-    ("VI", u"VINIEDO"),
-    ("VO", u"ASOCIACION OLIVAR-VINIEDO"),
-    ("ZC", u"ZONA CONCENTRADA NO REFLEJADA EN LA ORTOFOTO"),
-    ("ZU", u"ZONA URBANA"),
-    ("ZV", u"ZONA CENSURADA")
+    ("AG", u"AG - CORRIENTES Y SUPERFICIES DE AGUA"),
+    ("CA", u"CA - VIALES"),
+    ("CF", u"CF - CITRICOS - FRUTAL"),
+    ("CI", u"CI - CITRICOS"),
+    ("CS", u"CS - CITRICOS - FRUTAL DE CASCARA"),
+    ("CV", u"CV - CITRICOS - VINIEDO"),
+    ("ED", u"ED - EDIFICACIONES"),
+    ("EP", u"EP - ELEMENTO DEL PAISAJE"),
+    ("FF", u"FF - FRUTAL DE CASCARA - FRUTAL"),
+    ("FL", u"FL - ASOCIACION FRUTAL DE CASCARA-OLIVAR"),
+    ("FO", u"FO - FORESTAL"),
+    ("FS", u"FS - FRUTAL DE CASCARA"),
+    ("FV", u"FV - ASOCIACION FRUTAL DE CASCARA-VINIEDO"),
+    ("FY", u"FY - FRUTAL"),
+    ("IM", u"IM - IMPRODUCTIVOS"),
+    ("IV", u"IV - INVERNADEROS Y CULTIVOS BAJO PLASTICO"),
+    ("OC", u"OC - OLIVAR - CITRICOS"),
+    ("OF", u"OF - ASOCIACION OLIVAR-FRUTAL"),
+    ("OV", u"OV - OLIVAR"),
+    ("PA", u"PA - PASTO CON ARBOLADO"),
+    ("PR", u"PR - PASTO ARBUSTIVO"),
+    ("PS", u"PS - PASTIZAL"),
+    ("TA", u"TA - TIERRA ARABLE"),
+    ("TH", u"TH - HUERTA"),
+    ("VF", u"VF - ASOCIACION FRUTAL-VINIEDO"),
+    ("VI", u"VI - VINIEDO"),
+    ("VO", u"VO - ASOCIACION OLIVAR-VINIEDO"),
+    ("ZC", u"ZC - ZONA CONCENTRADA NO REFLEJADA EN LA ORTOFOTO"),
+    ("ZU", u"ZU - ZONA URBANA"),
+    ("ZV", u"ZV - ZONA CENSURADA")
   )
   return x 
 
@@ -567,9 +575,9 @@ def add_TipoSemilla(ft, name):
     .setShortLabel(u"Semilla")\
     .setDescription(u"Semilla utilizada")
   setAvailableValues(x, 
-    ("C", u"Certificada"),
-    ("R", u"Reempleo"),
-    ("N", u"Dato no disponible")
+    ("C", u"C - Certificada"),
+    ("R", u"R - Reempleo"),
+    ("N", u"N - Dato no disponible")
   )
   return x
   
@@ -579,8 +587,8 @@ def add_TipoCicloCultivo(ft, name):
     .setShortLabel(u"Cod. producto")\
     .setDescription(u"Ciclo de cultivo")
   setAvailableValues(x, 
-    ("I", u"Invierno"),
-    ("P", u"Primavera"),
+    ("I", u"I - Invierno"),
+    ("P", u"P - Primavera"),
   )
   return x
   
@@ -590,17 +598,17 @@ def add_TipoActividadAgraria(ft, name):
     .setShortLabel(u"Act. agraria")\
     .setDescription(u"Actividad agraria realizada")
   setAvailableValues(x, 
-    ("1", u"Produccion"),
-    ("2", u"Laboreo"),
-    ("3", u"Eliminacion de malas hierbas"),
-    ("4", u"Mantenimiento de cultivos permanentes"),
-    ("5", u"Pastoreo"),
-    ("6", u"Desbroce"),
-    ("7", u"Siega para mantenimiento"),
-    ("8", u"Mantenimiento de drenajes"),
-    ("9", u"Estercolado o fertilizacion"),
-    ("10", u"Mantenimiento/Establecimiento de una cubierta vegetal en barbechos"),
-    ("11", u"Siega para la produccion de hierba"),
+    ( "1", u"01 - Produccion"),
+    ( "2", u"02 - Laboreo"),
+    ( "3", u"03 - Eliminacion de malas hierbas"),
+    ( "4", u"04 - Mantenimiento de cultivos permanentes"),
+    ( "5", u"05 - Pastoreo"),
+    ( "6", u"06 - Desbroce"),
+    ( "7", u"07 - Siega para mantenimiento"),
+    ( "8", u"08 - Mantenimiento de drenajes"),
+    ( "9", u"09 - Estercolado o fertilizacion"),
+    ("10", u"10 - Mantenimiento/Establecimiento de una cubierta vegetal en barbechos"),
+    ("11", u"11 - Siega para la produccion de hierba"),
   )
   return x
 
@@ -959,30 +967,55 @@ def add_TipoCoordenada(ft, name):
 #
 
 def add_fields_RSUPAC2019_EXPLOTACIONES(ft):
+  ft.setLabel("RSU PAC 2019 - Explotaciones")
+
   # RSU/Solicitud/OtrosDatos/Explotaciones
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
   add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
     .setIsIndexed(True)\
-    .setLabel("Num. expediente")
+    .setLabel("Expediente")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
+    .set("foreingkey.code","NUM_EXPEDIENTE")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.closedlist",False)
+
   add_TipoCodREGA(ft, "CodREGA")
 
 def add_fields_RSUPAC2019_ORIGEN_ANIMALES(ft):
+  ft.setLabel("RSU PAC 2019 - Explotaciones de origen animal")
+
   # RSU/Solicitud/OtrosDatos/OrigenAnimales
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
   add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
     .setIsIndexed(True)\
-    .setLabel("Num. expediente")
+    .setLabel("Expediente")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
+    .set("foreingkey.code","NUM_EXPEDIENTE")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.closedlist",False)
   add_TipoCodREGA(ft, "CodREGA")
 
 def add_fields_RSUPAC2019_AYUDA_SOL_AD(ft):
+  ft.setLabel("RSU PAC 2019 - Ayudas solicitadas AD")
+
   # RSU/Solicitud/ResumenSol/Linea_AyudaSolAD
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
   add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
     .setIsIndexed(True)\
-    .setLabel("Num. expediente")
+    .setLabel("Expediente")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
+    .set("foreingkey.code","NUM_EXPEDIENTE")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.closedlist",False)
   add_TipoLineaAD(ft, "Codigo_lineaAD")\
     .setLabel(u"Linea de ayuda AD solicitada")\
     .setShortLabel(u"AD")\
@@ -991,12 +1024,20 @@ def add_fields_RSUPAC2019_AYUDA_SOL_AD(ft):
     .setDescription("Superficie para cada uno de los regímenes de ayuda. Número entero expresado en áreas.")
 
 def add_fields_RSUPAC2019_AYUDA_SOL_PDR(ft):
+  ft.setLabel("RSU PAC 2019 - Ayudas solicitadas PDR")
+
   # RSU/Solicitud/ResumenSol/Linea_AyudaSolPDR
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
   add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
     .setIsIndexed(True)\
-    .setLabel("Num. expediente")
+    .setLabel("Expediente")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
+    .set("foreingkey.code","NUM_EXPEDIENTE")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.closedlist",False)
   add_TipoLineaPDR(ft, "Codigo_lineaPDR")\
     .setLabel(u"Linea de ayuda PDR solicitada")\
     .setShortLabel(u"PDR")\
@@ -1004,6 +1045,11 @@ def add_fields_RSUPAC2019_AYUDA_SOL_PDR(ft):
 
 
 def add_fields_RSUPAC2019_EXPEDIENTES(ft):
+  ft.setLabel("RSU PAC 2019 - Expedientes")
+  
+  tags = ft.getTags()
+  tags.set("dynform.width",700)
+  
   # RSU
   add_TipoCampania(ft, "Ano") 
   add_TipoCCAA(ft, "CA_Expediente")
@@ -1247,6 +1293,11 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
 
 
 def add_fields_RSUPAC2019_R10_PARCELAS(ft):
+  ft.setLabel("RSU PAC 2019 - R10 Parcelas")
+  
+  tags = ft.getTags()
+  tags.set("dynform.width",500)
+  
   # RSU/Parcelas/R10_Parcelas
   # pag 12 - circular 2
   
@@ -1256,7 +1307,13 @@ def add_fields_RSUPAC2019_R10_PARCELAS(ft):
     .setLabel("Id. parcela")
   add_TipoNumExpdiente(ft, "NUM_EXPEDIENTE")\
     .setIsIndexed(True)\
-    .setLabel("Num. expediente")
+    .setLabel("Expediente")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
+    .set("foreingkey.code","NUM_EXPEDIENTE")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NUM_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingkey.closedlist",False)
 
   add_TipoNumeroOrden(ft, "PA_NumOrdem")\
     .setLabel(u"Numero de Orden")\
@@ -1307,13 +1364,24 @@ def add_fields_RSUPAC2019_R10_PARCELAS(ft):
 
 
 def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
+  ft.setLabel("RSU PAC 2019 - Recintos SIGPAC")
+  
+  tags = ft.getTags()
+  tags.set("dynform.width",700)
+  
   # RSU/Parcelas/R10_Parcelas/LD_RecintoSIGPAC
   ft.add("ID_RECINTO", "Integer")\
     .setIsPrimaryKey(True)\
     .setLabel("Id. recinto")
   ft.add("ID_PARCELA", "Integer")\
     .setIsIndexed(True)\
-    .setLabel("Id. parcela")
+    .setLabel("Parcela")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_R10_PARCELAS")\
+    .set("foreingkey.code","ID_PARCELA")\
+    .set("foreingKey.Label","FORMAT('%s %f %s %s',ID_PARCELA,PA_SupTotalDec, PA_Producto, PA_Variedad)")\
+    .set("foreingkey.closedlist",False)
     
   add_TipoLineaDeclaracionRecinto(ft, "LineaDeclaracion")\
     .setLabel(u"Linea de Declaracion de Recinto")\
@@ -1464,8 +1532,8 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
   # en el xsd solo aparece un ID_AGPC
   # TODO: label
   add_TipoCIFNIFNIE(ft, "ID_AGPC")\
-    .setLabel(u"ID")\
-    .setShortLabel(u"ID")\
+    .setLabel(u"CIF (AGPC)")\
+    .setShortLabel(u"CIF (AGPC)")\
     .setDescription(u"Datos de la autoridad Gestora del Pastro declarado en comun")
     
   # RSU/Parcelas/R10_Parcelas/LD_RecintoSIGPAC/LD_Linea_AyudaSolAD
@@ -1492,7 +1560,6 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
     .setLabel(u"Producto (CS)")\
     .setShortLabel(u"Producto (CS)")\
     .setDescription(u"Producto (CS)")\
-    .setGroup("Ayudas (CS)")\
     .getTags().set("dynform.separator","Cultivo Secundario")
   add_TipoVariedad(ft, "VariedadCS")\
     .setLabel(u"Variedad (CS)")\
@@ -1505,7 +1572,7 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
   
   # RSU/Parcelas/R10_Parcelas/LD_RecintoSIGPAC/CultivoSecundario/AyudaSecundario
   add_relatedFeatures(ft, 
-    "LD_Linea_AyudaSolPDR", 
+    "AyudaSecundario", 
     "RSUPAC2019_RECINTOS_SIGPAC_AS", 
     "ID", 
     ("ID", "ID_RECINTO", "AyudaSolicitadaSecundario"), 
@@ -1541,14 +1608,27 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
     
   add_TipoRecintoCompleto(ft, "Completo")
 
+  x = ft.add("GEOMETRY","Geometry")\
+    .setGeometryType(Geometry.TYPES.MULTIPOLYGON, Geometry.SUBTYPES.GEOM2D)\
+    .setSRS(u'EPSG:4326')\
+    .setHidden(True)
+
 def add_fields_RSUPAC2019_RECINTOS_SIGPAC_CH(ft):
+  ft.setLabel("RSU PAC 2019 - Cultivos horticolas")
+
   # RSU/Parcelas/R10_Parcelas/LD_RecintoSIGPAC
 
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
   ft.add("ID_RECINTO", "Integer")\
     .setIsIndexed(True)\
-    .setLabel("Id. recinto")
+    .setLabel("Recinto")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_R10_PARCELAS")\
+    .set("foreingkey.code","ID_RECINTO")\
+    .set("foreingKey.Label","FORMAT('%d %s %d %d',ID_RECINTO,RefCatastral, Completo,SupRecintoDec)")\
+    .set("foreingkey.closedlist",False)
   
   add_TipoProducto(ft, "ProductoCH")\
     .setLabel(u"Producto (CH)")\
@@ -1560,12 +1640,20 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC_CH(ft):
     .setDescription(u"Variedad (Cultivo horticola)")
   
 def add_fields_RSUPAC2019_RECINTOS_SIGPAC_AS(ft):
+  ft.setLabel("RSU PAC 2019 - Ayudas solicitadas secundarias")
+
   # RSU/Parcelas/R10_Parcelas/LD_RecintoSIGPAC
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
   ft.add("ID_RECINTO", "Integer")\
     .setIsIndexed(True)\
-    .setLabel("Id. recinto")
+    .setLabel("Recinto")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_R10_PARCELAS")\
+    .set("foreingkey.code","ID_RECINTO")\
+    .set("foreingKey.Label","FORMAT('%d %s %d %d',ID_RECINTO,RefCatastral, Completo,SupRecintoDec)")\
+    .set("foreingkey.closedlist",False)
   
   #campo 55
   add_TipoLineaADSecundario(ft, "AyudaSolicitadaSecundario")\
@@ -1574,11 +1662,19 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC_AS(ft):
     .setDescription(u"Ayuda solicitada del cultivo secundario")
 
 def add_fields_RSUPAC2019_RECINTOS_SIGPAC_PDR(ft):
+  ft.setLabel("RSU PAC 2019 - Ayudas recinto PDR")
+
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
   ft.add("ID_RECINTO", "Integer")\
     .setIsIndexed(True)\
-    .setLabel("Id. recinto")
+    .setLabel("Recinto")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_R10_PARCELAS")\
+    .set("foreingkey.code","ID_RECINTO")\
+    .set("foreingKey.Label","FORMAT('%d %s %d %d',ID_RECINTO,RefCatastral, Completo,SupRecintoDec)")\
+    .set("foreingkey.closedlist",False)
 
   #campo 50
   add_TipoLineaPDR(ft, "LD_LineaSolicitadaPDR")\
@@ -1592,11 +1688,19 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC_PDR(ft):
     .setDescription(u"Superficie solicitada por linea de ayuda PDR multi-registro")
 
 def add_fields_RSUPAC2019_RECINTOS_SIGPAC_AD(ft):
+  ft.setLabel("RSU PAC 2019 - Ayudas recinto AD")
+
   ft.add("ID", "Integer")\
     .setIsPrimaryKey(True)
   ft.add("ID_RECINTO", "Integer")\
     .setIsIndexed(True)\
-    .setLabel("Id. recinto")
+    .setLabel("Recinto")\
+    .setAllowNull(False)\
+    .set("foreingkey",True)\
+    .set("foreingkey.table","RSUPAC2019_R10_PARCELAS")\
+    .set("foreingkey.code","ID_RECINTO")\
+    .set("foreingKey.Label","FORMAT('%d %s %d %d',ID_RECINTO,RefCatastral, Completo,SupRecintoDec)")\
+    .set("foreingkey.closedlist",False)
         
   #campo 49
   add_TipoLineaAD(ft, "AyudaRecinto")\
