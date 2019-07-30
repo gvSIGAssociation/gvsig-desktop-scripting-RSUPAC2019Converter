@@ -25,6 +25,7 @@ from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_RECINTOS_SIGPAC_CH
 
 from addons.RSUPAC2019Importer.createviews import createViews
+from addons.RSUPAC2019Importer.parserRSU import RSUGrafParser
 
 #
 # TODO: Quitar esta clase y sustituirla por el import del lector real del xml
@@ -94,7 +95,7 @@ class ImportProcess(Runnable):
           self.target.getExplorerName(),
           self.target
       )
-      self.xmlreader = XMLReader(self.status)
+      self.xmlreader = RSUGrafParser(self.status)
 
       count = 12+12+self.xmlreader.getCount(self.source)
       
