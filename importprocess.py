@@ -25,8 +25,8 @@ from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_RECINTOS_SIGPAC_CH
 
 #
-# Quitar esta clase y sustituirla por el import de tu lector del xml
-# Ojo que preciso de los tres metodos.
+# TODO: Quitar esta clase y sustituirla por el import del lector del xml
+# Ojo que es necesario que implemente los metodos: close(), getCount(xmlfile) y parse(dbwriter, xmlfile)
 #from addons.RSUPAC2019Importer.xmlreader import XMLReader
 class XMLReader(object):
   def __init__(self, status):
@@ -35,10 +35,14 @@ class XMLReader(object):
     self.count = 0
 
   def close(self):
+    # Se la llama cuando se termina de usar el lecto de xml
+    # para que cierre/libere los recursos que pueda estar usando
     pass
 
   def getCount(self, xmlfile):
-    # xmlfile as File
+    # Recive un File a un XML y devuelve cuantas entidades SRU hay
+    # en el fichero XML.
+    # Patatera, pero esta implementacion puede servirnos.
     self.count = 0
     f = open(xmlfile.getAbsolutePath(),"r")
     for line in f.xreadlines():
@@ -48,8 +52,11 @@ class XMLReader(object):
     return self.count
   
   def parse(self, dbwriter, xmlfile): 
-    # xmlfile as File
-    # Cada vez que encuentra el tag </RSU> llama a self.status.incrementCurrentValue()
+    # Recive un DBWriter y un File al XML y parsea el XML
+    # llamando al writer para escribir los datos en la BBDD
+    # Cada vez que lee un registo SRU debe llamar a self.status.incrementCurrentValue()
+
+    # Esta implementacion es para poder probar el dbwriter.
     self.dbwriter = dbwriter
     v = dict()
     v["CA_Expediente"] = "17"
