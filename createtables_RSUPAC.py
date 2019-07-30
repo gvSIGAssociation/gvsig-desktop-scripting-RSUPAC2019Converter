@@ -1608,11 +1608,14 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
     
   add_TipoRecintoCompleto(ft, "Completo")
 
+  # TODO: Hay que recuperar el campo geometria
+  """
   x = ft.add("GEOMETRY","Geometry")\
     .setGeometryType(Geometry.TYPES.MULTIPOLYGON, Geometry.SUBTYPES.GEOM2D)\
     .setSRS(u'EPSG:4326')\
     .setHidden(True)
-
+  """
+  
 def add_fields_RSUPAC2019_RECINTOS_SIGPAC_CH(ft):
   ft.setLabel("RSU PAC 2019 - Cultivos horticolas")
 

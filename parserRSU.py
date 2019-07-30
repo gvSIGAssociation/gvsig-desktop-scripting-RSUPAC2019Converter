@@ -11,10 +11,12 @@ from org.xmlpull.v1 import XmlPullParserException
 from org.xmlpull.v1 import XmlPullParserFactory
 from java.io import File, FileInputStream
 from org.gvsig.tools import ToolsLocator
+from org.gvsig.fmap.crs import CRSFactory
 
 class RSUInsertFeatures(object):
   def __init__(self):
     pass
+    
   def insert(self, nombretabla, **params):
     #if nombretabla == "R10_Parcelas":
     print "@@@@@@@ INSERT IN ", nombretabla, " VALUES:", params
@@ -49,6 +51,7 @@ class RSUGrafParser(object):
         self.count += 1
     f.close()
     return self.count
+    
   def rewind(self):
     factory = XmlPullParserFactory.newInstance(ToolsLocator.getInstance().getXmlPullParserFactoryClassNames(),None)
     self.parser = factory.newPullParser()
@@ -59,8 +62,8 @@ class RSUGrafParser(object):
     return self.done
 
   def open(self):
-    ScriptingUtils.log(ScriptingUtils.WARN, "Loading file xml "+ self.fname)
-    self.resource = FileInputStream(File(self.fname))
+    ScriptingUtils.log(ScriptingUtils.WARN, "Loading file xml "+ self.fname.getName())
+    self.resource = FileInputStream(self.fname)
     self.parser.setInput(self.resource, None);
     ScriptingUtils.log(ScriptingUtils.WARN, "File loaded.")
     self.initValues()
@@ -88,13 +91,14 @@ class RSUGrafParser(object):
     self.num_CultivosHorticolas = 0
     self.num_PA_NumOrden = 0
   def checkAndTransformWKT(self, wkt, srid):
+    return None
     geom = None
     if wkt!=None:
       if "EMPTY" in wkt:
         #ScriptingUtils.log(ScriptingUtils.WARN, "La geometria no es valida en %s:%s, el poligono esta vacio" % (self.num_expediente, self.num_parcela))
         pass
       else:
-        geom = GeometryUtils.createFrom(wkt, srid)
+        geom = GeometryUtils.createFrom(wkt, "EPSG:4326")#+srid)
         if geom!=None and not geom.isValid():
           #status = geom.getValidationStatus()
           #msg = status.getMessage()
@@ -103,6 +107,8 @@ class RSUGrafParser(object):
       
       if geom!=None and not isinstance(geom,MultiPolygon):
         geom = geom.toPolygons()
+      if geom!=None:
+        geom.setProjection(CRSFactory.getCRS("EPSG:4326"))#"+srid))
     return geom
 
   def dicR10_Parcelas(self):
@@ -165,7 +171,7 @@ class RSUGrafParser(object):
             self.insertLinea_AyudaSolAD()
           else:
             self.insertActualTag(dicRSU)
-          #print "nexttag: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
+          print "nexttag: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
 
           self.parser.nextTag()
           if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()!="R00_Solicitud":
@@ -180,7 +186,7 @@ class RSUGrafParser(object):
       elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R10_Parcelas":
         print "######## R10 PARCELAS"
         dicValuesR10_Parcelas = self.dicR10_Parcelas()
-        #print "R10 Init Parcelas. start:", self.parser.getEventType() == XmlPullParser.START_TAG, " end: ",self.parser.getEventType() == XmlPullParser.END_TAG, "name: ", self.parser.getName()
+        print "R10 Init Parcelas. start:", self.parser.getEventType() == XmlPullParser.START_TAG, " end: ",self.parser.getEventType() == XmlPullParser.END_TAG, "name: ", self.parser.getName()
         self.parser.nextTag() # pasa el <R10_Parcelas>
         while True:
           #print "R10 Parcelas. start:", self.parser.getEventType() == XmlPullParser.START_TAG, " end: ",self.parser.getEventType() == XmlPullParser.END_TAG, "name: ", self.parser.getName()
@@ -197,7 +203,7 @@ class RSUGrafParser(object):
           #print "last here: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
           #print dicValuesR10_Parcelas
           if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="R10_Parcelas":
-            self.insertFactory.insert("R10_Parcelas", **dicValuesR10_Parcelas)
+            self.insertFactory.insert("RSUPAC2019_R10_PARCELAS", **dicValuesR10_Parcelas)
             dicValuesR10_Parcelas = self.dicR10_Parcelas()
           if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="R10_Parcelas": # Cuando siguen tags despues de unbounded
             pass
@@ -244,7 +250,7 @@ class RSUGrafParser(object):
       if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="RSU":
         break
     print "Insert RSU"
-    self.insertFactory.insert("RSU", **dicRSU)
+    self.insertFactory.insert("RSUPAC2019_EXPEDIENTES", **dicRSU)
     print "# END RSU"
   def dicLD_RecintoSIGPAC(self):
     dic = {"ID_RECINTO": self.num_LD_RecintoSIGPAC, "ID_PARCELA":self.num_R10_Parcelas}
@@ -288,7 +294,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
-        self.insertFactory.insert("LD_RecintoSIGPAC", **dicValues)
+        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC", **dicValues)
         if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_RecintoSIGPAC": # Si hay otro del unbounded
           self.parser.nextTag()
         else:
@@ -328,6 +334,7 @@ class RSUGrafParser(object):
       dic["GEOMETRY"] = g
       print "GEOMETRY:", g
     #self.parser.nextTag()
+    
   def dicAyudaSecundario(self):
     dic = {"ID": self.num_AyudaSecundario, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_AyudaSecundario+=1
@@ -358,7 +365,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
-        self.insertFactory.insert("AyudaSecundario", **dicValues)
+        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC_AS", **dicValues)
         if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="AyudaSecundario": # Si hay otro del unbounded
           dicValues = self.dicAyudaSecundario()
           self.parser.nextTag()
@@ -398,7 +405,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
-        self.insertFactory.insert("CultivosHorticolas", **dicValues)
+        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC_CH", **dicValues)
         if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="CultivosHorticolas": # Si hay otro del unbounded
           dicValues = self.dicCultivosHorticolas()
           self.parser.nextTag()
@@ -438,7 +445,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
-        self.insertFactory.insert("LD_Linea_AyudaSolPDR", **dicValues)
+        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC_PDR", **dicValues)
         if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_Linea_AyudaSolPDR": # Si hay otro del unbounded
           dicValues = self.dicLD_Linea_AyudaSolPDR()
           self.parser.nextTag()
@@ -478,7 +485,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
-        self.insertFactory.insert("LD_Linea_AyudaSolAD", **dicValues)
+        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC_AD", **dicValues)
         if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_Linea_AyudaSolAD": # Si hay otro del unbounded
           dicValues = self.dicLD_Linea_AyudaSolAD()
           self.parser.nextTag()
@@ -518,7 +525,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
-        self.insertFactory.insert("Linea_AyudaSolAD", **dicValues)
+        self.insertFactory.insert("RSUPAC2019_AYUDA_SOL_AD", **dicValues)
         if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Linea_AyudaSolAD": # Si hay otro del unbounded
           dicValues = self.dicLinea_AyudaSolAD()
           self.parser.nextTag()
@@ -559,7 +566,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
-        self.insertFactory.insert("Explotaciones", **dicValues)
+        self.insertFactory.insert("RSUPAC2019_EXPLOTACIONES", **dicValues)
         if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Explotaciones": # Si hay otro del unbounded
           dicValues = self.dicExplotaciones()
           self.parser.nextTag()
@@ -596,7 +603,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
-        self.insertFactory.insert("OrigenAnimales", **dicValues)
+        self.insertFactory.insert("RSUPAC2019_ORIGEN_ANIMALES", **dicValues)
         dicValues = self.dicLinea_OrigenAnimales()
         if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="OrigenAnimales": # Si hay otro del unbounded
           self.parser.nextTag()
@@ -635,8 +642,8 @@ class RSUGrafParser(object):
 
     # Esta implementacion es para poder probar el dbwriter.
     self.insertFactory = dbwriter
-    self.xml = xmlfile
-    
+    self.fname = xmlfile
+    self.open()
     self.read()
       
 def main():

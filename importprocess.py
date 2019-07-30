@@ -106,7 +106,7 @@ class ImportProcess(Runnable):
       self.workspace.create("SRUPAC2019","SRU PAC 2019 (db)")
 
       self.createTables()
-      createViews(self.server)
+      #createViews(self.server)
       self.addTablesToWorkspace()
 
       self.status.message("Cargando...")

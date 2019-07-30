@@ -69,13 +69,15 @@ class DBWriter(object):
   def insert(self, tableName, **values):
     store = self.getStore(tableName)
     print "### insert(%r, %r)" % (tableName, values)
-    
+   
     featureType = store.getDefaultFeatureType()
     f = store.createNewFeature()
     for name, value in values.iteritems():
       attrdesc = featureType.get(name)
       if attrdesc == None:
-        raise Exception("No existe el campo %r in la tabla %r" % (name, tableName))
+        #raise Exception("No existe el campo %r in la tabla %r" % (name, tableName))
+        print "ERROR: No existe el campo %r in la tabla %r" % (name, tableName)
+        return 
       if value!=None and attrdesc.getType()==DataTypes.BOOLEAN:
         if value.lower()=="s":
           f.set(name,True)
