@@ -24,6 +24,8 @@ from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_RECINTOS_SIGPAC_AS
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_RECINTOS_SIGPAC_CH
 
+from addons.RSUPAC2019Importer.createviews import createViews
+
 #
 # TODO: Quitar esta clase y sustituirla por el import del lector real del xml
 # Ojo que es necesario que implemente los metodos: close(), getCount(xmlfile) y parse(dbwriter, xmlfile)
@@ -103,6 +105,7 @@ class ImportProcess(Runnable):
       self.workspace.create("SRUPAC2019","SRU PAC 2019 (db)")
 
       self.createTables()
+      createViews(self.server)
       self.addTablesToWorkspace()
 
       self.status.message("Cargando...")
@@ -162,6 +165,7 @@ class ImportProcess(Runnable):
       "RSUPAC2019_RECINTOS_SIGPAC_PDR",
       "RSUPAC2019_RECINTOS_SIGPAC_AS",
       "RSUPAC2019_RECINTOS_SIGPAC_CH",
+      "RSUPAC2019_RSU_PARCELAS_RECINTOS",
       ):
       self.status.message("Actualizando espacio de trabajo ("+tableName+")")
       self.status.incrementCurrentValue()
