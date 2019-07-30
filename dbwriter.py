@@ -44,28 +44,31 @@ class DBWriter(object):
   def edit(self):
     for tableName in self.getStoreNames():
       store = self.getStore(tableName)
-      print "%s.edit()" % tableName
-      store.edit(1)
+      print "### edit(%r)" % tableName
+      if not store.isEditing():
+        store.edit()
       
   def finishEditing(self):
     for tableName in self.getStoreNames():
       store = self.getStore(tableName)
-      print "%s.finishEditing()" % tableName
-      store.finishEditing()
+      print "### finishEditing(%r)" % tableName
+      if store.isEditing():
+        store.finishEditing()
 
   def cancelEditing(self):
     for tableName in self.getStoreNames():
       try:
         store = self.getStore(tableName)
-        print "%s.cancelEditing()" % tableName
-        store.cancelEditing()
+        print "### cancelEditing(%r)" % tableName
+        if store.isEditing():
+          store.cancelEditing()
       except:
         print "Error cancelEditing table '"+tableName+"'."
         traceback.print_exc()
 
   def insert(self, tableName, **values):
     store = self.getStore(tableName)
-    print "insert(%r, %r)" % (tableName, values)
+    print "### insert(%r, %r)" % (tableName, values)
     
     featureType = store.getDefaultFeatureType()
     f = store.createNewFeature()

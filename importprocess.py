@@ -25,7 +25,7 @@ from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_RECINTOS_SIGPAC_CH
 
 #
-# TODO: Quitar esta clase y sustituirla por el import del lector del xml
+# TODO: Quitar esta clase y sustituirla por el import del lector real del xml
 # Ojo que es necesario que implemente los metodos: close(), getCount(xmlfile) y parse(dbwriter, xmlfile)
 #from addons.RSUPAC2019Importer.xmlreader import XMLReader
 class XMLReader(object):
@@ -35,7 +35,7 @@ class XMLReader(object):
     self.count = 0
 
   def close(self):
-    # Se la llama cuando se termina de usar el lecto de xml
+    # Se la llama cuando se termina de usar el lector de xml
     # para que cierre/libere los recursos que pueda estar usando
     pass
 
