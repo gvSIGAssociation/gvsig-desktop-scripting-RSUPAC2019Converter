@@ -576,6 +576,7 @@ class RSUGrafParser(object):
   def insertLinea_OrigenAnimales(self):
     print "######## R00 SOLICITUD/OTROS DATOS - insertLinea_OrigenAnimales"
     n = 0
+    dicValues = self.dicLinea_OrigenAnimales()
     self.parser.nextTag() # pasa el <R10_Parcelas>
     while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="OrigenAnimales":
       checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
@@ -596,6 +597,7 @@ class RSUGrafParser(object):
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
         self.insertFactory.insert("OrigenAnimales", **dicValues)
+        dicValues = self.dicLinea_OrigenAnimales()
         if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="OrigenAnimales": # Si hay otro del unbounded
           self.parser.nextTag()
         else:
