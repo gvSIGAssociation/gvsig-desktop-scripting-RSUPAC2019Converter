@@ -105,10 +105,10 @@ class ImportProcess(Runnable):
       self.createTables()
       self.addTablesToWorkspace()
 
+      self.status.message("Cargando...")
       self.dbwriter = DBWriter(self.server, self.status)
 
       self.dbwriter.edit()
-      self.status.message("Cargando...")
       self.xmlreader.parse(self.dbwriter, self.source)
       self.dbwriter.finishEditing()
       
