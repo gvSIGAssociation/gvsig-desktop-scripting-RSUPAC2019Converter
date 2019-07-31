@@ -44,14 +44,14 @@ class DBWriter(object):
   def edit(self):
     for tableName in self.getStoreNames():
       store = self.getStore(tableName)
-      print "### edit(%r)" % tableName
+      #print "### edit(%r)" % tableName
       if not store.isEditing():
         store.edit()
       
   def finishEditing(self):
     for tableName in self.getStoreNames():
       store = self.getStore(tableName)
-      print "### finishEditing(%r)" % tableName
+      #print "### finishEditing(%r)" % tableName
       if store.isEditing():
         store.finishEditing()
 
@@ -59,7 +59,7 @@ class DBWriter(object):
     for tableName in self.getStoreNames():
       try:
         store = self.getStore(tableName)
-        print "### cancelEditing(%r)" % tableName
+        #print "### cancelEditing(%r)" % tableName
         if store.isEditing():
           store.cancelEditing()
       except:
@@ -68,16 +68,16 @@ class DBWriter(object):
 
   def insert(self, tableName, **values):
     store = self.getStore(tableName)
-    print "### insert(%r, %r)" % (tableName, values)
+    #print "### insert(%r, %r)" % (tableName, values)
    
     featureType = store.getDefaultFeatureType()
     f = store.createNewFeature()
     for name, value in values.iteritems():
       attrdesc = featureType.get(name)
       if attrdesc == None:
-        #raise Exception("No existe el campo %r in la tabla %r" % (name, tableName))
-        print "ERROR: No existe el campo %r in la tabla %r" % (name, tableName)
-        continue 
+        raise Exception("No existe el campo %r in la tabla %r" % (name, tableName))
+        #print "ERROR: No existe el campo %r in la tabla %r" % (name, tableName)
+        #continue 
       if value!=None and attrdesc.getType()==DataTypes.BOOLEAN:
         if value.lower()=="s":
           f.set(name,True)

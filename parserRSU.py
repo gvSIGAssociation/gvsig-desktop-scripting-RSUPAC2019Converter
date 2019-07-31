@@ -77,7 +77,7 @@ class RSUGrafParser(object):
     ScriptingUtils.log(ScriptingUtils.WARN, "File loaded.")
     self.initValues()
     self.readInitValues()
-    print "# end open"
+    #print "# end open"
 
   def readInitValues(self):
     self.parser.nextTag()
@@ -144,7 +144,7 @@ class RSUGrafParser(object):
         while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="R00_Solicitante":
           self.insertActualTag(dicRSU)
           self.parser.nextTag()
-          if n>5000:
+          if n>1000000:
             print "#3 out of 5000"
             break
           else:
@@ -187,7 +187,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
           if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()!="R00_Solicitud":
             self.parser.nextTag()
-          if n>5000:
+          if n>1000000:
             print "while safety: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
             break
           else:
@@ -232,7 +232,7 @@ class RSUGrafParser(object):
               self.parser.nextTag()
             else:
               break # Si no es otro cambia de bloque
-          if n>5000:
+          if n>1000000:
             break
           else:
             n+=1
@@ -242,7 +242,7 @@ class RSUGrafParser(object):
           self.insertActualTag(dicRSU)
         if "NumExpediente" in dicRSU:
           self.num_RSU = dicRSU["NumExpediente"]
-      if n>5000:
+      if n>1000000:
         print "#2 out of 5000"
         break
       else:
@@ -326,7 +326,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
         else:
           break # Si no es otro cambia de bloque
-      if n>5000:
+      if n>1000000:
         break
       else:
         n+=1
@@ -356,14 +356,14 @@ class RSUGrafParser(object):
     if wkt != None:
       g = self.checkAndTransformWKT(wkt, srid)
       dic["GEOMETRY"] = g
-      print "GEOMETRY:", g
+      #print "GEOMETRY:", g
     
   def dicAyudaSecundario(self):
     dic = {"ID": self.num_AyudaSecundario, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_AyudaSecundario+=1
     return dic
   def insertAyudaSecundario(self):
-    print "######## R10 PARCELAS/LD_RecintoSIGPAC - insertAyudaSecundario"
+    #print "######## R10 PARCELAS/LD_RecintoSIGPAC - insertAyudaSecundario"
     n = 0
     dicValues = self.dicAyudaSecundario()
     self.parser.nextTag() # pasa el <R10_Parcelas>
@@ -395,7 +395,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
         else:
           break # Si no es otro cambia de bloque
-      if n>5000:
+      if n>1000000:
         break
       else:
         n+=1
@@ -406,7 +406,7 @@ class RSUGrafParser(object):
     return dic
 
   def insertCultivosHorticolas(self):
-    print "######## R10 PARCELAS/LD_RecintoSIGPAC - insertCultivosHorticolas"
+    #print "######## R10 PARCELAS/LD_RecintoSIGPAC - insertCultivosHorticolas"
     n = 0
     dicValues = self.dicCultivosHorticolas()
     self.parser.nextTag() # pasa el <R10_Parcelas>
@@ -435,7 +435,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
         else:
           break # Si no es otro cambia de bloque
-      if n>5000:
+      if n>1000000:
         break
       else:
         n+=1
@@ -474,7 +474,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
         else:
           break # Si no es otro cambia de bloque
-      if n>5000:
+      if n>1000000:
         break
       else:
         n+=1
@@ -512,7 +512,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
         else:
           break # Si no es otro cambia de bloque
-      if n>5000:
+      if n>1000000:
         break
       else:
         n+=1
@@ -553,7 +553,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
         else:
           break # Si no es otro cambia de bloque
-      if n>5000:
+      if n>1000000:
         break
       else:
         n+=1
@@ -592,7 +592,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
         else:
           break # Si no es otro cambia de bloque
-      if n>5000:
+      if n>1000000:
         break
       else:
         n+=1
@@ -601,7 +601,7 @@ class RSUGrafParser(object):
     self.num_Linea_OrigenAnimales+=1
     return dic
   def insertLinea_OrigenAnimales(self):
-    print "######## R00 SOLICITUD/OTROS DATOS - insertLinea_OrigenAnimales"
+    #print "######## R00 SOLICITUD/OTROS DATOS - insertLinea_OrigenAnimales"
     n = 0
     dicValues = self.dicLinea_OrigenAnimales()
     self.parser.nextTag() # pasa el <R10_Parcelas>
@@ -627,7 +627,7 @@ class RSUGrafParser(object):
           self.parser.nextTag()
         else:
           break # Si no es otro cambia de bloque
-      if n>5000:
+      if n>1000000:
         break
       else:
         n+=1
