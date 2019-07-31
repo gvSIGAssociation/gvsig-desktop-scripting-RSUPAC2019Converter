@@ -1286,7 +1286,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "R10_Parcelas", 
     "RSUPAC2019_R10_PARCELAS", 
     "ID_PARCELA", 
-    ("NumExpediente", "PA_NumOrdem", "PA_SupTotalDec", "PA_Producto"), 
+    ("NumExpediente", "PA_NumOrden", "PA_SupTotalDec", "PA_Producto"), 
     "FEATURES('RSUPAC2019_R10_PARCEAS',FORMAT('NumExpediente = ''%s''',NumExpediente))"
   )\
   .setGroup("Parcelas")
@@ -1315,7 +1315,7 @@ def add_fields_RSUPAC2019_R10_PARCELAS(ft):
     .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
 
-  add_TipoNumeroOrden(ft, "PA_NumOrdem")\
+  add_TipoNumeroOrden(ft, "PA_NumOrden")\
     .setLabel(u"Numero de Orden")\
     .setShortLabel(u"Num. Orden")\
     .setDescription(u"Numero de orden formateado con ceros a la izquierda.")
