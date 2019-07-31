@@ -56,7 +56,7 @@ class ImportProcess(Runnable):
       self.status.setCurValue(0)
 
       self.status.message("Creando espacio de trabajo")
-      self.workspace.create("SRUPAC2019","SRU PAC 2019 (db)")
+      self.workspace.create("RSUPAC2019","RSU PAC 2019 (db)")
 
       self.createTables()
       createViews(self.server)

@@ -101,7 +101,6 @@ class RSUGrafParser(object):
     self.num_PA_NumOrden = 999
   
   def checkAndTransformWKT(self, wkt, srid):
-    return None
     geom = None
     if wkt!=None:
       if "EMPTY" in wkt:
@@ -257,10 +256,12 @@ class RSUGrafParser(object):
       if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="RSU":
         dicRSU = fixFieldNames(dicRSU)
         self.insertFactory.insert("RSUPAC2019_EXPEDIENTES", **dicRSU)
+        self.status.incrementCurrentValue()
         dicValuesR10_Parcelas = self.dicR10_Parcelas()
       if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="Expedientes_RSU": # Cuando siguen tags despues de unbounded
         dicRSU = fixFieldNames(dicRSU)
         self.insertFactory.insert("RSUPAC2019_EXPEDIENTES", **dicRSU)
+        self.status.incrementCurrentValue()
         break
       if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="RSU": # Cuando siguen tags despues de unbounded
         pass
@@ -352,13 +353,10 @@ class RSUGrafParser(object):
     if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="WKT":
       wkt = self.parser.nextText()
       self.parser.nextTag()
-      #self.parser.nextTag()
     if wkt != None:
       g = self.checkAndTransformWKT(wkt, srid)
-      #TODO: g.setProjection()
-      #dic["GEOMETRY"] = g
+      dic["GEOMETRY"] = g
       print "GEOMETRY:", g
-    #self.parser.nextTag()
     
   def dicAyudaSecundario(self):
     dic = {"ID": self.num_AyudaSecundario, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
