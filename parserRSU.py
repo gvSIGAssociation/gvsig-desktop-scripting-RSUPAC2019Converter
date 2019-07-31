@@ -99,6 +99,7 @@ class RSUGrafParser(object):
     self.num_AyudaSecundario = 0
     self.num_CultivosHorticolas = 0
     self.num_PA_NumOrden = 999
+  
   def checkAndTransformWKT(self, wkt, srid):
     return None
     geom = None
@@ -121,7 +122,6 @@ class RSUGrafParser(object):
     return geom
 
   def dicR10_Parcelas(self):
-    
     dic = {"ID_PARCELA": 999, "NumExpediente":self.num_RSU}
     self.num_R10_Parcelas+=1
     return dic
@@ -210,8 +210,8 @@ class RSUGrafParser(object):
             self.insertActualTag(dicValuesR10_Parcelas)
             if "PA_NumOrden" in dicValuesR10_Parcelas:
               self.num_PA_NumOrden = dicValuesR10_Parcelas["PA_NumOrden"]
-              ID_PARCELA = "%20.20s%05d" % (self.num_RSU,float(self.num_PA_NumOrden))
-              dicValuesR10_Parcelas["ID_PARCELA"]=ID_PARCELA
+              self.ID_PARCELA = "%s%05d" % (self.num_RSU,int(self.num_PA_NumOrden))
+              dicValuesR10_Parcelas["ID_PARCELA"]=self.ID_PARCELA
 
           # Ending while setting new
           #print "last here: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
@@ -278,7 +278,7 @@ class RSUGrafParser(object):
           break # Si no es otro cambia de bloque
        
   def dicLD_RecintoSIGPAC(self): #num_PA_NumOrden
-    dic = {"ID_RECINTO": self.num_LD_RecintoSIGPAC, "ID_PARCELA":self.num_PA_NumOrden} #self.num_R10_Parcelas}
+    dic = {"ID_RECINTO": self.num_LD_RecintoSIGPAC, "ID_PARCELA": self.ID_PARCELA}
     self.num_LD_RecintoSIGPAC+=1
     return dic
   def insertLD_RecintoSIGPAC(self):
@@ -466,7 +466,7 @@ class RSUGrafParser(object):
       else:
         self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_Linea_AyudaSolPDR": # Si hay otro del unbounded
-          self.parser.nextTag()
+        self.parser.nextTag()
       if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
         self.parser.nextTag()
         dicValues = fixFieldNames(dicValues)

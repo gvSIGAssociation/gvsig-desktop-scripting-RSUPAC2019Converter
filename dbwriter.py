@@ -77,7 +77,7 @@ class DBWriter(object):
       if attrdesc == None:
         #raise Exception("No existe el campo %r in la tabla %r" % (name, tableName))
         print "ERROR: No existe el campo %r in la tabla %r" % (name, tableName)
-        return 
+        continue 
       if value!=None and attrdesc.getType()==DataTypes.BOOLEAN:
         if value.lower()=="s":
           f.set(name,True)

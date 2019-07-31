@@ -14,7 +14,7 @@ Tablas a crear en el esquema "public":
 - RSUPAC2019_AYUDA_SOL_AD
 - RSUPAC2019_AYUDA_SOL_PDR
 
-- RSUPAC2019_R10_PARCEAS
+- RSUPAC2019_R10_PARCELAS
 - RSUPAC2019_RECINTOS_SIGPAC (R10_Parcelas/LD_RecintosSIGPAC)
 - RSUPAC2019_RECINTOS_SIGPAC_AD (R10_Parcelas/LD_RecintosSIGPAC/LD_Linea_AyudaSolAD)
 - RSUPAC2019_RECINTOS_SIGPAC_PDR (R10_Parcelas/LD_RecintosSIGPAC/LD_Linea_AyudaSolPDR)
@@ -1074,7 +1074,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
   add_TipoApellido(ft, "Apellido2_Solicitante")\
     .setLabel("Apellido 2")
   add_TipoFecha(ft, "Fnacimiento_Solicitante")\
-    .setLabel("fecha nacimiento")\
+    .setLabel("Fecha nacimiento")\
     .setShortLabel("F. nacimiento")
   add_TipoSexo(ft, "Sexo_Solicitante") 
   add_TipoDireccion(ft, "Direccion_Solicitante")
@@ -1187,11 +1187,11 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
   
   # RSU/Solicitud/OtrosDatos/Explotaciones/CodREGA
   add_relatedFeatures(ft, 
-    "Explotaiones_OD_Solicitud", 
-    "RSUPAC2019_EXPEDIENTES_EXPLOTACIONES", 
+    "Explotaciones_OD_Solicitud", 
+    "RSUPAC2019_EXPLOTACIONES", 
     "ID", 
     ("ID", "CodREGA"), 
-    "FEATURES('RSUPAC2019_EXPEDIENTES_EXPLOTACIONES',FORMAT('NumExpediente = ''%s''',NumExpediente))"
+    "FEATURES('RSUPAC2019_EXPLOTACIONES',FORMAT('NumExpediente = ''%s''',NumExpediente))"
   )\
   .setGroup(u"REGA Explotacion")
   
@@ -1287,7 +1287,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "RSUPAC2019_R10_PARCELAS", 
     "ID_PARCELA", 
     ("NumExpediente", "PA_NumOrden", "PA_SupTotalDec", "PA_Producto"), 
-    "FEATURES('RSUPAC2019_R10_PARCEAS',FORMAT('NumExpediente = ''%s''',NumExpediente))"
+    "FEATURES('RSUPAC2019_R10_PARCELAS',FORMAT('NumExpediente = ''%s''',NumExpediente))"
   )\
   .setGroup("Parcelas")
 
@@ -1357,10 +1357,10 @@ def add_fields_RSUPAC2019_R10_PARCELAS(ft):
     "LD_RecintoSIGPAC", 
     "RSUPAC2019_RECINTOS_SIGPAC", 
     "ID_RECINTO", 
-    ("ID_RECINTO", "ID_PARCELA", "PA_NumOrden", "RefCatastral", "ProvMuni"), 
+    ("ID_RECINTO", "ID_PARCELA", "RefCatastral", "ProvMuni"), 
     "FEATURES('RSUPAC2019_RECINTOS_SIGPAC',FORMAT('ID_PARCELA = ''%s''',ID_PARCELA))"
   )\
-  .setGroup("Parcelas")
+  .setGroup("Recintos")
 
 
 def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
@@ -1373,16 +1373,17 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
   ft.add("ID_RECINTO", "Integer")\
     .setIsPrimaryKey(True)\
     .setLabel("Id. recinto")
-  ft.add("ID_PARCELA", "Integer")\
+  ft.add("ID_PARCELA", "String", 25)\
     .setIsIndexed(True)\
-    .setLabel("Parcela")\
+    .setLabel("Id. Parcela")\
     .setAllowNull(False)\
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_R10_PARCELAS")\
     .set("foreingkey.code","ID_PARCELA")\
-    .set("foreingKey.Label","FORMAT('%s %f %s %s',ID_PARCELA,PA_SupTotalDec, PA_Producto, PA_Variedad)")\
+    .set("foreingKey.Label","FORMAT('%s %d %d',ID_PARCELA,PA_NumOrden,PA_SupTotalDec)")\
     .set("foreingkey.closedlist",False)
-    
+  #.set("foreingKey.Label","FORMAT('%s %d %f',ID_PARCELA,PA_NumOrden,PA_SupTotalDec)")\
+  #"FORMAT('%d %s %d %d',ID_RECINTO,RefCatastral, Completo,SupRecintoDec)"
   add_TipoLineaDeclaracionRecinto(ft, "LineaDeclaracion")\
     .setLabel(u"Linea de Declaracion de Recinto")\
     .setShortLabel(u"Lin. Recinto")\
@@ -1552,7 +1553,7 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
     "RSUPAC2019_RECINTOS_SIGPAC_PDR", 
     "ID", 
     ("ID", "ID_RECINTO", "LD_LineaSolicitadaPDR", "LD_SupSolicitadaPDR"), 
-    "FEATURES('RSUPAC2019_RECINTOS_SIGPAC_AD',FORMAT('ID_RECINTO = ''%s''',ID_RECINTO))"
+    "FEATURES('RSUPAC2019_RECINTOS_SIGPAC_PDR',FORMAT('ID_RECINTO = ''%s''',ID_RECINTO))"
   )\
   .setGroup("Ayuda PDR")
 
@@ -1590,12 +1591,12 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
   # RSU/Parcelas/R10_Parcelas/LD_RecintoSIGPAC/CultivosHorticolas
   add_relatedFeatures(ft, 
     "CultivosHorticolas", 
-    "RSUPAC2019_RECINTOS_SIGPAC_AS", 
+    "RSUPAC2019_RECINTOS_SIGPAC_CH", 
     "ID", 
     ("ID", "ID_RECINTO", "ProductoCH", "VariedadCH"), 
-    "FEATURES('RSUPAC2019_RECINTOS_SIGPAC_AS',FORMAT('ID_RECINTO = ''%s''',ID_RECINTO))"
+    "FEATURES('RSUPAC2019_RECINTOS_SIGPAC_CH',FORMAT('ID_RECINTO = ''%s''',ID_RECINTO))"
   )\
-  .setGroup("Ayudas (CS)")
+  .setGroup("Ayudas (CH)")
 
   add_TipoCoordenada(ft, "CoordX_Centroide")\
     .setLabel(u"Centroide: Coordenada X")\
