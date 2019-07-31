@@ -25,57 +25,9 @@ from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_
 from addons.RSUPAC2019Importer.createtables_RSUPAC import add_fields_RSUPAC2019_RECINTOS_SIGPAC_CH
 
 from addons.RSUPAC2019Importer.createviews import createViews
+
 from addons.RSUPAC2019Importer.parserRSU import RSUGrafParser
-
-#
-# TODO: Quitar esta clase y sustituirla por el import del lector real del xml
-# Ojo que es necesario que implemente los metodos: close(), getCount(xmlfile) y parse(dbwriter, xmlfile)
-#from addons.RSUPAC2019Importer.xmlreader import XMLReader
-class XMLReader(object):
-  def __init__(self, status):
-    self.status = status
-    self.dbwriter = None
-    self.count = 0
-
-  def close(self):
-    # Se la llama cuando se termina de usar el lector de xml
-    # para que cierre/libere los recursos que pueda estar usando
-    pass
-
-  def getCount(self, xmlfile):
-    # Recive un File a un XML y devuelve cuantas entidades SRU hay
-    # en el fichero XML.
-    # Patatera, pero esta implementacion puede servirnos.
-    self.count = 0
-    f = open(xmlfile.getAbsolutePath(),"r")
-    for line in f.xreadlines():
-      if "</rsu>" in line.lower():
-        self.count += 1
-    f.close()
-    return self.count
-  
-  def parse(self, dbwriter, xmlfile): 
-    # Recive un DBWriter y un File al XML y parsea el XML
-    # llamando al writer para escribir los datos en la BBDD
-    # Cada vez que lee un registo SRU debe llamar a self.status.incrementCurrentValue()
-
-    # Esta implementacion es para poder probar el dbwriter.
-    self.dbwriter = dbwriter
-    v = dict()
-    v["CA_Expediente"] = "17"
-    v["ProvExpediente"] = "46"
-    v["CRExpediente"] = "000"
-    v["NumExpediente"] = "104622002446"
-    v["Fregistro"] = "2019-04-23"
-    v["Fmodificacion"] = "2019-05-24"
-    v["TitComp_Solicitante"] = "N"
-    v["Extran_Conyuge_Solicitud"] = "S"
-    for n in xrange(self.count):
-      v["CRExpediente"] = "%03d" % n
-      v["NumExpediente"] = "10462200244%d" % n
-      self.dbwriter.insert("RSUPAC2019_EXPEDIENTES", **v)
-      self.status.incrementCurrentValue()
-    
+from addons.RSUPAC2019Importer.xmlreaderfacade import XMLReaderFacade    
 
 class ImportProcess(Runnable):
   def __init__(self, source, target, status):
@@ -96,6 +48,7 @@ class ImportProcess(Runnable):
           self.target
       )
       self.xmlreader = RSUGrafParser(self.status)
+      #self.xmlreader = XMLReaderFacade(self.status)
 
       count = 12+12+self.xmlreader.getCount(self.source)
       
@@ -106,7 +59,7 @@ class ImportProcess(Runnable):
       self.workspace.create("SRUPAC2019","SRU PAC 2019 (db)")
 
       self.createTables()
-      #createViews(self.server)
+      createViews(self.server)
       self.addTablesToWorkspace()
 
       self.status.message("Cargando...")
