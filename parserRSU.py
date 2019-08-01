@@ -13,36 +13,50 @@ from java.io import File, FileInputStream
 from org.gvsig.tools import ToolsLocator
 from org.gvsig.fmap.crs import CRSFactory
 
+"""
+Tablas a crear en el esquema "public":
+- RSUPAC2019_EXPEDIENTES
+- RSUPAC2019_EXPLOTACIONES
+- RSUPAC2019_ORIGEN_ANIMALES
+- RSUPAC2019_AYUDA_SOL_AD
+- RSUPAC2019_AYUDA_SOL_PDR
+
+- RSUPAC2019_R10_PARCELAS
+- RSUPAC2019_RECINTOS_SIGPAC (R10_Parcelas/LD_RecintosSIGPAC)
+- RSUPAC2019_RECINTOS_SIGPAC_AD (R10_Parcelas/LD_RecintosSIGPAC/LD_Linea_AyudaSolAD)
+- RSUPAC2019_RECINTOS_SIGPAC_PDR (R10_Parcelas/LD_RecintosSIGPAC/LD_Linea_AyudaSolPDR)
+- RSUPAC2019_RECINTOS_SIGPAC_AS (R10_Parcelas/LD_RecintosSIGPAC/AyudaSecundario)
+- RSUPAC2019_RECINTOS_SIGPAC_CH (R10_Parcelas/LD_RecintosSIGPAC/CultivosHorticolas)
+
+"""
+
 class RSUInsertFeatures(object):
   def __init__(self):
     self.m = 0
     pass
     
-    
   def insert(self, nombretabla, **params):
-    
-    if nombretabla == "RSUPAC2019_RECINTOS_SIGPAC_AD":
-      import pprint
-      pp = pprint.PrettyPrinter(indent=4)
-      print self.m, "@@@@@@@ INSERT IN ", nombretabla, " VALUES:",
-      self.m +=1
-      pp.pprint(params)
+    #if nombretabla == "RSUPAC2019_RECINTOS_SIGPAC_AD":
+    #import pprint
+    #pp = pprint.PrettyPrinter(indent=4)
+    #print self.m, "@@@@@@@ INSERT IN ", nombretabla, " VALUES:",
+    self.m +=1
+    #pp.pprint(params)
 
-      #print "@@@@@@@ INSERT IN ", nombretabla, " VALUES:", params
+    print "@@@@@@@ INSERT IN ", nombretabla #, " VALUES:", params
     pass
     
 class RSUGrafParser(object):
   
-  def __init__(self, status, fname=None):
+  def __init__(self, status=None):
     self.status = status
-    self.insertFactory = RSUInsertFeatures()
-    self.fname = fname
     self.xml = None
     factory = XmlPullParserFactory.newInstance(ToolsLocator.getInstance().getXmlPullParserFactoryClassNames(),None)
     self.parser = factory.newPullParser()
-    self.initValues()
-    self.dbwriter = None
+    self.dbwriter = RSUInsertFeatures()
     self.count = 0
+    self.initValues()
+    self.n = 1 # Safety while
 
   def close(self):
     # Se la llama cuando se termina de usar el lector de xml
@@ -77,7 +91,6 @@ class RSUGrafParser(object):
     ScriptingUtils.log(ScriptingUtils.WARN, "File loaded.")
     self.initValues()
     self.readInitValues()
-    #print "# end open"
 
   def readInitValues(self):
     self.parser.nextTag()
@@ -87,7 +100,7 @@ class RSUGrafParser(object):
   def initValues(self):
     # Reset and init values
     self.done = False
-    self.num_RSU = 0
+    self.actual_RSU_NumExpediente = "xxx"
     self.num_Explotaciones = 0
     self.num_OrigenAnimales = 0
     self.num_Linea_AyudaSolAD = 0
@@ -99,6 +112,7 @@ class RSUGrafParser(object):
     self.num_AyudaSecundario = 0
     self.num_CultivosHorticolas = 0
     self.num_PA_NumOrden = 999
+    self.ID_PARCELA = 0
   
   def checkAndTransformWKT(self, wkt, srid):
     geom = None
@@ -121,219 +135,188 @@ class RSUGrafParser(object):
     return geom
 
   def dicR10_Parcelas(self):
-    dic = {"ID_PARCELA": 999, "NumExpediente":self.num_RSU}
+    dic = {"ID_PARCELA": 999, "NumExpediente":self.actual_RSU_NumExpediente}
     self.num_R10_Parcelas+=1
     return dic
     
-  def readRSU(self):
+  def parseRSU(self):
     ## Start with expediente
     self.parser.require(XmlPullParser.START_TAG, "", "RSU")
-    dicRSU = {} ### VALORES DEL RSU
+    dicValues = {} ### VALORES DEL RSU
     self.parser.nextTag()
-    self.insertActualTag(dicRSU)
-    n = 0
-    
     while True:
-      #if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()!="RSU":
-      #  print "end rsu"
-      #  pass
       if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="Expedientes_RSU": # Cuando siguen tags despues de unbounded
         break
       elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R00_Solicitante":
-        self.parser.nextTag() # pasa el <R00_Solicitante>
-        while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="R00_Solicitante":
-          self.insertActualTag(dicRSU)
-          self.parser.nextTag()
-          if n>1000000:
-            print "#3 out of 5000"
-            break
-          else:
-            n+=1
-        # rellena el RSU
+        self.parseR00_Solicitante(dicValues)
+        self.parser.require(XmlPullParser.END_TAG, "", "R00_Solicitante")
       elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R00_Solicitud":
-        self.parser.nextTag() # pasa el <R00_Solicitud>
-        while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="R00_Solicitud":
-          checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
-          parserTagName = self.parser.getName()
-          
-          if self.parser.getEventType() == XmlPullParser.END_TAG:
-            pass
-          elif checkStart and parserTagName=="Conyuge":
-            pass
-          elif checkStart and parserTagName=="Representante":
-            pass
-          elif checkStart and parserTagName=="RespJuridica":
-            pass
-          elif checkStart and parserTagName=="JefeExplotacion":
-            pass
-          elif checkStart and parserTagName=="DatosBancarios":
-            pass
-          elif checkStart and parserTagName=="OtrosDatos":
-            pass          
-          elif checkStart and parserTagName=="Explotaciones":  # dentro de OtrosDatos
-            self.insertExplotaciones()
-          elif checkStart and parserTagName=="OrigenAnimales":  # dentro de OtrosDatos
-            self.insertLinea_OrigenAnimales()
-          elif checkStart and self.parser.getName()=="JefeExplotacion":
-            pass
-          elif checkStart and self.parser.getName()=="ResumenSol":
-            pass
-          elif checkStart and parserTagName=="Linea_AyudaSolAD":  # dentro de ResumenSol
-            self.insertLinea_AyudaSolAD()
-          else:
-            self.insertActualTag(dicRSU)
-          #print "nexttag: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
-
-          self.parser.nextTag()
-          if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()!="R00_Solicitud":
-            self.parser.nextTag()
-          if n>1000000:
-            print "while safety: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
-            break
-          else:
-            n+=1
-        #rellena el RSU #not valid -> self.insertFactory.insert("R00_Solicitud", dicR00_Solicitud)
-        
+        self.parseR00_Solicitud(dicValues)
+        self.parser.require(XmlPullParser.END_TAG, "", "R00_Solicitud")
       elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R10_Parcelas":
-        #print "######## R10 PARCELAS"
-        dicValuesR10_Parcelas = self.dicR10_Parcelas()
-        #print "R10 Init Parcelas. start:", self.parser.getEventType() == XmlPullParser.START_TAG, " end: ",self.parser.getEventType() == XmlPullParser.END_TAG, "name: ", self.parser.getName()
-        self.parser.nextTag() # pasa el <R10_Parcelas>
-        while True:
-          #print "R10 Parcelas. start:", self.parser.getEventType() == XmlPullParser.START_TAG, " end: ",self.parser.getEventType() == XmlPullParser.END_TAG, "name: ", self.parser.getName()
-          if self.parser.getEventType() == XmlPullParser.END_TAG:
-            pass
-          elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_RecintoSIGPAC":
-            self.insertLD_RecintoSIGPAC()
-          else:
-            self.insertActualTag(dicValuesR10_Parcelas)
-            if "PA_NumOrden" in dicValuesR10_Parcelas:
-              self.num_PA_NumOrden = dicValuesR10_Parcelas["PA_NumOrden"]
-              self.ID_PARCELA = "%s%05d" % (self.num_RSU,int(self.num_PA_NumOrden))
-              dicValuesR10_Parcelas["ID_PARCELA"]=self.ID_PARCELA
-
-          # Ending while setting new
-          #print "last here: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
-          #print dicValuesR10_Parcelas
-          if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="R10_Parcelas":
-            dicValuesR10_Parcelas = fixFieldNames(dicValuesR10_Parcelas)
-            self.insertFactory.insert("RSUPAC2019_R10_PARCELAS", **dicValuesR10_Parcelas)
-            dicValuesR10_Parcelas = self.dicR10_Parcelas()
-          if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="R10_Parcelas": # Cuando siguen tags despues de unbounded
-            pass
-          else:
-            self.parser.nextTag()
-          if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R10_Parcelas": # Si hay otro del unbounded
-              self.parser.nextTag()
-          if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-            #self.insertFactory.insert("R10_Parcelas", dicValuesR10_Parcelas)
-            self.parser.nextTag()
-            if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R10_Parcelas": # Si hay otro del unbounded
-              self.parser.nextTag()
-            else:
-              break # Si no es otro cambia de bloque
-          if n>1000000:
-            break
-          else:
-            n+=1
+        self.parseR10_Parcelas()
+        self.parser.require(XmlPullParser.END_TAG, "", "R10_Parcelas")
+      elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R11_Socios":
+        self.parseUntilClose("R11_Socios")
+        self.parser.require(XmlPullParser.END_TAG, "", "R11_Socios")
+      elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R12_Entidades":
+        self.parseUntilClose("R12_Entidades")
+        self.parser.require(XmlPullParser.END_TAG, "", "R12_Entidades")
+      elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R30_AnimalesPDR":
+        self.parseUntilClose("R30_AnimalesPDR")
+        self.parser.require(XmlPullParser.END_TAG, "", "R30_AnimalesPDR")
+      elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R40_ApiculturaPDR":
+        self.parseUntilClose("R40_ApiculturaPDR")
+        self.parser.require(XmlPullParser.END_TAG, "", "R40_ApiculturaPDR")
+      elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="R50_EntidadesAsoc":
+        self.parseUntilClose("R50_EntidadesAsoc")
+        self.parser.require(XmlPullParser.END_TAG, "", "R50_EntidadesAsoc")
       else:
-        #print "last here: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
-        if self.parser.getEventType() != XmlPullParser.END_TAG:
-          self.insertActualTag(dicRSU)
-        if "NumExpediente" in dicRSU:
-          self.num_RSU = dicRSU["NumExpediente"]
-      if n>1000000:
-        print "#2 out of 5000"
-        break
-      else:
-        n+=1
-
+        #print "last else insertActualTag: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
+        self.insertActualTag(dicValues)
+        if self.actual_RSU_NumExpediente == "xxx" and "NumExpediente" in dicValues:
+          self.actual_RSU_NumExpediente = dicValues["NumExpediente"]
+        
       # Ending while setting new
-      #print "last here: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
-      #print self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="RSU"
-      #print dicValues
+      # Tiene que llegar el tag de cierre
+      self.parser.nextTag()
       
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="RSU":
-        dicRSU = fixFieldNames(dicRSU)
-        self.insertFactory.insert("RSUPAC2019_EXPEDIENTES", **dicRSU)
-        self.status.incrementCurrentValue()
-        dicValuesR10_Parcelas = self.dicR10_Parcelas()
-      if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="Expedientes_RSU": # Cuando siguen tags despues de unbounded
-        dicRSU = fixFieldNames(dicRSU)
-        self.insertFactory.insert("RSUPAC2019_EXPEDIENTES", **dicRSU)
-        self.status.incrementCurrentValue()
+      if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="RSU":
+        dicValues = fixFieldNames(dicValues)
+        #print "Expediente: ", self.actual_RSU_NumExpediente, " count: ", self.n
+        self.n+=1
+        self.insertFactory.insert("RSUPAC2019_EXPEDIENTES", **dicValues)
+        self.actual_RSU_NumExpediente =  "xxx"
         break
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="RSU": # Cuando siguen tags despues de unbounded
-        pass
-      else:
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="RSU": # Si hay otro del unbounded
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-        self.parser.nextTag()
-        #dicRSU = fixFieldNames(dicRSU)
-        #self.insertFactory.insert("RSUPAC2019_EXPEDIENTES", **dicRSU)
-        if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="RSU": # Si hay otro del unbounded
-          self.parser.nextTag()
-        else:
-          break # Si no es otro cambia de bloque
-       
-  def dicLD_RecintoSIGPAC(self): #num_PA_NumOrden
-    dic = {"ID_RECINTO": self.num_LD_RecintoSIGPAC, "ID_PARCELA": self.ID_PARCELA}
-    self.num_LD_RecintoSIGPAC+=1
-    return dic
-  def insertLD_RecintoSIGPAC(self):
-    #print "######## R10 PARCELAS - insertLD_RecintoSIGPAC"
-    n = 0
-    dicValues = self.dicLD_RecintoSIGPAC()
-    self.parser.nextTag() # pasa el <R10_Parcelas>
-    while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="LD_RecintoSIGPAC":
+
+  def parseUntilClose(self, nameTag):
+    self.parser.nextTag()
+    while True:
+      self.parser.next()
+      if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()==nameTag:
+        break
+        
+  def parseComplexType(self, nameTag, dicValues):
+    self.parser.nextTag()
+    while True:
+      self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()==nameTag:
+        break
+        
+      
+  def parseR00_Solicitante(self, dicValues):
+    self.parser.nextTag()
+    while True:
+      self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="R00_Solicitante":
+        break
+
+  def parseR00_Solicitud(self, dicValues):
+    self.parser.nextTag()
+    while True:
       checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
       parserTagName = self.parser.getName()
-      
-      if self.parser.getEventType() == XmlPullParser.END_TAG:
-        pass
-      elif checkStart and parserTagName=="LD_Linea_AyudaSolAD":
-        self.insertLD_Linea_AyudaSolAD()
-      elif checkStart and parserTagName=="LD_Linea_AyudaSolPDR":
-        self.insertLD_Linea_AyudaSolPDR()
-      elif checkStart and parserTagName=="CultivoSecundario":
-        pass #not unbounded
-      elif checkStart and parserTagName=="AyudaSecundario":
-        self.insertAyudaSecundario()
-      elif checkStart and parserTagName=="CultivosHorticolas":
-        self.insertCultivosHorticolas()
-      elif checkStart and parserTagName=="R10Graf":
-        # Trato coon funcion aparte porque tengo que crear la geometria
-        self.insertLinea_R10Graf(dicValues)
+      if checkStart and parserTagName=="Conyuge":
+        self.parseComplexType("Conyuge", dicValues)
+      elif checkStart and parserTagName=="Representante":
+        self.parseComplexType("Representante", dicValues)
+      elif checkStart and parserTagName=="RespJuridica":
+        self.parseComplexType("RespJuridica", dicValues)
+      elif checkStart and parserTagName=="JefeExplotacion":
+        self.parseComplexType("JefeExplotacion", dicValues)
+      elif checkStart and parserTagName=="DatosBancarios":
+        self.parseComplexType("DatosBancarios", dicValues)
+      elif checkStart and parserTagName=="OtrosDatos":
+        self.parseOtrosDatos(dicValues)
+      elif checkStart and self.parser.getName()=="JefeExplotacion":
+        self.parseComplexType("JefeExplotacion", dicValues)
+      elif checkStart and self.parser.getName()=="ResumenSol":
+        self.parseResumenSol(dicValues)
       else:
         self.insertActualTag(dicValues)
 
-      # Ending while setting new
-      #print "last here: ", self.parser.getName(), "start:", self.parser.getEventType() == XmlPullParser.START_TAG , "end:", self.parser.getEventType() == XmlPullParser.END_TAG
-      #print dicValues
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="LD_RecintoSIGPAC": # Cuando siguen tags despues de unbounded
-        pass
+      self.parser.nextTag()
+      statusBlock = self.endBlockCheck("R00_Solicitud")
+      if statusBlock == True: break
+        
+  def parseResumenSol(self, dicValues):
+    self.parser.nextTag()
+    while True:
+      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Linea_AyudaSolAD":
+        self.parseLinea_AyudaSolAD()
+      elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Linea_AyudaSolPDR":
+        self.parseLinea_AyudaSolPDR()
       else:
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_RecintoSIGPAC": # Si hay otro del unbounded
-          self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-        self.parser.nextTag()
-        dicValues = fixFieldNames(dicValues)
-        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC", **dicValues)
-        if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_RecintoSIGPAC": # Si hay otro del unbounded
-          self.parser.nextTag()
-        else:
-          break # Si no es otro cambia de bloque
-      if n>1000000:
-        break
-      else:
-        n+=1
+        self.insertActualTag(dicValues)
 
-  def insertLinea_R10Graf(self, dic):
-    # No es unbounded.
-    #print "* r10graf: insertLinea_R10Graf"
+      self.parser.nextTag()
+      statusBlock = self.endBlockCheck("ResumenSol")
+      if statusBlock == True: break
+      
+  def parseOtrosDatos(self, dicValues):
+    self.parser.nextTag()
+    while True:
+      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Explotaciones":
+        self.parseExplotaciones()
+      elif self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="OrigenAnimales":
+        self.parseOrigenAnimales()
+      else:
+        self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="OtrosDatos":
+        break
+        
+  def parseR10_Parcelas(self):
+    dicValuesR10_Parcelas = self.dicR10_Parcelas()
+    self.parser.nextTag()
+    while True:
+      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_RecintoSIGPAC":
+        self.parseLD_RecintoSIGPAC()
+      else:
+        self.insertActualTag(dicValuesR10_Parcelas)
+        if self.num_PA_NumOrden==0 and "PA_NumOrden" in dicValuesR10_Parcelas:
+          self.num_PA_NumOrden = dicValuesR10_Parcelas["PA_NumOrden"]
+          self.ID_PARCELA = "%s%05d" % (self.actual_RSU_NumExpediente,int(self.num_PA_NumOrden))
+          dicValuesR10_Parcelas["ID_PARCELA"]=self.ID_PARCELA
+
+      self.parser.nextTag()
+      statusBlock = self.endBlockWithInsert("R10_Parcelas", "RSUPAC2019_R10_PARCELAS", dicValuesR10_Parcelas)
+      if statusBlock == True: 
+        self.num_PA_NumOrden = 0
+        self.ID_PARCELA = 0
+        break
+
+  def dicLD_RecintoSIGPAC(self):
+    dic = {"ID_RECINTO": self.num_LD_RecintoSIGPAC, "ID_PARCELA": self.ID_PARCELA}
+    self.num_LD_RecintoSIGPAC+=1
+    return dic
+
+  def parseLD_RecintoSIGPAC(self):
+    dicValues = self.dicLD_RecintoSIGPAC()
+    self.parser.nextTag()
+    while True:
+      checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
+      parserTagName = self.parser.getName()
+      if checkStart and parserTagName=="LD_Linea_AyudaSolAD":
+        self.parseLD_Linea_AyudaSolAD()
+      elif checkStart and parserTagName=="LD_Linea_AyudaSolPDR":
+        self.parseLD_Linea_AyudaSolPDR()
+      elif checkStart and parserTagName=="CultivoSecundario":
+        self.parseCultivoSecundario(dicValues)
+      elif checkStart and parserTagName=="CultivosHorticolas":
+        self.parseCultivosHorticolas()
+      elif checkStart and parserTagName=="R10Graf":
+        self.parseR10Graf(dicValues)
+      else:
+        self.insertActualTag(dicValues)
+      
+      self.parser.nextTag()
+      statusBlock = self.endBlockWithInsert("LD_RecintoSIGPAC", "RSUPAC2019_RECINTOS_SIGPAC", dicValues)
+      if statusBlock == True: break
+
+  def parseR10Graf(self, dic):
     name = self.parser.getName()
     self.parser.nextTag()
 
@@ -344,313 +327,182 @@ class RSUGrafParser(object):
     if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="SRID":
       srid = self.parser.nextText()
       self.parser.nextTag()
-      #self.parser.nextTag()
     if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Completo":
       completo = self.parser.nextText()
       dic["Completo"] = completo
       self.parser.nextTag()
-      #self.parser.nextTag()
     if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="WKT":
       wkt = self.parser.nextText()
       self.parser.nextTag()
     if wkt != None:
       g = self.checkAndTransformWKT(wkt, srid)
       dic["GEOMETRY"] = g
-      #print "GEOMETRY:", g
-    
+
   def dicAyudaSecundario(self):
     dic = {"ID": self.num_AyudaSecundario, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_AyudaSecundario+=1
     return dic
-  def insertAyudaSecundario(self):
-    #print "######## R10 PARCELAS/LD_RecintoSIGPAC - insertAyudaSecundario"
-    n = 0
+    
+  def parseAyudaSecundario(self):
     dicValues = self.dicAyudaSecundario()
-    self.parser.nextTag() # pasa el <R10_Parcelas>
-    while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="AyudaSecundario":
-      checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
-      parserTagName = self.parser.getName()
-      
-      if self.parser.getEventType() == XmlPullParser.END_TAG:
-        pass
-      else:
-        self.insertActualTag(dicValues)
-      #elif checkStart and parserTagName=="unbounded":
-      #  unbounded = {}
-      #  self.insertLinea_unbounded(unbounded)
-
-      # Ending while setting new
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="AyudaSecundario": # Cuando siguen tags despues de unbounded
-        pass
-      else:
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="AyudaSecundario": # Si hay otro del unbounded
-          self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-        self.parser.nextTag()
-        dicValues = fixFieldNames(dicValues)
-        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC_AS", **dicValues)
-        if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="AyudaSecundario": # Si hay otro del unbounded
-          dicValues = self.dicAyudaSecundario()
-          self.parser.nextTag()
-        else:
-          break # Si no es otro cambia de bloque
-      if n>1000000:
-        break
-      else:
-        n+=1
+    self.parser.nextTag()
+    while True:
+      self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      statusBlock = self.endBlockWithInsert("AyudaSecundario", "RSUPAC2019_RECINTOS_SIGPAC_AS", dicValues)
+      if statusBlock == True: break
 
   def dicCultivosHorticolas(self):
     dic = {"ID": self.num_CultivosHorticolas, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_CultivosHorticolas+=1
     return dic
 
-  def insertCultivosHorticolas(self):
-    #print "######## R10 PARCELAS/LD_RecintoSIGPAC - insertCultivosHorticolas"
-    n = 0
+  def parseCultivosHorticolas(self):
     dicValues = self.dicCultivosHorticolas()
-    self.parser.nextTag() # pasa el <R10_Parcelas>
+    self.parser.nextTag()
     while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="CultivosHorticolas":
-      checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
-      parserTagName = self.parser.getName()
+      self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      statusBlock = self.endBlockWithInsert("CultivosHorticolas", "RSUPAC2019_RECINTOS_SIGPAC_CH", dicValues)
+      if statusBlock == True: break
       
-      if self.parser.getEventType() == XmlPullParser.END_TAG:
-        pass
+  def parseCultivoSecundario(self, dicValues):
+    self.parser.nextTag()
+    while True:
+      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="AyudaSecundario":  # dentro de OtrosDatos
+        self.parseAyudaSecundario()
       else:
         self.insertActualTag(dicValues)
-
-      # Ending while setting new
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="CultivosHorticolas": # Cuando siguen tags despues de unbounded
-        pass
-      else:
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="CultivosHorticolas": # Si hay otro del unbounded
-          self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-        self.parser.nextTag()
-        dicValues = fixFieldNames(dicValues)
-        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC_CH", **dicValues)
-        if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="CultivosHorticolas": # Si hay otro del unbounded
-          dicValues = self.dicCultivosHorticolas()
-          self.parser.nextTag()
-        else:
-          break # Si no es otro cambia de bloque
-      if n>1000000:
-        break
-      else:
-        n+=1
+      self.parser.nextTag()
+      statusBlock = self.endBlockCheck("CultivoSecundario")
+      if statusBlock == True: break
+        
   def dicLD_Linea_AyudaSolPDR(self):
     dic = {"ID": self.num_LD_Linea_AyudaSolPDR, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_LD_Linea_AyudaSolPDR+=1
     return dic
 
-  def insertLD_Linea_AyudaSolPDR(self):
-    #print "######## R10 PARCELAS/LD_RecintoSIGPAC - insertLD_Linea_AyudaSolPDR"
-    n = 0
+  def parseLD_Linea_AyudaSolPDR(self):
     dicValues = self.dicLD_Linea_AyudaSolPDR()
     self.parser.nextTag()
     while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="LD_Linea_AyudaSolPDR":
-      checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
-      parserTagName = self.parser.getName()
-      
-      if self.parser.getEventType() == XmlPullParser.END_TAG:
-        pass
-      else:
-        self.insertActualTag(dicValues)
-
-      # Ending while setting new
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="LD_Linea_AyudaSolPDR": # Cuando siguen tags despues de unbounded
-        pass
-      else:
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_Linea_AyudaSolPDR": # Si hay otro del unbounded
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-        self.parser.nextTag()
-        dicValues = fixFieldNames(dicValues)
-        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC_PDR", **dicValues)
-        if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_Linea_AyudaSolPDR": # Si hay otro del unbounded
-          dicValues = self.dicLD_Linea_AyudaSolPDR()
-          self.parser.nextTag()
-        else:
-          break # Si no es otro cambia de bloque
-      if n>1000000:
-        break
-      else:
-        n+=1
+      self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      statusBlock = self.endBlockWithInsert("LD_Linea_AyudaSolPDR", "RSUPAC2019_RECINTOS_SIGPAC_PDR", dicValues)
+      if statusBlock == True: break
+ 
   def dicLD_Linea_AyudaSolAD(self):
     dic = {"ID": self.num_LD_Linea_AyudaSolAD, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_LD_Linea_AyudaSolAD+=1
     return dic
-  def insertLD_Linea_AyudaSolAD(self):
-    #print "######## R10 PARCELAS/LD_RecintoSIGPAC - LD_Linea_AyudaSolAD"
-    n = 0
+
+  def parseLD_Linea_AyudaSolAD(self):
     dicValues = self.dicLD_Linea_AyudaSolAD()
     self.parser.nextTag()
-    while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="LD_Linea_AyudaSolAD":
+    while True:
       checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
       parserTagName = self.parser.getName()
-      
-      if self.parser.getEventType() == XmlPullParser.END_TAG:
-        pass
-      else:
-        self.insertActualTag(dicValues)
+      self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      statusBlock = self.endBlockWithInsert("LD_Linea_AyudaSolAD", "RSUPAC2019_RECINTOS_SIGPAC_AD", dicValues)
+      if statusBlock == True: break
 
-      # Ending while setting new
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="LD_Linea_AyudaSolAD": # Cuando siguen tags despues de unbounded
-        pass
-      else:
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_Linea_AyudaSolAD": # Si hay otro del unbounded
-          self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-        self.parser.nextTag()
-        dicValues = fixFieldNames(dicValues)
-        self.insertFactory.insert("RSUPAC2019_RECINTOS_SIGPAC_AD", **dicValues)
-        if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="LD_Linea_AyudaSolAD": # Si hay otro del unbounded
-          dicValues = self.dicLD_Linea_AyudaSolAD()
-          self.parser.nextTag()
-        else:
-          break # Si no es otro cambia de bloque
-      if n>1000000:
-        break
-      else:
-        n+=1
-      pass
-        
+  def dicLinea_AyudaSolPDR(self):
+    dic = {"ID": self.num_Linea_AyudaSolPDR, "NumExpediente":self.actual_RSU_NumExpediente}
+    self.num_Linea_AyudaSolPDR+=1
+    return dic
+    
+  def parseLinea_AyudaSolPDR(self):
+    dicValues = self.dicLinea_AyudaSolPDR()
+    self.parser.nextTag()
+    while True:
+      checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
+      parserTagName = self.parser.getName()
+      self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      statusBlock = self.endBlockWithInsert("Linea_AyudaSolPDR", "RSUPAC2019_AYUDA_SOL_PDR", dicValues)
+      if statusBlock == True: break
+
+  def endBlockCheck(self, nameTag):
+    if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()==nameTag:
+      return True
+    return False
+  def endBlockWithInsert(self, nameTag, nameTable, dicValues):
+    if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()==nameTag:
+      dicValues = fixFieldNames(dicValues)
+      self.insertFactory.insert(nameTable, **dicValues)
+      return True
+    return False
+    
   def dicLinea_AyudaSolAD(self):
-    dic = {"ID": self.num_Linea_AyudaSolAD, "NumExpediente":self.num_RSU}
+    dic = {"ID": self.num_Linea_AyudaSolAD, "NumExpediente":self.actual_RSU_NumExpediente}
     self.num_Linea_AyudaSolAD+=1
     return dic
     
-  def insertLinea_AyudaSolAD(self):
-    #print "######## R00 SOLICITUD/ResumenSol - Linea_AyudaSolAD"
-    n = 0
+  def parseLinea_AyudaSolAD(self):
     dicValues = self.dicLinea_AyudaSolAD()
-    self.parser.nextTag() # pasa el <R10_Parcelas>
-    while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="Linea_AyudaSolAD":
+    self.parser.nextTag()
+    while True:
       checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
       parserTagName = self.parser.getName()
-      
-      if self.parser.getEventType() == XmlPullParser.END_TAG:
-        pass
-      else:
-        self.insertActualTag(dicValues)
-
-      # Ending while setting new
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="Linea_AyudaSolAD": # Cuando siguen tags despues de unbounded
-        pass
-      else:
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Linea_AyudaSolAD": # Si hay otro del unbounded
-          self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-        self.parser.nextTag()
-        dicValues = fixFieldNames(dicValues)
-        self.insertFactory.insert("RSUPAC2019_AYUDA_SOL_AD", **dicValues)
-        if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Linea_AyudaSolAD": # Si hay otro del unbounded
-          dicValues = self.dicLinea_AyudaSolAD()
-          self.parser.nextTag()
-        else:
-          break # Si no es otro cambia de bloque
-      if n>1000000:
-        break
-      else:
-        n+=1
+      self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      statusBlock = self.endBlockWithInsert("Linea_AyudaSolAD", "RSUPAC2019_AYUDA_SOL_AD", dicValues)
+      if statusBlock == True: break
+        
   def dicExplotaciones(self):
-    dic = {"ID": self.num_Explotaciones, "NumExpediente":self.num_RSU}
+    dic = {"ID": self.num_Explotaciones, "NumExpediente":self.actual_RSU_NumExpediente}
     self.num_Explotaciones+=1
     return dic
     
-  def insertExplotaciones(self):
-    #print "######## R00 SOLICITUD/OTROS DATOS - insertExplotaciones"
-    n = 0
+  def parseExplotaciones(self):
     dicValues = self.dicExplotaciones()
-    self.parser.nextTag() # pasa el <R10_Parcelas>
-    while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="Explotaciones":
+    self.parser.nextTag()
+    while True:
       checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
       parserTagName = self.parser.getName()
-      
-      if self.parser.getEventType() == XmlPullParser.END_TAG:
-        pass
-      else:
-        self.insertActualTag(dicValues)
-
-      # Ending while setting new
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()!="Explotaciones": # Cuando siguen tags despues de unbounded
-        pass
-      else:
-        self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Explotaciones": # Si hay otro del unbounded
-          self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-        self.parser.nextTag()
-        dicValues = fixFieldNames(dicValues)
-        self.insertFactory.insert("RSUPAC2019_EXPLOTACIONES", **dicValues)
-        if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="Explotaciones": # Si hay otro del unbounded
-          dicValues = self.dicExplotaciones()
-          self.parser.nextTag()
-        else:
-          break # Si no es otro cambia de bloque
-      if n>1000000:
-        break
-      else:
-        n+=1
-  def dicLinea_OrigenAnimales(self):
-    dic = {"ID": self.num_Linea_OrigenAnimales, "NumExpediente":self.num_RSU}
-    self.num_Linea_OrigenAnimales+=1
-    return dic
-  def insertLinea_OrigenAnimales(self):
-    #print "######## R00 SOLICITUD/OTROS DATOS - insertLinea_OrigenAnimales"
-    n = 0
-    dicValues = self.dicLinea_OrigenAnimales()
-    self.parser.nextTag() # pasa el <R10_Parcelas>
-    while self.parser.getEventType() != XmlPullParser.END_TAG and self.parser.getName()!="OrigenAnimales":
-      checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
-      parserTagName = self.parser.getName()
-      
-      if self.parser.getEventType() == XmlPullParser.END_TAG:
-        pass
-      else:
-        self.insertActualTag(dicValues)
-
-      # Ending while setting new
+      self.insertActualTag(dicValues)
       self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="OrigenAnimales": # Si hay otro del unbounded
-          self.parser.nextTag()
-      if self.parser.getEventType() == XmlPullParser.END_TAG: # and self.parser.getName()!="R10_Parcelas": # Si se llega al tag final del bloque unbounded
-        self.parser.nextTag()
-        dicValues = fixFieldNames(dicValues)
-        self.insertFactory.insert("RSUPAC2019_ORIGEN_ANIMALES", **dicValues)
-        if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="OrigenAnimales": # Si hay otro del unbounded
-          dicValues = self.dicLinea_OrigenAnimales()
-          self.parser.nextTag()
-        else:
-          break # Si no es otro cambia de bloque
-      if n>1000000:
-        break
-      else:
-        n+=1
+      statusBlock = self.endBlockWithInsert("Explotaciones", "RSUPAC2019_EXPLOTACIONES", dicValues)
+      if statusBlock == True: break
+        
+  def dicLinea_OrigenAnimales(self):
+    dic = {"ID": self.num_OrigenAnimales, "NumExpediente":self.actual_RSU_NumExpediente}
+    self.num_OrigenAnimales+=1
+    return dic
+    
+  def parseOrigenAnimales(self):
+    dicValues = self.dicLinea_OrigenAnimales()
+    self.parser.nextTag()
+    while True:
+      checkStart = self.parser.getEventType() == XmlPullParser.START_TAG
+      parserTagName = self.parser.getName()
+      self.insertActualTag(dicValues)
+      self.parser.nextTag()
+      statusBlock = self.endBlockWithInsert("OrigenAnimales", "RSUPAC2019_ORIGEN_ANIMALES", dicValues)
+      if statusBlock == True: break
+      
 
   def insertActualTag(self, dic):
     name = self.parser.getName()
-    #print "insertActualtag:", name,
     text = self.parser.nextText()
-    #print  text
     dic[name] = text
-    return name, text
     
   def read(self):
-    if self.isDone():
-      return None
     self.next()
 
   def next(self):
     if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="Expedientes_RSU":
-        self.done = True
-        return None
+      return None
     if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="RSU":
-      self.readRSU()
+      while self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="RSU":
+        if self.status!=None:
+          self.status.incrementCurrentValue()
+        self.parseRSU()
+        self.parser.nextTag()
+        
+    if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="Expedientes_RSU":
+      return None
     return
     
   def parse(self, dbwriter, xmlfile): 
@@ -736,14 +588,12 @@ def main():
   #return
   #from r10grafreader import test, selfRegister, R10GrafReaderFactory
   #selfRegister()
-  fname = gvsig.getResource(__file__,"datos","test","RSU_PAC_2019_muestra.xml")
+  fname = gvsig.getResource(__file__,"datos","test","RSU_PAC_2019_extra.xml")
   #fname = gvsig.getResource(__file__,"RSU_PAC_2019_muestra.xml")
   #test(R10GrafReaderFactory(), fname)
   # Uso del pull en java: DynclassImportHelper
   # importDefinitions
   from java.io import File
   xmlfile = File(fname)
-  parser = RSUGrafParser(fname)
+  parser = RSUGrafParser()
   parser.parse(RSUInsertFeatures(), xmlfile)
-  
-  print "Values:", parser.read()

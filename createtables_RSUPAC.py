@@ -1432,7 +1432,7 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
     .setLabel(u"Control complementario de recintos nuevos")\
     .setShortLabel(u"Control compl. recintos nuevos")\
     .setDescription(u"Marca para el control complementario de recintos nuevos")
-  add_TipoCAPDeclarado(ft, "TipoCAPDeclarado")\
+  add_TipoCAPDeclarado(ft, "CAPDeclarado")\
     .setLabel(u"CAP declarado")\
     .setShortLabel(u"CAP declarado")\
     .setDescription(u"CAP declarado: Prevalece al SIGPAC salvo lo modifique el agricultor")

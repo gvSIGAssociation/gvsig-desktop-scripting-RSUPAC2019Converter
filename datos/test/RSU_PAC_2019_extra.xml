@@ -62,6 +62,12 @@
         <JovenGan>N</JovenGan>
         <NuevoGan>N</NuevoGan>
         <Cebadero_comunitario>N</Cebadero_comunitario>
+        <Explotaciones>
+            <CodREGA>999</CodREGA>
+        </Explotaciones>
+        <OrigenAnimales>
+            <CodREGA>999</CodREGA>
+        </OrigenAnimales>
       </OtrosDatos>
       <ResumenSol>
         <SupDeclarada>88</SupDeclarada>
@@ -71,6 +77,9 @@
           <Codigo_LineaAD>1</Codigo_LineaAD>
           <SupDeclarada_LineaAD>88</SupDeclarada_LineaAD>
         </Linea_AyudaSolAD>
+        <Linea_AyudaSolPDR>
+          <Codigo_LineaPDR>101</Codigo_LineaPDR>
+        </Linea_AyudaSolPDR>
       </ResumenSol>
     </R00_Solicitud>
     <R10_Parcelas>
@@ -103,6 +112,15 @@
         <AprovForrajero>N</AprovForrajero>
         <SIE>N</SIE>
         <Extran_AGPC>N</Extran_AGPC>
+        <CultivoSecundario>
+          <AyudaSecundario>
+           <AyudaSolicitadaSecundario>0</AyudaSolicitadaSecundario>
+          </AyudaSecundario>
+        </CultivoSecundario>
+        <CultivosHorticolas>
+       <ProductoCH>101</ProductoCH>
+        <VariedadCH>10</VariedadCH>
+        </CultivosHorticolas>
         <LD_Linea_AyudaSolAD>
           <AyudaRecinto>1</AyudaRecinto>
         </LD_Linea_AyudaSolAD>
