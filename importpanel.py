@@ -16,6 +16,7 @@ from javax.swing import ButtonGroup
 
 
 from addons.RSUPAC2019Importer.importprocess import createImportProcess
+from addons.RSUPAC2019Importer.trace import trace, trace_format
 
 from addons.RSUPAC2019Importer.parsers.xmlparser0 import create_parser
 #from addons.RSUPAC2019Importer.parsers.xmlparser1 import XmlParser1 as RSUParser
@@ -125,7 +126,7 @@ class ImportDialog(FormPanel, Observer):
     
   def btnImport_click(self, *args):
     taskManager = ToolsLocator.getTaskStatusManager()
-    self.status = taskManager.createDefaultSimpleTaskStatus("SRU PAC")
+    self.status = taskManager.createDefaultSimpleTaskStatus("RSU PAC")
     self.status.addObserver(self)
     self.taskStatusController.bind(self.status)
     self.setVisibleTaskStatus(True)
@@ -140,15 +141,17 @@ class ImportDialog(FormPanel, Observer):
       return
     #writer = create_writer_facade(self.status)
     
-    parser = create_parsers(self.status, self.sourcePicker.get())
+    parser = create_parser(self.status)
+    xmlfiles = getFiles(self.sourcePicker.get())
     
     process = createImportProcess(
       parser,
       writer,
       self.status,
+      xmlfiles,
       create=True
     )
-    th = Thread(process, "SRUPAC_2019_import")
+    th = Thread(process, "RSUPAC_2019_import")
     th.start()
 
 def showImportPanel():
@@ -156,8 +159,8 @@ def showImportPanel():
   panel.showWindow("RSU PAC 2019 Conversor")
 
 
-def create_parsers(status, xmlfile):
-  parsers = list()
+def getFiles(xmlfile):
+  files = list()
   fname = xmlfile.getAbsolutePath()
   if fname.endswith("_001.XML"):
     base = fname[:-8]
@@ -167,21 +170,19 @@ def create_parsers(status, xmlfile):
       #print "fname %s" % fname
       if not os.path.exists(fname):
         break
-      parser = create_parser(status, File(fname))
-      parsers.append(parser)
+      files.append(File(fname))
   else:
-    parser = create_parser(status, File(fname))
-    parsers.append(parser)
-  return parsers
+    files.append(File(fname))
+  return files
   
 def test():
   
-  fname = r"C:\Users\D73553626V\Desktop\gvSIG-desktop-2.5.0-2918-testing-win-x86_64\datos\BDA_RSU_PAC19_1723072019_001.XML"
+  fname = r"/home/jjdelcerro/Descargas/datos/BDA_RSU_PAC19_1723072019_001.XML"
   taskManager = ToolsLocator.getTaskStatusManager()
-  status = taskManager.createDefaultSimpleTaskStatus("SRU PAC")
+  status = taskManager.createDefaultSimpleTaskStatus("RSU PAC")
 
-  parsers = create_parsers(status, File(fname))
-  print parsers
+  files = getFiles(File(fname))
+  print trace_format(files)
     
 def main(*args):
   showImportPanel()

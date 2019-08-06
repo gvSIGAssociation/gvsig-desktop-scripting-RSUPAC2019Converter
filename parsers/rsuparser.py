@@ -4,17 +4,16 @@ import gvsig
 
 class RSUParser(object):
   """Clase base/interface de la que deben extender todos los parsers"""
-  def __init__(self, status, xmlfile):
+  def __init__(self, status):
     self.status = status
-    self.xmlfile = xmlfile
-
+    
   def close(self):
     pass
     
-  def getCount(self):
+  def getCount(self, xmlfile):
     return 0
 
-  def parse(self, writer): 
+  def parse(self, xmlfile, writer): 
     pass
     
 def main(*args):

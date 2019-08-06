@@ -33,17 +33,18 @@ Tablas a crear en el esquema "public":
 from addons.RSUPAC2019Importer.parsers.rsuparser import RSUParser
 from addons.RSUPAC2019Importer.trace import trace, trace_format, trace_remove
 
-def create_parser(status, xmlfile):
-  return XMLParser0(status, xmlfile)
+def create_parser(status):
+  return XMLParser0(status)
 
 class XMLParser0(RSUParser):
   
-  def __init__(self, status, xmlfile):
-    RSUParser.__init__(self, status, xmlfile)
+  def __init__(self, status):
+    RSUParser.__init__(self, status)
     self.count = 0
+    self.xmlfile = None
     self.inputStream = None
     self.parser = None
-    self.initValues()
+    self.resetCounters()
 
   def close(self):
     # Se la llama cuando se termina de usar el lector de xml
@@ -54,12 +55,12 @@ class XMLParser0(RSUParser):
     self.inputStream = None
     self.xmlfile = None
 
-  def getCount(self):
+  def getCount(self, xmlfile):
     # Recive un File a un XML y devuelve cuantas entidades SRU hay
     # en el fichero XML.
     # Patatera, pero esta implementacion puede servirnos.
     self.count = 0
-    f = open(self.xmlfile.getAbsolutePath(),"r")
+    f = open(xmlfile.getAbsolutePath(),"r")
     for line in f.xreadlines():
       if "</rsu>" in line.lower():
         self.count += 1
@@ -73,7 +74,6 @@ class XMLParser0(RSUParser):
     self.inputStream = FileInputStream(self.xmlfile)
     self.parser.setInput(self.inputStream, None)
     ScriptingUtils.log(ScriptingUtils.WARN, "File loaded.")
-    self.initValues()
     self.readInitValues()
 
 
@@ -82,9 +82,7 @@ class XMLParser0(RSUParser):
     self.parser.require(XmlPullParser.START_TAG, None, "Expedientes_RSU")
     self.parser.nextTag()
 
-  def initValues(self):
-    # Reset and init values
-    self.done = False
+  def resetCounters(self):
     self.actual_RSU_NumExpediente = "xxx"
     self.num_Expediente = 0
     self.num_Explotaciones = 0
@@ -491,8 +489,9 @@ class XMLParser0(RSUParser):
     text = self.parser.nextText()
     dic[name] = text
     
-  def parse(self, writer): 
+  def parse(self, xmlfile, writer): 
     self.writer = writer
+    self.xmlfile = xmlfile
     self.open()
     if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="Expedientes_RSU":
       return None

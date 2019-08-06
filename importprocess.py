@@ -11,11 +11,12 @@ import java.lang.Exception
 from org.gvsig.fmap.dal import DALLocator
 
 class ImportProcess(Runnable):
-  def __init__(self, parsers, writer, status, create=True):
-    self.parsers = parsers
+  def __init__(self, parser, writer, status, xmlfiles, create=True):
+    self.parser = parser
     self.writer = writer
     self.status = status
     self.create = create
+    self.xmlfiles = xmlfiles
     
   def run(self):
     try:
@@ -24,9 +25,10 @@ class ImportProcess(Runnable):
         self.writer.drop()
         self.writer.create()
 
+      self.status.message("Estimando numero de expedientes...")
       count = 0
-      for parser in self.parsers:
-        count += parser.getCount()
+      for xmlfile in self.xmlfiles:
+        count += self.parser.getCount(xmlfile)
       
       self.status.setRangeOfValues(0,count)
       self.status.setCurValue(0)
@@ -34,8 +36,10 @@ class ImportProcess(Runnable):
       self.status.message("Cargando...")
 
       self.writer.edit()
-      for parser in self.parsers:
-        parser.parse(self.writer)
+      self.status.message("Convirtiendo expedientes")
+      for xmlfile in self.xmlfiles:
+        self.parser.parse(xmlfile, self.writer)
+      self.status.message("Cerrando ficheros")
       self.writer.finishEditing()
       
       self.status.message("Importacion completada")
@@ -68,8 +72,8 @@ class ImportProcess(Runnable):
           except:
             pass
       
-def createImportProcess(source, target, status, **kwargs):
-  return ImportProcess(source, target, status, **kwargs)
+def createImportProcess(source, target, status, xmlfiles, **kwargs):
+  return ImportProcess(source, target, status, xmlfiles, **kwargs)
 
 def main(*args):
     pass

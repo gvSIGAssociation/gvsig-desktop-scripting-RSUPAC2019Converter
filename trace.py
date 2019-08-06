@@ -23,10 +23,10 @@ def trace_remove():
   except:
     pass
 
-def trace0(s):
+def trace(s):
   pass
   
-def trace(s):
+def trace0(s):
   global trace_counter, trace_file
 
   if trace_counter < 20:
