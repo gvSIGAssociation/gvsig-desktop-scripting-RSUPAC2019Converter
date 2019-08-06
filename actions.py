@@ -55,13 +55,13 @@ def selfRegister():
   action = actionManager.createAction(
     extension, 
     "rsupac2019-importer-showimporter", # Action name
-    "Importador RSU-PAC 2019", # Text
+    "Conversor RSU-PAC 2019", # Text
     "rsupac2019-importer-showimporter", # Action command
     "rsupac2019-importer-showimporter", # Icon name
     None, # Accelerator
     650700600, # Position 
-    "_Show_the_RSUPAC_2019_import_tool" # Tooltip
+    "_Show_the_RSUPAC_2019_converter_tool" # Tooltip
   )
   action = actionManager.registerAction(action)
-  application.addMenu(action, "tools/RSU PAC 2019/Importador")
+  application.addMenu(action, "tools/RSU PAC 2019/Conversor")
   

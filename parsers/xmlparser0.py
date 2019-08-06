@@ -1,12 +1,12 @@
 # encoding: utf-8
 
 import gvsig
+from gvsig import getResource
 
 from org.gvsig.fmap.geom.aggregate import MultiPolygon
 from org.gvsig.scripting.app.extension import ScriptingUtils
 from org.gvsig.fmap.geom import GeometryUtils
 from org.xmlpull.v1 import XmlPullParser
-from java.io import File
 from org.xmlpull.v1 import XmlPullParserException
 from org.xmlpull.v1 import XmlPullParserFactory
 from java.io import File, FileInputStream
@@ -30,67 +30,52 @@ Tablas a crear en el esquema "public":
 
 """
 
-class RSUInsertFeatures(object):
-  def __init__(self):
-    self.m = 0
-    pass
-    
-  def insert(self, nombretabla, **params):
-    #if nombretabla == "RSUPAC2019_RECINTOS_SIGPAC_AD":
-    #import pprint
-    #pp = pprint.PrettyPrinter(indent=4)
-    #print self.m, "@@@@@@@ INSERT IN ", nombretabla, " VALUES:",
-    self.m +=1
-    #pp.pprint(params)
+from addons.RSUPAC2019Importer.parsers.rsuparser import RSUParser
+from addons.RSUPAC2019Importer.trace import trace, trace_format, trace_remove
 
-    print "@@@@@@@ INSERT IN ", nombretabla #, " VALUES:", params
-    pass
-    
-class RSUGrafParser(object):
+def create_parser(status, xmlfile):
+  return XMLParser0(status, xmlfile)
+
+class XMLParser0(RSUParser):
   
-  def __init__(self, status=None):
-    self.status = status
-    self.xml = None
-    factory = XmlPullParserFactory.newInstance(ToolsLocator.getInstance().getXmlPullParserFactoryClassNames(),None)
-    self.parser = factory.newPullParser()
-    self.dbwriter = RSUInsertFeatures()
+  def __init__(self, status, xmlfile):
+    RSUParser.__init__(self, status, xmlfile)
     self.count = 0
+    self.inputStream = None
+    self.parser = None
     self.initValues()
-    self.n = 1 # Safety while
 
   def close(self):
     # Se la llama cuando se termina de usar el lector de xml
     # para que cierre/libere los recursos que pueda estar usando
-    pass
+    self.parser = None
+    if self.inputStream != None:
+      self.inputStream.close()
+    self.inputStream = None
+    self.xmlfile = None
 
-  def getCount(self, xmlfile):
+  def getCount(self):
     # Recive un File a un XML y devuelve cuantas entidades SRU hay
     # en el fichero XML.
     # Patatera, pero esta implementacion puede servirnos.
     self.count = 0
-    f = open(xmlfile.getAbsolutePath(),"r")
+    f = open(self.xmlfile.getAbsolutePath(),"r")
     for line in f.xreadlines():
       if "</rsu>" in line.lower():
         self.count += 1
     f.close()
     return self.count
-    
-  def rewind(self):
-    factory = XmlPullParserFactory.newInstance(ToolsLocator.getInstance().getXmlPullParserFactoryClassNames(),None)
-    self.parser = factory.newPullParser()
-    self.initValues()
-    self.open()
-        
-  def isDone(self):
-    return self.done
 
   def open(self):
-    ScriptingUtils.log(ScriptingUtils.WARN, "Loading file xml "+ self.fname.getName())
-    self.resource = FileInputStream(self.fname)
-    self.parser.setInput(self.resource, None);
+    ScriptingUtils.log(ScriptingUtils.WARN, "Loading file xml "+ self.xmlfile.getName())
+    factory = XmlPullParserFactory.newInstance(ToolsLocator.getInstance().getXmlPullParserFactoryClassNames(),None)
+    self.parser = factory.newPullParser()
+    self.inputStream = FileInputStream(self.xmlfile)
+    self.parser.setInput(self.inputStream, None)
     ScriptingUtils.log(ScriptingUtils.WARN, "File loaded.")
     self.initValues()
     self.readInitValues()
+
 
   def readInitValues(self):
     self.parser.nextTag()
@@ -101,6 +86,7 @@ class RSUGrafParser(object):
     # Reset and init values
     self.done = False
     self.actual_RSU_NumExpediente = "xxx"
+    self.num_Expediente = 0
     self.num_Explotaciones = 0
     self.num_OrigenAnimales = 0
     self.num_Linea_AyudaSolAD = 0
@@ -123,10 +109,10 @@ class RSUGrafParser(object):
       else:
         geom = GeometryUtils.createFrom(wkt, "EPSG:4326")#+srid)
         if geom!=None and not geom.isValid():
-          #status = geom.getValidationStatus()
-          #msg = status.getMessage()
-          #ScriptingUtils.log(ScriptingUtils.WARN, "La geometria no es valida en %s:%s, %s" % (self.num_expediente, self.num_parcela, msg))
-          geom = None
+          status = geom.getValidationStatus()
+          msg = status.getMessage()
+          trace("GEOMETRIA NO VALIDA: %s" % msg)
+          #geom = None
       
       if geom!=None and not isinstance(geom,MultiPolygon):
         geom = geom.toPolygons()
@@ -135,14 +121,19 @@ class RSUGrafParser(object):
     return geom
 
   def dicR10_Parcelas(self):
-    dic = {"ID_PARCELA": 999, "NumExpediente":self.actual_RSU_NumExpediente}
     self.num_R10_Parcelas+=1
+    dic = {"ID_PARCELA": self.num_R10_Parcelas, "ID_EXPEDIENTE": self.num_Expediente}
+    return dic
+    
+  def dicRSU(self):
+    self.num_Expediente+=1
+    dic = {"ID_EXPEDIENTE": self.num_Expediente}
     return dic
     
   def parseRSU(self):
     ## Start with expediente
     self.parser.require(XmlPullParser.START_TAG, "", "RSU")
-    dicValues = {} ### VALORES DEL RSU
+    dicValues = self.dicRSU() ### VALORES DEL RSU
     self.parser.nextTag()
     while True:
       if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="Expedientes_RSU": # Cuando siguen tags despues de unbounded
@@ -184,8 +175,8 @@ class RSUGrafParser(object):
       if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="RSU":
         dicValues = fixFieldNames(dicValues)
         #print "Expediente: ", self.actual_RSU_NumExpediente, " count: ", self.n
-        self.n+=1
-        self.insertFactory.insert("RSUPAC2019_EXPEDIENTES", **dicValues)
+        #self.n+=1
+        self.writer.insert("RSUPAC2019_EXPEDIENTES", **dicValues)
         self.actual_RSU_NumExpediente =  "xxx"
         break
 
@@ -239,7 +230,8 @@ class RSUGrafParser(object):
 
       self.parser.nextTag()
       statusBlock = self.endBlockCheck("R00_Solicitud")
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
         
   def parseResumenSol(self, dicValues):
     self.parser.nextTag()
@@ -253,7 +245,8 @@ class RSUGrafParser(object):
 
       self.parser.nextTag()
       statusBlock = self.endBlockCheck("ResumenSol")
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
       
   def parseOtrosDatos(self, dicValues):
     self.parser.nextTag()
@@ -276,11 +269,12 @@ class RSUGrafParser(object):
         self.parseLD_RecintoSIGPAC()
       else:
         self.insertActualTag(dicValuesR10_Parcelas)
+        """
         if self.num_PA_NumOrden==0 and "PA_NumOrden" in dicValuesR10_Parcelas:
           self.num_PA_NumOrden = dicValuesR10_Parcelas["PA_NumOrden"]
           self.ID_PARCELA = "%s%05d" % (self.actual_RSU_NumExpediente,int(self.num_PA_NumOrden))
           dicValuesR10_Parcelas["ID_PARCELA"]=self.ID_PARCELA
-
+        """
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("R10_Parcelas", "RSUPAC2019_R10_PARCELAS", dicValuesR10_Parcelas)
       if statusBlock == True: 
@@ -289,8 +283,8 @@ class RSUGrafParser(object):
         break
 
   def dicLD_RecintoSIGPAC(self):
-    dic = {"ID_RECINTO": self.num_LD_RecintoSIGPAC, "ID_PARCELA": self.ID_PARCELA}
     self.num_LD_RecintoSIGPAC+=1
+    dic = {"ID_RECINTO": self.num_LD_RecintoSIGPAC, "ID_PARCELA": self.num_R10_Parcelas}
     return dic
 
   def parseLD_RecintoSIGPAC(self):
@@ -314,10 +308,11 @@ class RSUGrafParser(object):
       
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("LD_RecintoSIGPAC", "RSUPAC2019_RECINTOS_SIGPAC", dicValues)
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
 
   def parseR10Graf(self, dic):
-    name = self.parser.getName()
+    #name = self.parser.getName()
     self.parser.nextTag()
 
     completo = None
@@ -339,8 +334,8 @@ class RSUGrafParser(object):
       dic["GEOMETRY"] = g
 
   def dicAyudaSecundario(self):
-    dic = {"ID": self.num_AyudaSecundario, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_AyudaSecundario+=1
+    dic = {"ID": self.num_AyudaSecundario, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     return dic
     
   def parseAyudaSecundario(self):
@@ -350,11 +345,12 @@ class RSUGrafParser(object):
       self.insertActualTag(dicValues)
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("AyudaSecundario", "RSUPAC2019_RECINTOS_SIGPAC_AS", dicValues)
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
 
   def dicCultivosHorticolas(self):
-    dic = {"ID": self.num_CultivosHorticolas, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_CultivosHorticolas+=1
+    dic = {"ID": self.num_CultivosHorticolas, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     return dic
 
   def parseCultivosHorticolas(self):
@@ -364,7 +360,8 @@ class RSUGrafParser(object):
       self.insertActualTag(dicValues)
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("CultivosHorticolas", "RSUPAC2019_RECINTOS_SIGPAC_CH", dicValues)
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
       
   def parseCultivoSecundario(self, dicValues):
     self.parser.nextTag()
@@ -375,11 +372,12 @@ class RSUGrafParser(object):
         self.insertActualTag(dicValues)
       self.parser.nextTag()
       statusBlock = self.endBlockCheck("CultivoSecundario")
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
         
   def dicLD_Linea_AyudaSolPDR(self):
-    dic = {"ID": self.num_LD_Linea_AyudaSolPDR, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_LD_Linea_AyudaSolPDR+=1
+    dic = {"ID": self.num_LD_Linea_AyudaSolPDR, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     return dic
 
   def parseLD_Linea_AyudaSolPDR(self):
@@ -389,11 +387,12 @@ class RSUGrafParser(object):
       self.insertActualTag(dicValues)
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("LD_Linea_AyudaSolPDR", "RSUPAC2019_RECINTOS_SIGPAC_PDR", dicValues)
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
  
   def dicLD_Linea_AyudaSolAD(self):
-    dic = {"ID": self.num_LD_Linea_AyudaSolAD, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     self.num_LD_Linea_AyudaSolAD+=1
+    dic = {"ID": self.num_LD_Linea_AyudaSolAD, "ID_RECINTO":self.num_LD_RecintoSIGPAC}
     return dic
 
   def parseLD_Linea_AyudaSolAD(self):
@@ -405,11 +404,12 @@ class RSUGrafParser(object):
       self.insertActualTag(dicValues)
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("LD_Linea_AyudaSolAD", "RSUPAC2019_RECINTOS_SIGPAC_AD", dicValues)
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
 
   def dicLinea_AyudaSolPDR(self):
-    dic = {"ID": self.num_Linea_AyudaSolPDR, "NumExpediente":self.actual_RSU_NumExpediente}
     self.num_Linea_AyudaSolPDR+=1
+    dic = {"ID": self.num_Linea_AyudaSolPDR, "ID_EXPEDIENTE": self.num_Expediente}
     return dic
     
   def parseLinea_AyudaSolPDR(self):
@@ -421,7 +421,8 @@ class RSUGrafParser(object):
       self.insertActualTag(dicValues)
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("Linea_AyudaSolPDR", "RSUPAC2019_AYUDA_SOL_PDR", dicValues)
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
 
   def endBlockCheck(self, nameTag):
     if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()==nameTag:
@@ -430,13 +431,13 @@ class RSUGrafParser(object):
   def endBlockWithInsert(self, nameTag, nameTable, dicValues):
     if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()==nameTag:
       dicValues = fixFieldNames(dicValues)
-      self.insertFactory.insert(nameTable, **dicValues)
+      self.writer.insert(nameTable, **dicValues)
       return True
     return False
     
   def dicLinea_AyudaSolAD(self):
-    dic = {"ID": self.num_Linea_AyudaSolAD, "NumExpediente":self.actual_RSU_NumExpediente}
     self.num_Linea_AyudaSolAD+=1
+    dic = {"ID": self.num_Linea_AyudaSolAD, "ID_EXPEDIENTE": self.num_Expediente}
     return dic
     
   def parseLinea_AyudaSolAD(self):
@@ -448,11 +449,12 @@ class RSUGrafParser(object):
       self.insertActualTag(dicValues)
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("Linea_AyudaSolAD", "RSUPAC2019_AYUDA_SOL_AD", dicValues)
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
         
   def dicExplotaciones(self):
-    dic = {"ID": self.num_Explotaciones, "NumExpediente":self.actual_RSU_NumExpediente}
     self.num_Explotaciones+=1
+    dic = {"ID": self.num_Explotaciones, "ID_EXPEDIENTE": self.num_Expediente}
     return dic
     
   def parseExplotaciones(self):
@@ -464,11 +466,12 @@ class RSUGrafParser(object):
       self.insertActualTag(dicValues)
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("Explotaciones", "RSUPAC2019_EXPLOTACIONES", dicValues)
-      if statusBlock == True: break
+      if statusBlock == True: 
+        break
         
   def dicLinea_OrigenAnimales(self):
-    dic = {"ID": self.num_OrigenAnimales, "NumExpediente":self.actual_RSU_NumExpediente}
     self.num_OrigenAnimales+=1
+    dic = {"ID": self.num_OrigenAnimales, "ID_EXPEDIENTE": self.num_Expediente}
     return dic
     
   def parseOrigenAnimales(self):
@@ -480,18 +483,17 @@ class RSUGrafParser(object):
       self.insertActualTag(dicValues)
       self.parser.nextTag()
       statusBlock = self.endBlockWithInsert("OrigenAnimales", "RSUPAC2019_ORIGEN_ANIMALES", dicValues)
-      if statusBlock == True: break
-      
+      if statusBlock == True: 
+        break
 
   def insertActualTag(self, dic):
     name = self.parser.getName()
     text = self.parser.nextText()
     dic[name] = text
     
-  def read(self):
-    self.next()
-
-  def next(self):
+  def parse(self, writer): 
+    self.writer = writer
+    self.open()
     if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="Expedientes_RSU":
       return None
     if self.parser.getEventType() == XmlPullParser.START_TAG and self.parser.getName()=="RSU":
@@ -504,17 +506,6 @@ class RSUGrafParser(object):
     if self.parser.getEventType() == XmlPullParser.END_TAG and self.parser.getName()=="Expedientes_RSU":
       return None
     return
-    
-  def parse(self, dbwriter, xmlfile): 
-    # Recive un DBWriter y un File al XML y parsea el XML
-    # llamando al writer para escribir los datos en la BBDD
-    # Cada vez que lee un registo SRU debe llamar a self.status.incrementCurrentValue()
-
-    # Esta implementacion es para poder probar el dbwriter.
-    self.insertFactory = dbwriter
-    self.fname = xmlfile
-    self.open()
-    self.read()
 
 def changeFieldNameDictionary():
   d = { "Nombre_Conyuge": "Nombre_Conyuge_Solicitud",
@@ -580,20 +571,43 @@ def fixFieldNames(tofix):
     else:
       new[k]=tofix[k]
   return new
+
+def test():
+  import os
+  from java.io import File
+
+  #from addons.RSUPAC2019Importer.parsers.xmlparser0 import create_parser
+  #from addons.RSUPAC2019Importer.parsers.xmlparserfacade import create_parser
+  
+  #from addons.RSUPAC2019Importer.writers.writerfacade import create_writer
+  from addons.RSUPAC2019Importer.writers.shpwriter import create_writer
+
+  trace_remove()
+  try:
+    os.remove("/tmp/srupac2019.shp")
+  except:
+    pass
+    
+  taskManager = ToolsLocator.getTaskStatusManager()
+
+  status = taskManager.createDefaultSimpleTaskStatus("SRU PAC")
+
+  source = File(gvsig.getResource(__file__,"..","datos","test","RSU_PAC_2019_extra.xml"))
+  source = File("/home/jjdelcerro/BDA_RSU_PAC19_1723072019_001.XML")
+  target = File("/tmp/srupac2019.shp")
+  
+  parser = create_parser(status, source)
+  writer = create_writer(status, target)
+
+  writer.drop()
+  writer.create()
+  
+  writer.edit()
+  parser.parse(writer)
+  writer.finishEditing()
+
   
 def main():
-  #t1 = {"Otras_supforrajeras": 1, "SupDeclarada": 2}
-  #print changeFieldNameDictionary()
-  #print fixFieldNames(t1)
-  #return
-  #from r10grafreader import test, selfRegister, R10GrafReaderFactory
-  #selfRegister()
-  fname = gvsig.getResource(__file__,"datos","test","RSU_PAC_2019_extra.xml")
-  #fname = gvsig.getResource(__file__,"RSU_PAC_2019_muestra.xml")
-  #test(R10GrafReaderFactory(), fname)
-  # Uso del pull en java: DynclassImportHelper
-  # importDefinitions
-  from java.io import File
-  xmlfile = File(fname)
-  parser = RSUGrafParser()
-  parser.parse(RSUInsertFeatures(), xmlfile)
+  test()
+  pass
+  

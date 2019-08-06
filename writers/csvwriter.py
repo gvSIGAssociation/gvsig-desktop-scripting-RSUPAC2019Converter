@@ -5,14 +5,26 @@ import gvsig
 from org.gvsig.fmap.dal import DataTypes
 
 from org.gvsig.fmap.dal import DALLocator
+from org.gvsig.fmap.dal.feature import FeatureStore
 
 import traceback
 
-class DBWriter(object):
-  def __init__(self, server, status):
-    self.server = server
-    self.status = status
+from addons.RSUPAC2019Importer.writer.rsuwriter import RSUWriter
+
+def create_writer(status, target):
+  return CSVWriter(status, target)
+
+class CSVWriter(object):
+  def __init__(self, status, target):
+    RSUWriter.__init__(self, status)
+    self.target = target
     self.stores = None
+    self.files = None
+    dataManager = DALLocator.getDataManager()
+    self.server = dataManager.openServerExplorer(
+          target.getExplorerName(),
+          target
+    )
 
   def getStoreNames(self):
     return (
@@ -41,37 +53,35 @@ class DBWriter(object):
       self.stores = stores      
     return self.stores[name]
     
+  def getFile(self, name):
+    if self.files == None:
+      files = dict()
+      for tableName in self.getStoreNames():
+        fname = "/tmp/"+tableName+".csv"
+        f = open(fname,"w")
+        files[tableName] = f
+      self.files = files
+    return self.files[name]
+
   def edit(self):
-    for tableName in self.getStoreNames():
-      store = self.getStore(tableName)
-      #print "### edit(%r)" % tableName
-      if not store.isEditing():
-        store.edit()
-      
+    self.getFile(self.getStoreNames()[0])
+    
   def finishEditing(self):
     for tableName in self.getStoreNames():
-      store = self.getStore(tableName)
-      #print "### finishEditing(%r)" % tableName
-      if store.isEditing():
-        store.finishEditing()
-
+      f = self.files[tableName]
+      f.close()
+      
   def cancelEditing(self):
     for tableName in self.getStoreNames():
-      try:
-        store = self.getStore(tableName)
-        #print "### cancelEditing(%r)" % tableName
-        if store.isEditing():
-          store.cancelEditing()
-      except:
-        print "Error cancelEditing table '"+tableName+"'."
-        traceback.print_exc()
+      f = self.files[tableName]
+      f.close()
 
   def insert(self, tableName, **values):
     store = self.getStore(tableName)
     #print "### insert(%r, %r)" % (tableName, values)
    
     featureType = store.getDefaultFeatureType()
-    f = store.createNewFeature()
+    feature = store.createNewFeature()
     for name, value in values.iteritems():
       attrdesc = featureType.get(name)
       if attrdesc == None:
@@ -80,14 +90,29 @@ class DBWriter(object):
         #continue 
       if value!=None and attrdesc.getType()==DataTypes.BOOLEAN:
         if value.lower()=="s":
-          f.set(name,True)
+          feature.set(name,True)
           continue
         elif value.lower()=="n":
-          f.set(name,False)
+          feature.set(name,False)
           continue
-      f.set(name,value)
-    store.insert(f)
-    store.commitChanges()
+      feature.set(name,value)
+    first = True
+    f = self.getFile(tableName)
+    for attrdesc in featureType:
+      if attrdesc.getType()==DataTypes.GEOMETRY or attrdesc.isComputed():
+        continue
+      value = feature.get(attrdesc.getName())
+      if first:
+        first=False
+      else:
+        f.write(";")
+      if value == None:
+        continue
+      if attrdesc.getDataType().isNumeric():
+        f.write("%s" %  value)
+      else:
+        f.write("\"%s\"" % repr(value))
+    f.write("\n")
     
 def main(*args):
     pass
