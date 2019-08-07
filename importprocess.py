@@ -65,12 +65,10 @@ class ImportProcess(Runnable):
         #self.writer.cancelEditing()
 
     finally:
-      for parser in self.parsers:
-        if parser!=None:
-          try:
-            parser.close()
-          except:
-            pass
+        try:
+          self.parser.close()
+        except:
+          pass
       
 def createImportProcess(source, target, status, xmlfiles, **kwargs):
   return ImportProcess(source, target, status, xmlfiles, **kwargs)

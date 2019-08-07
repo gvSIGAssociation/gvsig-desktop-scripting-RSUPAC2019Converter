@@ -93,7 +93,7 @@ INNER JOIN RSUPAC2019_RECINTOS_SIGPAC ON RSUPAC2019_R10_PARCELAS."ID_PARCELA" = 
 
 }
 
-
+VIEWS = {}
 
 def create_writer(status, target):
   return DBWriter(status, target)
