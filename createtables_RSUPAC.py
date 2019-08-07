@@ -632,7 +632,7 @@ def add_TipoProducto(ft, name):
     ("001", u"TRIGO BLANDO"),
     ("002", u"TRITICUM SPELTA"),
     ("003", u"TRIGO DURO"),
-    ("004", u"MA√çZ"),
+    ("004", u"MA√?Z"),
     ("005", u"CEBADA"),
     ("006", u"CENTENO"),
     ("007", u"SORGO"),
@@ -649,7 +649,7 @@ def add_TipoProducto(ft, name):
     ("023", u"BARBECHO MEDIOAMBIENTAL"),
     ("024", u"BARBECHO SIN PRODUCCI√ìN"),
     ("025", u"ABANDONO 20 a√±os"),
-    ("334", u"BARBECHO CON ESPECIES MEL√çFERAS "),
+    ("334", u"BARBECHO CON ESPECIES MEL√?FERAS "),
     ("033", u"GIRASOL"),
     ("034", u"SOJA"),
     ("035", u"COLZA"),
@@ -688,7 +688,7 @@ def add_TipoProducto(ft, name):
     ("091", u"FLORES"),
     ("092", u"ROMANESCU"),
     ("093", u"LINO NO TEXTIL"),
-    ("096", u"ESPECIES AROMATICAS HERB√ÅCEAS"),
+    ("096", u"ESPECIES AROMATICAS HERB√?CEAS"),
     ("097", u"SETAS"),
     ("098", u"PIMIENTO PARA PIMENT√ìN"),
     ("099", u"PATATA"),
@@ -713,7 +713,7 @@ def add_TipoProducto(ft, name):
     ("168", u"CHALOTA"),
     ("169", u"AJO"),
     ("170", u"COL"),
-    ("171", u"CHIRIV√çA"),
+    ("171", u"CHIRIV√?A"),
     ("172", u"REPOLLO"),
     ("173", u"COL ROJA O LOMBARDA"),
     ("174", u"COL MILAN"),
@@ -722,7 +722,7 @@ def add_TipoProducto(ft, name):
     ("177", u"ENDIVIA"),
     ("178", u"ZANAHORIA"),
     ("179", u"NABO"),
-    ("180", u"JUD√çA"),
+    ("180", u"JUD√?A"),
     ("181", u"ACHICORIA"),
     ("182", u"GUINDILLAS"),
     ("183", u"ESPINACA"),
@@ -759,7 +759,7 @@ def add_TipoProducto(ft, name):
     ("250", u"ALBERJ√ìN"),
     ("251", u"AJEDREA"),
     ("252", u"CILANTRO"),
-    ("253", u"AN√çS DULCE"),
+    ("253", u"AN√?S DULCE"),
     ("254", u"ENELDO"),
     ("255", u"MANZANILLA"),
     ("256", u"VALERIANA"),
@@ -768,7 +768,7 @@ def add_TipoProducto(ft, name):
     ("259", u"HISOPO"),
     ("260", u"HINOJO"),
     ("261", u"PEREJIL"),
-    ("262", u"AZAFR√ÅN"),
+    ("262", u"AZAFR√?N"),
     ("263", u"TOMILLO"),
     ("264", u"ALBAHACA"),
     ("265", u"MELISA O TORONJIL"),
@@ -786,7 +786,7 @@ def add_TipoProducto(ft, name):
     ("277", u"VERBENA"),
     ("298", u"MEZCLA GUISANTE-CEBADA"),
     ("299", u"MEZCLA GUISANTE-AVENA"),
-    ("302", u"MEZCLA EN M√ÅRGENES MULTIFUNCIONALES "),
+    ("302", u"MEZCLA EN M√?RGENES MULTIFUNCIONALES "),
     ("303", u"MEZCLA DE RESERVORIOS"),
     ("304", u"COL CHINA"),
     ("305", u"MECLA AVENA-TRIGO"),
@@ -804,14 +804,14 @@ def add_TipoProducto(ft, name):
     ("318", u"MANZANILLA DULCE"),
     ("319", u"MILENRAMA"),
     ("320", u"POLEO"),
-    ("321", u"R√ÅBANO NEGRO"),
+    ("321", u"R√?BANO NEGRO"),
     ("322", u"ROMPEPIEDRA"),
     ("323", u"TRAVALERA"),
     ("324", u"VARA DE ORO"),
     ("325", u"TRIGO KHORASAN"),
-    ("326", u"MA√çZ DULCE"),
+    ("326", u"MA√?Z DULCE"),
     ("327", u"REMOLACHA DE MESA"),
-    ("328", u"PASTO DEL SUD√ÅN"),
+    ("328", u"PASTO DEL SUD√?N"),
     ("329", u"AMARANTO"),
     ("330", u"ELEMENTO DEL PAISAJE"),
     ("332", u"MOSTAZA"),
@@ -824,12 +824,12 @@ def add_TipoProducto(ft, name):
     ("341", u"SILPHIUM"),
     ("342", u"OTRAS MEZCLAS CON PREDOMINANCIA CFN "),
     ("350", u"RASTROJERAS"),
-    ("700", u"HECT√ÅREAS DE AGROSILVICULTURA QUE RECIBAN O HAYAN RECIBIDO AYUDAS DEL REGLAMENTO No 1698/2005 Y/O DEL REGLAMENTO No 1305/2013"),
+    ("700", u"HECT√?REAS DE AGROSILVICULTURA QUE RECIBAN O HAYAN RECIBIDO AYUDAS DEL REGLAMENTO No 1698/2005 Y/O DEL REGLAMENTO No 1305/2013"),
     ("750", u"SUPERFICIES VINCULADAS A LA DIRECTIVA 92/43/CEE "),
     ("900", u"SINAPIS ALBA"),
     ("901", u"BRASSICA CARINATA"),
     ("902", u"BRASSICA JUNCEA"),
-    ("903", u"OTRAS CRUC√çFERAS"),
+    ("903", u"OTRAS CRUC√?FERAS"),
     ("904", u"CROTALARIA JUNCEA"),
     ("78", u"RAYGRAS ANUAL (Lolium multiflorum LAM. And hybrids) "),
     ("139", u"HIERBA CINTA (Phalaris arundinacea L.)"),
@@ -856,7 +856,7 @@ def add_TipoProducto(ft, name):
     ("122", u"ALGARROBO"),
     ("123", u"AVELLANO"),
     ("124", u"PISTACHO"),
-    ("125", u"FRUTOS DE C√ÅSCARA"),
+    ("125", u"FRUTOS DE C√?SCARA"),
     ("201", u"PLATERINA"),
     ("202", u"PARAGUAYO"),
     ("203", u"ENDRINO O ARA√ë√ìN"),
@@ -866,13 +866,13 @@ def add_TipoProducto(ft, name):
     ("207", u"LIMONERO"),
     ("208", u"POMELO"),
     ("209", u"MANDARINO"),
-    ("210", u"MANDARINO H√çBRIDO"),
+    ("210", u"MANDARINO H√?BRIDO"),
     ("211", u"MEMBRILLO"),
     ("212", u"KIWI"),
     ("213", u"CAQUI o PALOSANTO"),
     ("214", u"NISPERO"),
     ("215", u"GROSELLA"),
-    ("216", u"AR√ÅNDANO"),
+    ("216", u"AR√?NDANO"),
     ("217", u"GRANADO"),
     ("218", u"HIGUERA"),
     ("221", u"UVA PASA"),
@@ -880,10 +880,10 @@ def add_TipoProducto(ft, name):
     ("235", u"JATROPHA"),
     ("237", u"SUPERFICIES FORESTALES DE ROTACI√ìN CORTA"),
     ("278", u"FRUTOS DEL BOSQUE"),
-    ("279", u"ESP√ÅRRAGOS"),
+    ("279", u"ESP√?RRAGOS"),
     ("280", u"TRUFA"),
     ("281", u"LAVANDA"),
-    ("282", u"LAVAND√çN"),
+    ("282", u"LAVAND√?N"),
     ("283", u"ALCAPARRA"),
     ("284", u"AJENJO"),
     ("285", u"ESPLIEGO"),
@@ -911,12 +911,12 @@ def add_TipoProducto(ft, name):
     ("911", u"KUMQUAT"),
     ("912", u"LIMEQUAT"),
     ("913", u"MANO DE BUDA"),
-    ("914", u"CAVIAR C√çTRICO/ FINGER LIME"),
+    ("914", u"CAVIAR C√?TRICO/ FINGER LIME"),
     ("915", u"LIMA"),
-    ("062", u"PASTOS PERMANENTES DE 5 O M√ÅS A√ëOS"),
-    ("064", u"PASTIZAL DE 5 O M√ÅS A√ëOS"),
-    ("065", u"PASTO ARBUSTIVO DE 5 O M√ÅS A√ëOS"),
-    ("066", u"PASTO ARBOLADO DE 5 O M√ÅS A√ëOS"),
+    ("062", u"PASTOS PERMANENTES DE 5 O M√?S A√ëOS"),
+    ("064", u"PASTIZAL DE 5 O M√?S A√ëOS"),
+    ("065", u"PASTO ARBUSTIVO DE 5 O M√?S A√ëOS"),
+    ("066", u"PASTO ARBOLADO DE 5 O M√?S A√ëOS"),
     ("028", u" RETIRADA FORESTACI√ìN"),
     ("114", u"SUPERFICIES FORESTALES MADERABLES"),
     ("115", u"OTRAS SUPERFICIES FORESTALES"),
@@ -979,7 +979,7 @@ def add_fields_RSUPAC2019_EXPLOTACIONES(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
 
   add_TipoCodREGA(ft, "CodREGA")
@@ -997,7 +997,7 @@ def add_fields_RSUPAC2019_ORIGEN_ANIMALES(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
   add_TipoCodREGA(ft, "CodREGA")
 
@@ -1014,7 +1014,7 @@ def add_fields_RSUPAC2019_AYUDA_SOL_AD(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
   add_TipoLineaAD(ft, "Codigo_lineaAD")\
     .setLabel(u"Linea de ayuda AD solicitada")\
@@ -1036,7 +1036,7 @@ def add_fields_RSUPAC2019_AYUDA_SOL_PDR(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
   add_TipoLineaPDR(ft, "Codigo_lineaPDR")\
     .setLabel(u"Linea de ayuda PDR solicitada")\
@@ -1194,7 +1194,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "RSUPAC2019_EXPLOTACIONES", 
     "ID", 
     ("ID", "CodREGA"), 
-    "FEATURES('RSUPAC2019_EXPLOTACIONES',FORMAT('NumExpediente = ''%s''',NumExpediente))"
+    "FEATURES('RSUPAC2019_EXPLOTACIONES',FORMAT('ID_EXPEDIENTE = ''%s''',ID_EXPEDIENTE))"
   )\
   .setGroup(u"REGA Explotacion")
   
@@ -1216,7 +1216,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "RSUPAC2019_ORIGEN_ANIMALES", 
     "ID", 
     ("ID", "CodREGA"), 
-    "FEATURES('RSUPAC2019_ORIGEN_ANIMALES',FORMAT('NumExpediente = ''%s''',NumExpediente))"
+    "FEATURES('RSUPAC2019_ORIGEN_ANIMALES',FORMAT('ID_EXPEDIENTE = ''%s''',ID_EXPEDIENTE))"
   )\
   .setGroup(u"REGA Explotacion (Orig. animales)")\
   .setDescription(u"C√≥digo REGA de la explotaci√≥n origen de los animales")
@@ -1268,7 +1268,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "RSUPAC2019_AYUDA_SOL_AD", 
     "ID", 
     ("ID", "Codigo_LineaAD", "SupDeclarada_LineaAD"), 
-    "FEATURES('RSUPAC2019_AYUDA_SOL_AD',FORMAT('NumExpediente = ''%s''',NumExpediente))"
+    "FEATURES('RSUPAC2019_AYUDA_SOL_AD',FORMAT('ID_EXPEDIENTE = ''%s''',ID_EXPEDIENTE))"
   )\
   .setGroup("Ayudas AD")
 
@@ -1279,7 +1279,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "RSUPAC2019_AYUDA_SOL_PDR", 
     "ID", 
     ("ID", "Codigo_LineaPDR"), 
-    "FEATURES('RSUPAC2019_AYUDA_SOL_PDR',FORMAT('NumExpediente = ''%s''',NumExpediente))"
+    "FEATURES('RSUPAC2019_AYUDA_SOL_PDR',FORMAT('ID_EXPEDIENTE = ''%s''',ID_EXPEDIENTE))"
   )\
   .setGroup("Ayudas PDR")
 
@@ -1289,8 +1289,8 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "R10_Parcelas", 
     "RSUPAC2019_R10_PARCELAS", 
     "ID_PARCELA", 
-    ("NumExpediente", "PA_NumOrden", "PA_SupTotalDec", "PA_Producto"), 
-    "FEATURES('RSUPAC2019_R10_PARCELAS',FORMAT('NumExpediente = ''%s''',NumExpediente))"
+    ("ID_EXPEDIENTE", "PA_NumOrden", "PA_SupTotalDec", "PA_Producto"), 
+    "FEATURES('RSUPAC2019_R10_PARCELAS',FORMAT('ID_EXPEDIENTE = ''%s''',ID_EXPEDIENTE))"
   )\
   .setGroup("Parcelas")
 
@@ -1315,7 +1315,7 @@ def add_fields_RSUPAC2019_R10_PARCELAS(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
 
   add_TipoNumeroOrden(ft, "PA_NumOrden")\
