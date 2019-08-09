@@ -4,6 +4,22 @@
 #
 # Unicode characters table
 # https://www.rapidtables.com/code/text/unicode-characters.html
+# 
+# 
+# a' \u00E1
+# e' \u00E9
+# i' \u00ED
+# o' \u00F3
+# u' \u00FA
+# u: \u00FC
+# n- \u00F1
+# A' \u00C1
+# E' \u00C9
+# I' \u00CD
+# O' \u00D3
+# U' \u00DA
+# U: \u00DC
+# N- \u00D1
 #
 
 """
@@ -86,7 +102,7 @@ def add_TipoCCAA(ft, name):
   x = ft.add( name, "String", 2)\
     .setLabel(u"C\u00F3d. CCAA")\
     .setShortLabel(u"CCAA")\
-    .setDescription(u"Comunidad autonoma")
+    .setDescription(u"Comunidad aut\u00F3noma")
   setAvailableValues(x,
     ("01", u"01 - Andaluc\u00EDa"),
     ("02", u"02 - Arag\u00F3n"),
@@ -141,7 +157,7 @@ def add_TipoCIFNIF(ft, name):
 def add_TipoCIFNIFNIE(ft, name):
   x = ft.add( name, "String", 14)\
     .setLabel(u"CIF/NIF/NIE")\
-    .setDescription(u"CIF, NIF o NIE de hasta 9 caracteres, o codigo de extrangero de hasta 14 caracteres")
+    .setDescription(u"CIF, NIF o NIE de hasta 9 caracteres, o c\u00F3digo de extranjero de hasta 14 caracteres")
   return x 
 
 def add_TipoCIF(ft, name):
@@ -158,7 +174,7 @@ def add_TipoNombreRazonSocial150(ft, name):
 def add_TipoNombreRazonSocial90(ft, name):
   x = ft.add( name, "String", 150)\
     .setLabel(u"Nombre")\
-    .setDescription(u"Nombre o razon social, o nombre de pasto")
+    .setDescription(u"Nombre o raz\u00F3n social, o nombre de pasto")
   return x 
 
 def add_TipoApellido(ft, name):
@@ -202,25 +218,25 @@ def add_TipoCodPostal(ft, name):
 
 def add_TipoTelefono(ft, name):
   x = ft.add( name, "String", 9)\
-    .setLabel(u"Telefono")
+    .setLabel(u"Tel\u00E9fono")
   return x 
 
 def add_TipoEmail(ft, name):
   x = ft.add( name, "String", 90)
-  x.setLabel(u"Correo electronico")
+  x.setLabel(u"Correo electr\u00F3nico")
   x.setShortLabel(u"EMail")
   return x 
 
 def add_TipoEntidadJuridica(ft, name):
   x = ft.add( name, "String", 1)\
-    .setLabel(u"Entidad juridica")\
-    .setDescription(u"Tipo de entidad juridica")
+    .setLabel(u"Entidad jur\u00EDdica")\
+    .setDescription(u"Tipo de entidad jur\u00EDdica")
   setAvailableValues(x, 
     ( "1", u"1 - SAT"),
     ( "2", u"2 - Cooperativa"),
     ( "3", u"3 - Sociedad civil"),
     ( "4", u"4 - Comunidad de bienes"),
-    ( "5", u"5 - Otras personas juridicas")
+    ( "5", u"5 - Otras personas jur\u00EDdicas")
   )
   return x 
 
@@ -231,21 +247,21 @@ def add_TipoRegimenMatrimonial(ft, name):
     .setDescription(u"Regimen matrimonial")
   setAvailableValues(x, 
     ( "1", u"1 - Gananciales"),
-    ( "2", u"2 - Separacion de bienes"),
-    ( "3", u"3 - Participacion")
+    ( "2", u"2 - Separaci\u00F3n de bienes"),
+    ( "3", u"3 - Participaci\u00F3n")
   )
   return x 
 
 def add_TipoRelacionConTitular(ft, name):
   x = ft.add( name, "String", 1)\
-    .setLabel(u"Relacion con titular")\
+    .setLabel(u"Relaci\u00F3n con titular")\
     .setShortLabel(u"Rel. titular")\
-    .setDescription(u"Tipo de relacion con el titular")
+    .setDescription(u"Tipo de relaci\u00F3n con el titular")
   setAvailableValues(x, 
-      ( "1", u"1 - El titular es jefe de la explotacion."),
-      ( "2", u"2 - El jefe de la explotacion no es el titular, ni miembro de la familia del titular."),
-      ( "3", u"3 - El jefe de la explotacion es conyuge del titular."),
-      ( "4", u"4 - El jefe de la explotacion es familiar del titular.")
+      ( "1", u"1 - El titular es jefe de la explotaci\u00F3n."),
+      ( "2", u"2 - El jefe de la explotaci\u00F3n no es el titular, ni miembro de la familia del titular."),
+      ( "3", u"3 - El jefe de la explotaci\u00F3n es c\u00F3nyuge del titular."),
+      ( "4", u"4 - El jefe de la explotaci\u00F3n es familiar del titular.")
   )
   return x 
 
@@ -253,7 +269,7 @@ def add_TipoPorcTA(ft, name):
   x = ft.add( name, "String", 1)\
     .setLabel(u"% tiempo anual")\
     .setShortLabel(u"% anual")\
-    .setDescription(u"Porcentaje de tiempo anual dedicado al trabajo en la explotacion")
+    .setDescription(u"Porcentaje de tiempo anual dedicado al trabajo en la explotaci\u00F3n")
   setAvailableValues(x, 
     ("1", u"1 - 0 o menor que  25"), 
     ("2", u"2 - 25 o menor que  50"), 
@@ -265,52 +281,52 @@ def add_TipoPorcTA(ft, name):
 
 def add_TipoFormAgraria(ft, name):
   x = ft.add( name, "String", 1)\
-    .setLabel(u"Formacion agraria")\
+    .setLabel(u"Formaci\u00F3n agraria")\
     .setShortLabel(u"F. agraria")\
-    .setDescription(u"Formacion agraria")
+    .setDescription(u"Formaci\u00F3n agraria")
   setAvailableValues(x, 
     ("1", u"1 - Solo experiencia practica agraria."),
-    ("2", u"2 - Cursos de formacion agraria."),
-    ("3", u"3 - Formacion profesional agraria."),
+    ("2", u"2 - Cursos de formaci\u00F3n agraria."),
+    ("3", u"3 - Formaci\u00F3n profesional agraria."),
     ("4", u"4 - Estudios universitarios y/o Superiores agrarios.")
   )
   return x 
 
 def add_TipoIBAN(ft, name):
   x = ft.add( name, "String", 4)\
-    .setLabel(u"Codigo IBAN")\
+    .setLabel(u"C\u00F3digo IBAN")\
     .setShortLabel(u"IBAN")
   return x 
 
 def add_TipoBancoSucursal(ft, name):
   x = ft.add( name, "String", 4)\
-    .setDescription(u"Codigo de banco o sucursal")
+    .setDescription(u"C\u00F3digo de banco o sucursal")
   return x 
 
 def add_TipoDC(ft, name):
   x = ft.add( name, "String", 2)\
-    .setDescription(u"Digitos de control")
+    .setDescription(u"D\u00EDgitos de control")
   return x 
 
 def add_TipoCCC(ft, name):
   x = ft.add( name, "String", 10)\
     .setLabel(u"Cuenta corriente")\
     .setShortLabel(u"CCC")\
-    .setDescription(u"Numero de cuenta corriente o libreta")
+    .setDescription(u"N\u00FAmero de cuenta corriente o libreta")
   return x 
 
 def add_TipoCodREGEPA(ft, name):
   x = ft.add( name, "String", 10)\
-    .setLabel(u"Codigo REGEPA")\
+    .setLabel(u"C\u00F3digo REGEPA")\
     .setShortLabel(u"REGEPA")\
-    .setDescription(u"Codigo REGEPA")
+    .setDescription(u"C\u00F3digo REGEPA")
   return x 
 
 def add_TipoCodREGA(ft, name):
   x = ft.add( name, "String", 14)\
-    .setLabel(u"Codigo REGA")\
+    .setLabel(u"C\u00F3digo REGA")\
     .setShortLabel(u"REGA")\
-    .setDescription(u"Codigo REGA (ES999999999999)")
+    .setDescription(u"C\u00F3digo REGA (ES999999999999)")
   return x 
 
 def add_TipoIngresos(ft, name):
@@ -330,26 +346,26 @@ def add_TipoNombreOI(ft, name):
 def add_TipoSuperficie(ft, name):
   x = ft.add( name, "Integer")\
     .setLabel(u"Superficie")\
-    .setDescription(u"Superficie, numero entero expresado en areas")
+    .setDescription(u"Superficie (expresado en \u00E1reas)")
   return x 
 
 def add_TipoLineaAD(ft, name):
   x = ft.add( name, "String", 3)\
-    .setLabel(u"Cod. linea ayuda AD")\
+    .setLabel(u"C\u00F3d. l\u00EDnea ayuda AD")\
     .setShortLabel(u"AD")\
-    .setDescription(u"Codigo de la linea de ayuda AD")
+    .setDescription(u"C\u00F3digo de la l\u00EDnea de ayuda AD")
   setAvailableValues(x, 
-    (   "1", u"001 Régimen de Pago Básico"),
-    (   "2", u"002 Pago para prácticas beneficiosas para el clima y el medio ambiente (Greening)"),
-    (   "6", u"006 Pago para jóvenes agricultores"),
-    (   "9", u"009 Régimen de Pequeños agricultores"),
+    (   "1", u"001 R\u00E9gimen de Pago B\u00E1sico"),
+    (   "2", u"002 Pago para pr\u00E1cticas beneficiosas para el clima y el medio ambiente (Greening)"),
+    (   "6", u"006 Pago para j\u00F3venes agricultores"),
+    (   "9", u"009 R\u00E9gimen de Pequeños agricultores"),
     ( "201", u"201 Ayuda asociada al cultivo del arroz"),
     ( "202", u"202 Ayuda asociada a los cultivos proteicos"),
-    ( "203", u"203 Ayuda asociada a los frutos de cáscara y las algarrobas"),
+    ( "203", u"203 Ayuda asociada a los frutos de c\u00E1scara y las algarrobas"),
     ( "204", u"204 Ayuda asociada a las legumbres de calidad"),
     ( "205", u"205 Ayuda asociada a la remolacha azucarera"),
     ( "206", u"206 Ayuda asociada al tomate para industria"),
-    ( "207", u"207 Ayuda al algodón"),
+    ( "207", u"207 Ayuda al algod\u00F3n"),
     ( "301", u"301 Ayuda asociada vaca nodriza."),
     ( "302", u"302 Ayuda asociada vacuno de cebo"),
     ( "303", u"303 Ayuda asociada vacuno de leche"),
@@ -363,9 +379,9 @@ def add_TipoLineaAD(ft, name):
 
 def add_TipoLineaADSecundario(ft, name):
   x = ft.add( name, "String", 3)\
-    .setLabel(u"Cod. AD Secundario")\
+    .setLabel(u"C\u00F3d. AD Secundario")\
     .setShortLabel(u"AD Secundario")\
-    .setDescription(u"Codigo de la linea de ayuda solicitada en cultivo secundario")
+    .setDescription(u"C\u00F3digo de la l\u00EDnea de ayuda solicitada en cultivo secundario")
   setAvailableValues(x, 
     ("202", u"Ayuda asociada a los cultivos proteicos"),
     ("204", u"Ayuda asociada a las legumbres de calidad"),
@@ -376,40 +392,40 @@ def add_TipoLineaADSecundario(ft, name):
 
 def add_TipoLineaPDR(ft, name):
   x = ft.add( name, "String", 11)\
-    .setLabel(u"Cod. linea PDR")\
+    .setLabel(u"C\u00F3d. l\u00EDnea PDR")\
     .setShortLabel(u"PDR")\
-    .setDescription(u"Codigo de la linea de ayuda PDR")
+    .setDescription(u"C\u00F3digo de la l\u00EDnea de ayuda PDR")
   return x 
 
 def add_TipoLineaAPI(ft, name):
   x = ft.add( name, "String", 11)\
-    .setLabel(u"Cod. linea API")\
+    .setLabel(u"C\u00F3d. l\u00EDnea API")\
     .setShortLabel(u"API")\
-    .setDescription(u"Codigo de la linea de ayuda de apicultura")
+    .setDescription(u"C\u00F3digo de la l\u00EDnea de ayuda de apicultura")
   return x 
 
 def add_TipoNumeroOrden(ft, name):
   x = ft.add( name, "Integer")\
-    .setLabel(u"Numero orden")\
-    .setShortLabel(u"Num. orden")\
-    .setDescription(u"Numero de orden")
+    .setLabel(u"N\u00FAmero orden")\
+    .setShortLabel(u"N\u00FAm. orden")\
+    .setDescription(u"N\u00FAmero de orden")
   return x 
 
 def add_TipoOPFH(ft, name):
   x = ft.add( name, "Integer")\
-    .setLabel(u"Numero OPFH")\
-    .setShortLabel(u"Num. OPFH")\
-    .setDescription(u"Numero de la OPFH")
+    .setLabel(u"N\u00FAmero OPFH")\
+    .setShortLabel(u"N\u00FAm. OPFH")\
+    .setDescription(u"N\u00FAmero de la OPFH")
   return x 
 
 def add_TipoSistemaExplotacion(ft, name):
   x = ft.add( name, "String", 1)\
-    .setLabel(u"Sistema explotacion")\
+    .setLabel(u"Sistema explotaci\u00F3n")\
     .setShortLabel(u"Sis. explo.")\
-    .setDescription(u"Sistema de explotacion")
+    .setDescription(u"Sistema de explotaci\u00F3n")
   setAvailableValues(x, 
     ("S", u"S - Secano"),
-    ("R", u"R - Regadio")
+    ("R", u"R - Regad\u00EDo")
   )
   return x 
 
@@ -419,35 +435,35 @@ def add_TipoRecintoCompleto(ft, name):
     .setShortLabel(u"Rec. Compl.")\
     .setDescription(u"Tipo Recinto Completo")
   setAvailableValues(x, 
-    (1, u"1 - Linea de declaracion ocupa toda la extension del recinto"),
-    (0, u"0 - Linea de declaracion ocupa parte de la extension del recinto")
+    (1, u"1 - Linea de declaraci\u00F3n ocupa toda la extensi\u00F3n del recinto"),
+    (0, u"0 - Linea de declaraci\u00F3n ocupa parte de la extensi\u00F3n del recinto")
   )
   return x 
     
 def add_TipoDestinoProduccion(ft, name):
   # campo 56
   x = ft.add( name, "String", 1)\
-    .setLabel(u"Destino de la produccion")\
+    .setLabel(u"Destino de la producci\u00F3n")\
     .setShortLabel(u"Dest. prod.")\
-    .setDescription(u"Destino de la produccion")
+    .setDescription(u"Destino de la producci\u00F3n")
   setAvailableValues(x, 
     ("1", u"1 - Consumo en fresco"),
     ("2", u"2 - Procesamiento industrial"),
-    ("3", u"3 - Semillas o plantulas con fines comerciales"),
-    ("4", u"4 - Energias renovables"),
+    ("3", u"3 - Semillas o pl\u00E1ntulas con fines comerciales"),
+    ("4", u"4 - Energ\u00EDas renovables"),
     ("5", u"5 - Abonado en verde")
   )
   return x 
   
 def add_TipoSistCultivoHorticolas(ft, name):
   x = ft.add( name, "String", 1)\
-    .setLabel(u"Sitema de cultivo")\
+    .setLabel(u"Sistema de cultivo")\
     .setShortLabel(u"Sist. cultivo")\
     .setDescription(u"Sistema de cultivo empleado")
   setAvailableValues(x, 
     ("1", u"1 - Aire libre"),
     ("2", u"2 - Malla"),
-    ("3", u"3 - Cubierta bajo plastico o invernadero")
+    ("3", u"3 - Cubierta bajo pl\u00E1stico o invernadero")
   )
   return x 
     
@@ -455,7 +471,7 @@ def add_TipoRecuentoArboles(ft, name):
   x = ft.add( name, "Integer")\
     .setLabel(u"Recuento de arboles")\
     .setShortLabel(u"Arboles")\
-    .setDescription(u"Recuento de arboles (almendros, avellanos, algarrobos, castanios)")
+    .setDescription(u"Recuento de arboles (almendros, avellanos, algarrobos, casta\u00F1ios)")
   return x 
     
 def add_TipoObservaciones(ft, name):
@@ -467,31 +483,31 @@ def add_TipoObservaciones(ft, name):
     
 def add_TipoCodigoMUP(ft, name):
   x = ft.add( name, "String", 10)\
-    .setLabel(u"TipoCodigoMUP")\
-    .setShortLabel(u"TipoCodigoMUP")\
-    .setDescription(u"Codigo de pasto: Numero de MUP en el caso de los montes de utilidad publica si se dispone del mismo")
+    .setLabel(u"C\u00F3digo MUP")\
+    .setShortLabel(u"C\u00F3digo MUP")\
+    .setDescription(u"C\u00F3digo de pasto: N\u00FAmero de MUP en el caso de los montes de utilidad publica si se dispone del mismo")
   return x 
     
 def add_TipoRegimenTenencia(ft, name): 
   x = ft.add( name, "String", 1)\
-    .setLabel(u"Regimen de tenencia")\
+    .setLabel(u"R\u00E9gimen de tenencia")\
     .setShortLabel(u"Reg. tenencia")\
-    .setDescription(u"Regimen de tTnencia")
+    .setDescription(u"R\u00E9gimen de tenencia")
   setAvailableValues(x, 
     ("1", u"1 - Propiedad"),
     ("2", u"2 - Arrendamiento"),
-    ("3", u"3 - Aparceria"),
+    ("3", u"3 - Aparcer\u00EDa"),
     ("4", u"4 - Usufructo"),
-    ("5", u"5 - Asignacion de superficie por parte de un bien comunal"),
-    ("6", u"6 - Aparceria comunal")
+    ("5", u"5 - Asignaci\u00F3n de superficie por parte de un bien comunal"),
+    ("6", u"6 - Aparcer\u00EDa comunal")
   )
   return x 
 
 def add_TipoCAPDeclarado(ft, name): #todo labels
   x = ft.add( name, "Integer")\
-    .setLabel(u"TipoCAPDeclarado")\
-    .setShortLabel(u"TipoCAPDeclarado")\
-    .setDescription(u"TipoCAPDeclarado")
+    .setLabel(u"CAP Declarado")\
+    .setShortLabel(u"CAP Decl.")\
+    .setDescription(u"CAP Declarado")
   return x 
 
 def add_TipoUsosSIGPAC(ft, name):
@@ -502,31 +518,31 @@ def add_TipoUsosSIGPAC(ft, name):
   setAvailableValues(x, 
     ("AG", u"AG - CORRIENTES Y SUPERFICIES DE AGUA"),
     ("CA", u"CA - VIALES"),
-    ("CF", u"CF - CITRICOS - FRUTAL"),
-    ("CI", u"CI - CITRICOS"),
-    ("CS", u"CS - CITRICOS - FRUTAL DE CASCARA"),
-    ("CV", u"CV - CITRICOS - VINIEDO"),
+    ("CF", u"CF - C\u00CDTRICOS - FRUTAL"),
+    ("CI", u"CI - C\u00CDTRICOS"),
+    ("CS", u"CS - C\u00CDTRICOS - FRUTAL DE CASCARA"),
+    ("CV", u"CV - C\u00CDTRICOS - VI\u00D1EDO"),
     ("ED", u"ED - EDIFICACIONES"),
     ("EP", u"EP - ELEMENTO DEL PAISAJE"),
     ("FF", u"FF - FRUTAL DE CASCARA - FRUTAL"),
-    ("FL", u"FL - ASOCIACION FRUTAL DE CASCARA-OLIVAR"),
+    ("FL", u"FL - ASOCIACI\u00D3N FRUTAL DE CASCARA-OLIVAR"),
     ("FO", u"FO - FORESTAL"),
     ("FS", u"FS - FRUTAL DE CASCARA"),
-    ("FV", u"FV - ASOCIACION FRUTAL DE CASCARA-VINIEDO"),
+    ("FV", u"FV - ASOCIACI\u00D3N FRUTAL DE CASCARA-VI\u00D1EDO"),
     ("FY", u"FY - FRUTAL"),
     ("IM", u"IM - IMPRODUCTIVOS"),
-    ("IV", u"IV - INVERNADEROS Y CULTIVOS BAJO PLASTICO"),
-    ("OC", u"OC - OLIVAR - CITRICOS"),
-    ("OF", u"OF - ASOCIACION OLIVAR-FRUTAL"),
+    ("IV", u"IV - INVERNADEROS Y CULTIVOS BAJO PL\u00C1STICO"),
+    ("OC", u"OC - OLIVAR - C\u00CDTRICOS"),
+    ("OF", u"OF - ASOCIACI\u00D3N OLIVAR-FRUTAL"),
     ("OV", u"OV - OLIVAR"),
     ("PA", u"PA - PASTO CON ARBOLADO"),
     ("PR", u"PR - PASTO ARBUSTIVO"),
     ("PS", u"PS - PASTIZAL"),
     ("TA", u"TA - TIERRA ARABLE"),
     ("TH", u"TH - HUERTA"),
-    ("VF", u"VF - ASOCIACION FRUTAL-VINIEDO"),
-    ("VI", u"VI - VINIEDO"),
-    ("VO", u"VO - ASOCIACION OLIVAR-VINIEDO"),
+    ("VF", u"VF - ASOCIACI\u00D3N FRUTAL-VI\u00D1EDO"),
+    ("VI", u"VI - VI\u00D1EDO"),
+    ("VO", u"VO - ASOCIACI\u00D3N OLIVAR-VI\u00D1EDO"),
     ("ZC", u"ZC - ZONA CONCENTRADA NO REFLEJADA EN LA ORTOFOTO"),
     ("ZU", u"ZU - ZONA URBANA"),
     ("ZV", u"ZV - ZONA CENSURADA")
@@ -557,21 +573,21 @@ def add_TipoParcelaRecinto(ft, name):
 
 def add_TipoAgregadoPoligono(ft, name):
   x = ft.add( name, "String", 3)\
-    .setLabel(u"Agregado poligono")\
-    .setShortLabel(u"Agregado poligono")\
-    .setDescription(u"Agregado / Poligono")
+    .setLabel(u"Agregado pol\u00EDgono")\
+    .setShortLabel(u"Agregado pol\u00EDgono")\
+    .setDescription(u"Agregado / Pol\u00EDgono")
   return x 
     
 def add_TipoLineaDeclaracionRecinto(ft, name): #todo labels
   x = ft.add( name, "Integer")\
-    .setLabel(u"Linea Declaracion Recinto")\
-    .setShortLabel(u"Tipo semilla")\
-    .setDescription(u"Tipo de semilla")
+    .setLabel(u"L\u00EDnea declaraci\u00F3n recinto")\
+    .setShortLabel(u"L\u00EDn. Decl. rec.")\
+    .setDescription(u"L\u00EDnea de declaraci\u00F3n del recinto")
   return x 
     
 def add_TipoSemilla(ft, name):
   x = ft.add( name, "String", 1)\
-    .setLabel(u"semilla utilizada")\
+    .setLabel(u"Semilla utilizada")\
     .setShortLabel(u"Semilla")\
     .setDescription(u"Semilla utilizada")
   setAvailableValues(x, 
@@ -584,7 +600,7 @@ def add_TipoSemilla(ft, name):
 def add_TipoCicloCultivo(ft, name):
   x = ft.add( name, "String", 1)\
     .setLabel(u"Ciclo de cultivo")\
-    .setShortLabel(u"Cod. producto")\
+    .setShortLabel(u"C\u00F3d. producto")\
     .setDescription(u"Ciclo de cultivo")
   setAvailableValues(x, 
     ("I", u"I - Invierno"),
@@ -598,26 +614,26 @@ def add_TipoActividadAgraria(ft, name):
     .setShortLabel(u"Act. agraria")\
     .setDescription(u"Actividad agraria realizada")
   setAvailableValues(x, 
-    ( "1", u"01 - Produccion"),
+    ( "1", u"01 - Producci\u00F3n"),
     ( "2", u"02 - Laboreo"),
-    ( "3", u"03 - Eliminacion de malas hierbas"),
+    ( "3", u"03 - Eliminaci\u00F3n de malas hierbas"),
     ( "4", u"04 - Mantenimiento de cultivos permanentes"),
     ( "5", u"05 - Pastoreo"),
     ( "6", u"06 - Desbroce"),
     ( "7", u"07 - Siega para mantenimiento"),
     ( "8", u"08 - Mantenimiento de drenajes"),
-    ( "9", u"09 - Estercolado o fertilizacion"),
+    ( "9", u"09 - Estercolado o fertilizaci\u00F3n"),
     ("10", u"10 - Mantenimiento/Establecimiento de una cubierta vegetal en barbechos"),
-    ("11", u"11 - Siega para la produccion de hierba"),
+    ("11", u"11 - Siega para la producci\u00F3n de hierba"),
   )
   return x
 
 def add_TipoVariedad(ft, name):
   # pag 26 - circular  2
   x = ft.add( name, "String", 4)\
-    .setLabel(u"Codigo de variedad")\
-    .setShortLabel(u"Cod. variedad")\
-    .setDescription(u"Codigo de variedad, especie, tipo o subcodigo")\
+    .setLabel(u"C\u00F3digo de variedad")\
+    .setShortLabel(u"C\u00F3d. variedad")\
+    .setDescription(u"C\u00F3digo de variedad, especie, tipo o subc\u00F3digo")\
   # TODO 
   # necesidad de que ciertos valores son especificos de cada especie
   return x
@@ -625,14 +641,14 @@ def add_TipoVariedad(ft, name):
 def add_TipoProducto(ft, name):
   # pag 26 - circular  2
   x = ft.add( name, "String", 3)\
-    .setLabel(u"Codigo del producto")\
-    .setShortLabel(u"Cod. producto")\
-    .setDescription(u"Codigo del producto")
+    .setLabel(u"C\u00F3digo del producto")\
+    .setShortLabel(u"C\u00F3d. producto")\
+    .setDescription(u"C\u00F3digo del producto")
   setAvailableValues(x, 
     ("001", u"TRIGO BLANDO"),
     ("002", u"TRITICUM SPELTA"),
     ("003", u"TRIGO DURO"),
-    ("004", u"MA�?Z"),
+    ("004", u"MA\u00CDZ"),
     ("005", u"CEBADA"),
     ("006", u"CENTENO"),
     ("007", u"SORGO"),
@@ -645,11 +661,11 @@ def add_TipoProducto(ft, name):
     ("014", u"TRITORDEUM"),
     ("019", u"TEFF"),
     ("020", u"BARBECHO TRADICIONAL"),
-    ("021", u"BARBECHO MEDIOAMBIENTAL ABANDONO 5 AÑOS "),
+    ("021", u"BARBECHO MEDIOAMBIENTAL ABANDONO 5 A\u00D1OS "),
     ("023", u"BARBECHO MEDIOAMBIENTAL"),
-    ("024", u"BARBECHO SIN PRODUCCIÓN"),
+    ("024", u"BARBECHO SIN PRODUCCI\u00D3N"),
     ("025", u"ABANDONO 20 años"),
-    ("334", u"BARBECHO CON ESPECIES MEL�?FERAS "),
+    ("334", u"BARBECHO CON ESPECIES MEL\u00CDFERAS "),
     ("033", u"GIRASOL"),
     ("034", u"SOJA"),
     ("035", u"COLZA"),
@@ -674,13 +690,13 @@ def add_TipoProducto(ft, name):
     ("073", u"FLEO"),
     ("074", u"POA"),
     ("076", u"ZULLA"),
-    ("077", u"TRÉBOL"),
+    ("077", u"TR\u00C9BOL"),
     ("080", u"ARROZ"),
-    ("081", u"ALGODÓN"),
+    ("081", u"ALGOD\u00D3N"),
     ("082", u"REMOLACHA"),
     ("083", u"TABACO"),
     ("085", u"LINO TEXTIL PARA FIBRA"),
-    ("086", u"CAÑAMO PARA FIBRA"),
+    ("086", u"CA\u00D1AMO PARA FIBRA"),
     ("087", u"CACAHUETE"),
     ("088", u"CARTAMO"),
     ("089", u"CHUFA"),
@@ -688,16 +704,16 @@ def add_TipoProducto(ft, name):
     ("091", u"FLORES"),
     ("092", u"ROMANESCU"),
     ("093", u"LINO NO TEXTIL"),
-    ("096", u"ESPECIES AROMATICAS HERB�?CEAS"),
+    ("096", u"ESPECIES AROMATICAS HERB\u00C1CEAS"),
     ("097", u"SETAS"),
-    ("098", u"PIMIENTO PARA PIMENTÓN"),
+    ("098", u"PIMIENTO PARA PIMENT\u00D3N"),
     ("099", u"PATATA"),
     ("121", u"BONIATO"),
     ("138", u"ADORMIDERA"),
     ("151", u"PUERROS"),
     ("152", u"PIMIENTO"),
-    ("153", u"MELÓN"),
-    ("154", u"BRÓCOLI"),
+    ("153", u"MEL\u00D3N"),
+    ("154", u"BR\u00D3COLI"),
     ("155", u"LECHUGA"),
     ("156", u"SANDIA"),
     ("157", u"CEBOLLA"),
@@ -713,7 +729,7 @@ def add_TipoProducto(ft, name):
     ("168", u"CHALOTA"),
     ("169", u"AJO"),
     ("170", u"COL"),
-    ("171", u"CHIRIV�?A"),
+    ("171", u"CHIRIV\u00CDA"),
     ("172", u"REPOLLO"),
     ("173", u"COL ROJA O LOMBARDA"),
     ("174", u"COL MILAN"),
@@ -722,7 +738,7 @@ def add_TipoProducto(ft, name):
     ("177", u"ENDIVIA"),
     ("178", u"ZANAHORIA"),
     ("179", u"NABO"),
-    ("180", u"JUD�?A"),
+    ("180", u"JUD\u00CDA"),
     ("181", u"ACHICORIA"),
     ("182", u"GUINDILLAS"),
     ("183", u"ESPINACA"),
@@ -736,14 +752,14 @@ def add_TipoProducto(ft, name):
     ("191", u"BERRO"),
     ("192", u"FRAMBUESAS"),
     ("193", u"HUERTA"),
-    ("194", u"CHAMPIÑON"),
+    ("194", u"CHAMPI\u00D1ON"),
     ("197", u"TOMATE"),
-    ("198", u"TOMATE PARA TRANSFORMACIÓN"),
+    ("198", u"TOMATE PARA TRANSFORMACI\u00D3N"),
     ("219", u"FRESAS"),
-    ("220", u"CAÑA DE AZUCAR"),
+    ("220", u"CA\u00D1A DE AZUCAR"),
     ("222", u"QUINOA"),
     ("223", u"MISCANTHUS"),
-    ("236", u"CAÑA COMÚN (ARUNDO DONAX)"),
+    ("236", u"CA\u00D1A COM\u00DAN (ARUNDO DONAX)"),
     ("238", u"ALTRAMUZ"),
     ("239", u"ALMORTA"),
     ("240", u"TITARROS"),
@@ -756,10 +772,10 @@ def add_TipoProducto(ft, name):
     ("247", u"CULTIVOS MIXTOS DE ESPECIES PRATENSES "),
     ("248", u"ALGARROBA"),
     ("249", u"ALVERJA"),
-    ("250", u"ALBERJÓN"),
+    ("250", u"ALBERJ\u00D3N"),
     ("251", u"AJEDREA"),
     ("252", u"CILANTRO"),
-    ("253", u"AN�?S DULCE"),
+    ("253", u"AN\u00CDS DULCE"),
     ("254", u"ENELDO"),
     ("255", u"MANZANILLA"),
     ("256", u"VALERIANA"),
@@ -768,25 +784,25 @@ def add_TipoProducto(ft, name):
     ("259", u"HISOPO"),
     ("260", u"HINOJO"),
     ("261", u"PEREJIL"),
-    ("262", u"AZAFR�?N"),
+    ("262", u"AZAFR\u00C1N"),
     ("263", u"TOMILLO"),
     ("264", u"ALBAHACA"),
     ("265", u"MELISA O TORONJIL"),
     ("266", u"MENTA"),
-    ("267", u"ORÉGANO"),
+    ("267", u"OR\u00C9GANO"),
     ("268", u"SALVIA"),
     ("269", u"PERIFOLLO"),
-    ("270", u"ESTRAGÓN"),
+    ("270", u"ESTRAG\u00D3N"),
     ("271", u"MEJORANA"),
-    ("272", u"CALÉNDULA"),
+    ("272", u"CAL\u00C9NDULA"),
     ("273", u"COMINO"),
     ("274", u"ESTEVIA"),
-    ("275", u"HIPÉRICO"),
+    ("275", u"HIP\u00C9RICO"),
     ("276", u"HIERBABUENA"),
     ("277", u"VERBENA"),
     ("298", u"MEZCLA GUISANTE-CEBADA"),
     ("299", u"MEZCLA GUISANTE-AVENA"),
-    ("302", u"MEZCLA EN M�?RGENES MULTIFUNCIONALES "),
+    ("302", u"MEZCLA EN M\u00C1RGENES MULTIFUNCIONALES "),
     ("303", u"MEZCLA DE RESERVORIOS"),
     ("304", u"COL CHINA"),
     ("305", u"MECLA AVENA-TRIGO"),
@@ -794,24 +810,24 @@ def add_TipoProducto(ft, name):
     ("307", u"MEZCLA AVENA-TRITICALE"),
     ("308", u"AGRIMONIA"),
     ("309", u"BARDANA"),
-    ("310", u"DIENTE DE LEÓN"),
+    ("310", u"DIENTE DE LE\u00D3N"),
     ("311", u"ENULA"),
     ("312", u"EQUINACEA"),
     ("313", u"GINSENG"),
-    ("315", u"LLANTÉN"),
+    ("315", u"LLANT\u00C9N"),
     ("316", u"MALVAVISCO"),
     ("317", u"MANZANILLA AMARGA"),
     ("318", u"MANZANILLA DULCE"),
     ("319", u"MILENRAMA"),
     ("320", u"POLEO"),
-    ("321", u"R�?BANO NEGRO"),
+    ("321", u"R\u00C1BANO NEGRO"),
     ("322", u"ROMPEPIEDRA"),
     ("323", u"TRAVALERA"),
     ("324", u"VARA DE ORO"),
     ("325", u"TRIGO KHORASAN"),
-    ("326", u"MA�?Z DULCE"),
+    ("326", u"MA\u00CDZ DULCE"),
     ("327", u"REMOLACHA DE MESA"),
-    ("328", u"PASTO DEL SUD�?N"),
+    ("328", u"PASTO DEL SUD\u00C1N"),
     ("329", u"AMARANTO"),
     ("330", u"ELEMENTO DEL PAISAJE"),
     ("332", u"MOSTAZA"),
@@ -824,20 +840,20 @@ def add_TipoProducto(ft, name):
     ("341", u"SILPHIUM"),
     ("342", u"OTRAS MEZCLAS CON PREDOMINANCIA CFN "),
     ("350", u"RASTROJERAS"),
-    ("700", u"HECT�?REAS DE AGROSILVICULTURA QUE RECIBAN O HAYAN RECIBIDO AYUDAS DEL REGLAMENTO No 1698/2005 Y/O DEL REGLAMENTO No 1305/2013"),
+    ("700", u"HECT\u00C1REAS DE AGROSILVICULTURA QUE RECIBAN O HAYAN RECIBIDO AYUDAS DEL REGLAMENTO No 1698/2005 Y/O DEL REGLAMENTO No 1305/2013"),
     ("750", u"SUPERFICIES VINCULADAS A LA DIRECTIVA 92/43/CEE "),
     ("900", u"SINAPIS ALBA"),
     ("901", u"BRASSICA CARINATA"),
     ("902", u"BRASSICA JUNCEA"),
-    ("903", u"OTRAS CRUC�?FERAS"),
+    ("903", u"OTRAS CRUC\u00CDFERAS"),
     ("904", u"CROTALARIA JUNCEA"),
     ("78", u"RAYGRAS ANUAL (Lolium multiflorum LAM. And hybrids) "),
     ("139", u"HIERBA CINTA (Phalaris arundinacea L.)"),
-    ("140", u"ABACA ALIAS MANILA (Musa textilis Née) "),
+    ("140", u"ABACA ALIAS MANILA (Musa textilis N\u00E9e) "),
     ("141", u"KENAF (Hibiscus cannabinus L.)"),
-    ("084", u"LÚPULO"),
+    ("084", u"L\u00DAPULO"),
     ("101", u"OLIVAR"),
-    ("102", u"VIÑEDO VINIFICACION"),
+    ("102", u"VI\u00D1EDO VINIFICACION"),
     ("103", u"UVA DE MESA"),
     ("104", u"ALMENDROS"),
     ("105", u"MELOCOTONEROS"),
@@ -849,41 +865,41 @@ def add_TipoProducto(ft, name):
     ("111", u"CIRUELOS"),
     ("112", u"NOGALES"),
     ("113", u"OTROS FRUTALES"),
-    ("117", u"CASTAÑOS"),
-    ("118", u"ESPECIES AROMATICAS LEÑOSAS"),
+    ("117", u"CASTA\u00D1OS"),
+    ("118", u"ESPECIES AROMATICAS LE\u00D1OSAS"),
     ("119", u"VIVEROS"),
-    ("120", u"VIÑA – OLIVAR"),
+    ("120", u"VI\u00D1A – OLIVAR"),
     ("122", u"ALGARROBO"),
     ("123", u"AVELLANO"),
     ("124", u"PISTACHO"),
-    ("125", u"FRUTOS DE C�?SCARA"),
+    ("125", u"FRUTOS DE CASCARA"),
     ("201", u"PLATERINA"),
     ("202", u"PARAGUAYO"),
-    ("203", u"ENDRINO O ARAÑÓN"),
+    ("203", u"ENDRINO O ARA\u00D1\u00D3N"),
     ("204", u"CLEMENTINAS"),
     ("205", u"SATSUMAS"),
     ("206", u"NARANJO"),
     ("207", u"LIMONERO"),
     ("208", u"POMELO"),
     ("209", u"MANDARINO"),
-    ("210", u"MANDARINO H�?BRIDO"),
+    ("210", u"MANDARINO H\u00CDBRIDO"),
     ("211", u"MEMBRILLO"),
     ("212", u"KIWI"),
     ("213", u"CAQUI o PALOSANTO"),
     ("214", u"NISPERO"),
     ("215", u"GROSELLA"),
-    ("216", u"AR�?NDANO"),
+    ("216", u"AR\u00C1NDANO"),
     ("217", u"GRANADO"),
     ("218", u"HIGUERA"),
     ("221", u"UVA PASA"),
     ("226", u"OPUNTIA"),
     ("235", u"JATROPHA"),
-    ("237", u"SUPERFICIES FORESTALES DE ROTACIÓN CORTA"),
+    ("237", u"SUPERFICIES FORESTALES DE ROTACI\u00D3N CORTA"),
     ("278", u"FRUTOS DEL BOSQUE"),
-    ("279", u"ESP�?RRAGOS"),
+    ("279", u"ESP\u00C1RRAGOS"),
     ("280", u"TRUFA"),
     ("281", u"LAVANDA"),
-    ("282", u"LAVAND�?N"),
+    ("282", u"LAVAND\u00CDN"),
     ("283", u"ALCAPARRA"),
     ("284", u"AJENJO"),
     ("285", u"ESPLIEGO"),
@@ -892,7 +908,7 @@ def add_TipoProducto(ft, name):
     ("288", u"ROMERO"),
     ("289", u"SANTOLINA"),
     ("290", u"ALOE VERA"),
-    ("291", u"CAFÉ"),
+    ("291", u"CAF\u00C9"),
     ("292", u"GROSELLA NEGRA"),
     ("330", u"ELEMENTO DEL PAISAJE"),
     ("331", u"MORINGA"),
@@ -905,19 +921,19 @@ def add_TipoProducto(ft, name):
     ("345", u"CHIRIMOYO (Ver variedades)"),
     ("346", u"PAPAYA (Ver variedades)"),
     ("347", u"MORERA (Ver variedades)"),
-    ("348", u"VIÑA- FRUTAL"),
+    ("348", u"VI\u00D1A- FRUTAL"),
     ("349", u"OLIVAR-FRUTAL"),
     ("910", u"LITCHI"),
     ("911", u"KUMQUAT"),
     ("912", u"LIMEQUAT"),
     ("913", u"MANO DE BUDA"),
-    ("914", u"CAVIAR C�?TRICO/ FINGER LIME"),
+    ("914", u"CAVIAR C\u00CDTRICO/ FINGER LIME"),
     ("915", u"LIMA"),
-    ("062", u"PASTOS PERMANENTES DE 5 O M�?S AÑOS"),
-    ("064", u"PASTIZAL DE 5 O M�?S AÑOS"),
-    ("065", u"PASTO ARBUSTIVO DE 5 O M�?S AÑOS"),
-    ("066", u"PASTO ARBOLADO DE 5 O M�?S AÑOS"),
-    ("028", u" RETIRADA FORESTACIÓN"),
+    ("062", u"PASTOS PERMANENTES DE 5 O M\u00C1S A\u00D1OS"),
+    ("064", u"PASTIZAL DE 5 O M\u00C1S A\u00D1OS"),
+    ("065", u"PASTO ARBUSTIVO DE 5 O M\u00C1S A\u00D1OS"),
+    ("066", u"PASTO ARBOLADO DE 5 O M\u00C1S A\u00D1OS"),
+    ("028", u" RETIRADA FORESTACI\u00D3N"),
     ("114", u"SUPERFICIES FORESTALES MADERABLES"),
     ("115", u"OTRAS SUPERFICIES FORESTALES"),
     ("116", u"CHOPOS"),
@@ -931,7 +947,7 @@ def add_TipoProducto(ft, name):
     ("231", u"GLEDITSIA"),
     ("232", u"JACARANDA"),
     ("233", u"PHYTOLACCA"),
-    ("234", u"CASTAÑO (FORESTAL)"),
+    ("234", u"CASTA\u00D1O (FORESTAL)"),
     ("293", u"ROBLE"),
     ("294", u"HAYA"),
     ("295", u"ALCORNOQUE"),
@@ -944,8 +960,8 @@ def add_TipoProducto(ft, name):
     ("600", u"FORESTACIONES VINCULADAS AL REGLAMENTO No 1698/2005"),
     ("800", u"FORESTACIONES VINCULADAS AL REGLAMENTO No 1305/2013"),
     ("850", u"OTRAS SUPERFICIES FORESTALES-VUELO"),
-    ("144", u"PINOS PIÑONEROS"),
-    ("145", u"RESTO DE PINOS (NO PIÑONEROS)"),
+    ("144", u"PINOS PI\u00D1ONEROS"),
+    ("145", u"RESTO DE PINOS (NO PI\u00D1ONEROS)"),
     ("146", u"ARBOLES DE NAVIDAD"),
     ("150", u"OTRAS UTILIZACIONES NO AGRARIAS NI FORESTALES")
 
@@ -979,7 +995,7 @@ def add_fields_RSUPAC2019_EXPLOTACIONES(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
 
   add_TipoCodREGA(ft, "CodREGA")
@@ -997,7 +1013,7 @@ def add_fields_RSUPAC2019_ORIGEN_ANIMALES(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
   add_TipoCodREGA(ft, "CodREGA")
 
@@ -1014,14 +1030,14 @@ def add_fields_RSUPAC2019_AYUDA_SOL_AD(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
   add_TipoLineaAD(ft, "Codigo_lineaAD")\
-    .setLabel(u"Linea de ayuda AD solicitada")\
+    .setLabel(u"L\u00EDnea de ayuda AD solicitada")\
     .setShortLabel(u"AD")\
-    .setDescription("Código línea de ayuda solicitada")
+    .setDescription("C\u00F3digo l\u00EDnea de ayuda solicitada")
   add_TipoSuperficie(ft, "SupDeclarada_LineaAD")\
-    .setDescription("Superficie para cada uno de los regímenes de ayuda. Número entero expresado en áreas.")
+    .setDescription("Superficie para cada uno de los reg\u00EDmenes de ayuda. N\u00FAmero entero expresado en \u00E1reas.")
 
 def add_fields_RSUPAC2019_AYUDA_SOL_PDR(ft):
   ft.setLabel("RSU PAC 2019 - Ayudas solicitadas PDR")
@@ -1036,12 +1052,12 @@ def add_fields_RSUPAC2019_AYUDA_SOL_PDR(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
   add_TipoLineaPDR(ft, "Codigo_lineaPDR")\
-    .setLabel(u"Linea de ayuda PDR solicitada")\
+    .setLabel(u"L\u00EDnea de ayuda PDR solicitada")\
     .setShortLabel(u"PDR")\
-    .setDescription("Código de la línea de ayuda PDR. Se consignarán las medidas según la codificación indicada en el Documento de codificación 2019 de medidas de Desarrollo Rural.")
+    .setDescription("C\u00F3digo de la l\u00EDnea de ayuda PDR. Se consignar\u00E1n las medidas seg\u00FAn la codificaci\u00F3n indicada en el Documento de codificaci\u00F3n 2019 de medidas de Desarrollo Rural.")
 
 
 def add_fields_RSUPAC2019_EXPEDIENTES(ft):
@@ -1060,7 +1076,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
   add_TipoCentroReceptor(ft, "CRExpediente")
   add_TipoNumExpdiente(ft, "NumExpediente")\
     .setIsIndexed(True)\
-    .setLabel("Num. expediente")
+    .setLabel("N\u00FAm. expediente")
   add_TipoFecha(ft, "Fregistro")\
     .setLabel("Fecha registro")\
     .setShortLabel("F. registro")
@@ -1085,10 +1101,10 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
   add_TipoProvinciaMunicipio(ft, "CodMunicipio_Solicitante")
   add_TipoCodPostal(ft, "CodPostal_Solicitante")
   add_TipoTelefono(ft, "Tfno_Solicitante")\
-    .setLabel("Telfono fijo")\
+    .setLabel("Tel\u00E9fono fijo")\
     .setShortLabel("Telf. fijo")
   add_TipoTelefono(ft, "TfnoMovil_Solicitante")\
-    .setLabel("Telefono movil")\
+    .setLabel("Tel\u00E9fono movil")\
     .setShortLabel("Telf. movil")
   add_TipoEmail(ft, "email_Solicitante")
   add_TipoEntidadJuridica(ft, "Tipo_EJ_Solicitante")
@@ -1096,18 +1112,18 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
 
   # RSU/Solicitud/Conyuge
   add_TipoNombreRazonSocial150(ft, "Nombre_Conyuge_Solicitud")\
-    .setShortLabel("Nombre (conyugue)")\
+    .setShortLabel("Nombre (c\u00F3nyuge)")\
     .getTags().set("dynform.separator","Solicitud - Conyuge")
   add_TipoApellido(ft, "Apellido1_Conyuge_Solicitud")\
     .setLabel("Apellido 1")\
-    .setShortLabel("Apellido 1 (conyugue)")
+    .setShortLabel("Apellido 1 (c\u00F3nyuge)")
   add_TipoApellido(ft, "Apellido2_Conyuge_Solicitud")\
     .setLabel("Apellido 2")\
-    .setShortLabel("Apellido 2 (conyugue)")
+    .setShortLabel("Apellido 2 (c\u00F3nyuge)")
   add_TipoIndicadorSN(ft, "Extran_Conyuge_Solicitud")\
-    .setShortLabel("Extranjero (conyugue)")
+    .setShortLabel("Extranjero (c\u00F3nyuge)")
   add_TipoCIFNIFNIE(ft, "ID_Conyuge_Solicitud")\
-    .setShortLabel("CIF (conyugue)")
+    .setShortLabel("CIF (c\u00F3nyuge)")
   add_TipoRegimenMatrimonial(ft, "RegMatrimonial_Conyuge_Solicitud")
 
   # RSU/Solicitud/Representante
@@ -1164,13 +1180,13 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     .setShortLabel("% TA (JE)")
   add_TipoAnyo(ft, "AnoInicio_JE_Solicitud")\
     .setShortLabel(u"A\u00F1o ini. (JE)")\
-    .setDescription(u"A\u00F1o comienzo trabajo en explotación")
+    .setDescription(u"A\u00F1o comienzo trabajo en explotaci\u00F3n")
   add_TipoFormAgraria(ft, "FormAgraria_JE_Solicitud")\
     .setShortLabel("F.agraria (JE)")
   add_TipoIndicadorSN(ft, "CursosPerfe_JE_Solicitud")\
     .setLabel(u"Cursos perfeccionamiento")\
     .setShortLabel(u"Curs. Perf. (JE)")\
-    .setDescription(u"Cursos de perfeccionamiento realizados durante los últimos doce meses")
+    .setDescription(u"Cursos de perfeccionamiento realizados durante los \u00FAltimos doce meses")
   
   # RSU/Solicitud/DatosBancarios
   add_TipoIBAN(ft, "IBAN_DB_Solicitud")\
@@ -1186,7 +1202,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
   add_TipoCodREGEPA(ft, "CodREGEPA_OD_Solicitud")\
     .getTags().set("dynform.separator","Solicitud - Otros")
   add_TipoIndicadorSN(ft, "VentaDirecta_OD_Solicitud")\
-    .setDescription(u"Venta Directa. marcar exclusivamente por aquellos solicitantes que realizan venta directa de su producción agraria al consumidor (RD 9/2015 de 16 de enero)")
+    .setDescription(u"Venta Directa. marcar exclusivamente por aquellos solicitantes que realizan venta directa de su producci\u00F3n agraria al consumidor (RD 9/2015 de 16 de enero)")
   
   # RSU/Solicitud/OtrosDatos/Explotaciones/CodREGA
   add_relatedFeatures(ft, 
@@ -1219,17 +1235,17 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "FEATURES('RSUPAC2019_ORIGEN_ANIMALES',FORMAT('ID_EXPEDIENTE = ''%s''',ID_EXPEDIENTE))"
   )\
   .setGroup(u"REGA Explotacion (Orig. animales)")\
-  .setDescription(u"Código REGA de la explotación origen de los animales")
+  .setDescription(u"C\u00F3digo REGA de la explotaci\u00F3n origen de los animales")
   
   add_TipoOPFH(ft, "OPFH_OD_Solicitud")
   add_TipoCCAA(ft, "CA_OPFH_OD_Solicitud")\
-    .setLabel(u"Comunidad autónoma de la OPFH")\
+    .setLabel(u"Comunidad aut\u00F3noma de la OPFH")\
     .setShortLabel(u"CCAA OPFH")
   add_TipoNombreRazonSocial150(ft, "Razon_Social_OPFH_OD_Solicitud")\
-    .setLabel(u"Razón social de la OPFH")\
+    .setLabel(u"Raz\u00F3n social de la OPFH")\
     .setShortLabel(u"R.S. OPFH")
   add_TipoNombreOI(ft, "OI_algodon_OD_Solicitud")\
-    .setLabel(u"OI en el caso de 'algodón'")\
+    .setLabel(u"OI en el caso de 'algod\u00F3n'")\
     .setShortLabel(u"OI algodon")
   add_TipoCIFNIF(ft, "CIF_OI_OD_Solicitud")\
     .setLabel(u"CIF de la OI")\
@@ -1249,14 +1265,14 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
 
   # RSU/Solicitud/ResumenSol
   add_TipoSuperficie(ft, "SupDeclarada_RS_Solicitud")\
-    .setLabel(u"Superfície total explotación declarada")\
-    .setShortLabel(u"Superfície")\
-    .setDescription(u"Superficie total de la explotación: número entero expresado en áreas")\
+    .setLabel(u"Superf\u00EDcie total explotaci\u00F3n declarada")\
+    .setShortLabel(u"Superf\u00EDcie")\
+    .setDescription(u"Superficie total de la explotaci\u00F3n: n\u00FAmero entero expresado en \u00E1reas")\
     .getTags().set("dynform.separator",u"Solicitud - Resumen de la declaracion")
   add_TipoSuperficie(ft, "PP5anos_RS_Solicitud")\
     .setLabel(u"Pastos permanentes ≥ 5 años")\
     .setShortLabel(u"Pastos perm.")\
-    .setDescription(u"Superficie declarada de Pastos permanentes de ≥ de 5 años: número entero expresado en áreas.")
+    .setDescription(u"Superficie declarada de Pastos permanentes de ≥ de 5 años: n\u00FAmero entero expresado en \u00E1reas.")
   add_TipoSuperficie(ft, "Otras_supforrajeras_RS_Solicitud")\
     .setLabel(u"Otras superficies forrajeras")\
     .setShortLabel(u"Otras superf.")\
@@ -1289,7 +1305,7 @@ def add_fields_RSUPAC2019_EXPEDIENTES(ft):
     "R10_Parcelas", 
     "RSUPAC2019_R10_PARCELAS", 
     "ID_PARCELA", 
-    ("ID_EXPEDIENTE", "PA_NumOrden", "PA_SupTotalDec", "PA_Producto"), 
+    ("NumExpediente", "PA_NumOrden", "PA_SupTotalDec", "PA_Producto"), 
     "FEATURES('RSUPAC2019_R10_PARCELAS',FORMAT('ID_EXPEDIENTE = ''%s''',ID_EXPEDIENTE))"
   )\
   .setGroup("Parcelas")
@@ -1315,17 +1331,17 @@ def add_fields_RSUPAC2019_R10_PARCELAS(ft):
     .set("foreingkey",True)\
     .set("foreingkey.table","RSUPAC2019_EXPEDIENTES")\
     .set("foreingkey.code","ID_EXPEDIENTE")\
-    .set("foreingKey.Label","FORMAT('%s %s %s',ID_EXPEDIENTE,CodPostal_Solicitante, ID_Solicitante)")\
+    .set("foreingKey.Label","FORMAT('%s %s %s',NumExpediente,CodPostal_Solicitante, ID_Solicitante)")\
     .set("foreingkey.closedlist",False)
 
   add_TipoNumeroOrden(ft, "PA_NumOrden")\
-    .setLabel(u"Numero de Orden")\
-    .setShortLabel(u"Num. Orden")\
-    .setDescription(u"Numero de orden formateado con ceros a la izquierda.")
+    .setLabel(u"N\u00FAmero de Orden")\
+    .setShortLabel(u"N\u00FAm. Orden")\
+    .setDescription(u"N\u00FAmero de orden formateado con ceros a la izquierda.")
   add_TipoSuperficie(ft, "PA_SupTotalDec")\
     .setLabel(u"Superficie total declarada")\
     .setShortLabel(u"Sup. total declarada")\
-    .setDescription(u"Superficie total declarada de la Parcela Agrícola: Número entero expresado en áreas.")
+    .setDescription(u"Superficie total declarada de la Parcela Agr\u00EDcola: N\u00FAmero entero expresado en \u00E1reas.")
   add_TipoSistemaExplotacion(ft, "PA_SistemaExplotacion")\
     .setLabel(u"Sistema de explotacion")\
     .setShortLabel(u"Sis. explotacion")\
@@ -1333,11 +1349,11 @@ def add_fields_RSUPAC2019_R10_PARCELAS(ft):
   add_TipoProducto(ft, "PA_Producto")\
     .setLabel(u"Producto")\
     .setShortLabel(u"Producto")\
-    .setDescription(u"Codigo del producto")
+    .setDescription(u"C\u00F3digo del producto")
   add_TipoVariedad(ft, "PA_Variedad")\
-    .setLabel(u"Variedad/Especie/Tipo/Subcódigo")\
+    .setLabel(u"Variedad/Especie/Tipo/Subc\u00F3digo")\
     .setShortLabel(u"Variedad")\
-    .setDescription(u"Codigo de variedad, especie, tipo o subcodigo")
+    .setDescription(u"C\u00F3digo de variedad, especie, tipo o subc\u00F3digo")
   add_TipoCicloCultivo(ft, "PA_Ciclo")\
     .setLabel(u"Ciclo de cultivo")\
     .setShortLabel(u"Ciclo cultivo")\
@@ -1396,7 +1412,7 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
   add_TipoProvinciaMunicipio(ft, "ProvMuni")\
     .setLabel(u"Provincia y municipio")\
     .setShortLabel(u"Prov. y municipo")\
-    .setDescription(u"Codigo de provincia (dos posiciones) y codigo de municipio (tres posiciones) siguiendo la codificacion catastral")
+    .setDescription(u"C\u00F3digo de provincia (dos posiciones) y c\u00F3digo de municipio (tres posiciones) siguiendo la codificacion catastral")
   add_TipoAgregadoPoligono(ft, "Agregado")\
     .setLabel(u"Agregado")\
     .setShortLabel(u"Agregado")\
@@ -1448,7 +1464,7 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
   add_TipoIndicadorSN(ft, "Extran_Arrendador")\
     .setLabel(u"Nº de identificacion corresponde a extranjero")\
     .setShortLabel(u"Nº idef. extrajero")\
-    .setDescription(u"Numero de identificacion del arrendador si es extranjero")
+    .setDescription(u"N\u00FAmero de identificacion del arrendador si es extranjero")
 
   # discrepancia con el pdf
   # - Letra CIF arrendador
@@ -1472,9 +1488,9 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
     .setShortLabel(u"Nombre pasto")\
     .setDescription(u"Nombre del pasto")
   add_TipoCodigoMUP(ft, "CodPasto")\
-    .setLabel(u"Codigo del pasto")\
-    .setShortLabel(u"Cod. pasto")\
-    .setDescription(u"Codigo del pasto")
+    .setLabel(u"C\u00F3digo del pasto")\
+    .setShortLabel(u"C\u00F3d. pasto")\
+    .setDescription(u"C\u00F3digo del pasto")
   add_TipoIndicadorSN(ft, "ZLN")\
     .setLabel(u"Zona con limitaciones naturales")\
     .setShortLabel(u"Zona lim. naturales")\
@@ -1494,19 +1510,19 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC(ft):
   add_TipoRecuentoArboles(ft, "NumAlmendros")\
     .setLabel(u"Nº Almendros")\
     .setShortLabel(u"Nº Almendros")\
-    .setDescription(u"Numero de arboles de almendros")
+    .setDescription(u"N\u00FAmero de arboles de almendros")
   add_TipoRecuentoArboles(ft, "NumAvellanos")\
     .setLabel(u"Nº Avellanos")\
     .setShortLabel(u"Nº Avellanos")\
-    .setDescription(u"Numero de arboles de avellanos")
+    .setDescription(u"N\u00FAmero de arboles de avellanos")
   add_TipoRecuentoArboles(ft, "NumAlgarrobos")\
     .setLabel(u"Nº Algarrobos")\
     .setShortLabel(u"Nº Algarrobos")\
-    .setDescription(u"Numero de arboles de algarrobos")
+    .setDescription(u"N\u00FAmero de arboles de algarrobos")
   add_TipoRecuentoArboles(ft, "NumCastanos")\
     .setLabel(u"Nº Castanyos")\
     .setShortLabel(u"Nº Castanyos")\
-    .setDescription(u"Numero de arboles de castanyos")
+    .setDescription(u"N\u00FAmero de arboles de castanyos")
   add_TipoAnyo(ft, "AnoPlantFrutales")\
     .setLabel(u"Anyo plantacion (para frutales)")\
     .setShortLabel(u"Anyo plantacion (frutales)")\
@@ -1682,14 +1698,14 @@ def add_fields_RSUPAC2019_RECINTOS_SIGPAC_PDR(ft):
 
   #campo 50
   add_TipoLineaPDR(ft, "LD_LineaSolicitadaPDR")\
-    .setLabel(u"Codigo de la Linea de ayuda solicitada")\
-    .setShortLabel(u"Cod. ayuda")\
-    .setDescription(u"Codigo de la Linea de ayuda solicitada PDR por recinto multi-registro")
+    .setLabel(u"C\u00F3digo de la Linea de ayuda solicitada")\
+    .setShortLabel(u"C\u00F3d. ayuda")\
+    .setDescription(u"C\u00F3digo de la Linea de ayuda solicitada PDR por recinto multi-registro")
   #campo 51
   add_TipoSuperficie(ft, "LD_SupSolicitadaPDR")\
-    .setLabel(u"Superficie solicitada por linea de ayuda")\
+    .setLabel(u"Superficie solicitada por l\u00EDnea de ayuda")\
     .setShortLabel(u"Sup. ayuda")\
-    .setDescription(u"Superficie solicitada por linea de ayuda PDR multi-registro")
+    .setDescription(u"Superficie solicitada por l\u00EDnea de ayuda PDR multi-registro")
 
 def add_fields_RSUPAC2019_RECINTOS_SIGPAC_AD(ft):
   ft.setLabel("RSU PAC 2019 - Ayudas recinto AD")
