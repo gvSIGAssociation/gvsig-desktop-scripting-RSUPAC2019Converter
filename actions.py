@@ -10,9 +10,9 @@ from org.gvsig.scripting.app.extension import ScriptingExtension
 from org.gvsig.tools import ToolsLocator
 from org.gvsig.tools.swing.api import ToolsSwingLocator
 
-from addons.RSUPAC2019Importer.importpanel import showImportPanel
+from addons.RSUPAC2019Converter.importpanel import showImportPanel
 
-class RSUPAC2019ImporterExtension(ScriptingExtension):
+class RSUPAC2019ConverterExtension(ScriptingExtension):
   def __init__(self):
     pass
 
@@ -27,7 +27,7 @@ class RSUPAC2019ImporterExtension(ScriptingExtension):
     
   def execute(self,actionCommand, *args):
     actionCommand = actionCommand.lower()
-    if actionCommand == "rsupac2019-importer-showimporter":
+    if actionCommand == "rsupac2019-converter-show":
       self.importData()
               
   def importData(self):
@@ -44,20 +44,20 @@ def selfRegister():
   #
   # Registramos los iconos en el tema de iconos
   iconTheme = ToolsSwingLocator.getIconThemeManager().getCurrent()
-  icon = File(getResource(__file__,"images","rsupac2019-importer-showimporter.png")).toURI().toURL()
-  iconTheme.registerDefault("scripting.RSUPAC2019ImporterExtension", "action", "rsupac2019-importer-showimporter", None, icon)
+  icon = File(getResource(__file__,"images","rsupac2019-converter-show.png")).toURI().toURL()
+  iconTheme.registerDefault("scripting.RSUPAC2019ConverterExtension", "action", "rsupac2019-converter-show", None, icon)
 
   #
   # Creamos la accion 
   actionManager = PluginsLocator.getActionInfoManager()
-  extension = RSUPAC2019ImporterExtension()
+  extension = RSUPAC2019ConverterExtension()
   
   action = actionManager.createAction(
     extension, 
-    "rsupac2019-importer-showimporter", # Action name
+    "rsupac2019-converter-show", # Action name
     "Conversor RSU-PAC 2019", # Text
-    "rsupac2019-importer-showimporter", # Action command
-    "rsupac2019-importer-showimporter", # Icon name
+    "rsupac2019-converter-show", # Action command
+    "rsupac2019-converter-show", # Icon name
     None, # Accelerator
     650700600, # Position 
     "_Show_the_RSUPAC_2019_converter_tool" # Tooltip

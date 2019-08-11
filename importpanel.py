@@ -15,20 +15,20 @@ from java.io import File
 from javax.swing import ButtonGroup
 
 
-from addons.RSUPAC2019Importer.importprocess import createImportProcess
-from addons.RSUPAC2019Importer.trace import trace, trace_format
+from addons.RSUPAC2019Converter.importprocess import createImportProcess
+from addons.RSUPAC2019Converter.trace import trace, trace_format
 
-from addons.RSUPAC2019Importer.parsers.xmlparser0 import create_parser
-#from addons.RSUPAC2019Importer.parsers.xmlparser1 import XmlParser1 as RSUParser
-#from addons.RSUPAC2019Importer.parsers.xmlparserfacade import XMLParserFacade as RSUParser
+from addons.RSUPAC2019Converter.parsers.xmlparser0 import create_parser
+#from addons.RSUPAC2019Converter.parsers.xmlparser1 import XmlParser1 as RSUParser
+#from addons.RSUPAC2019Converter.parsers.xmlparserfacade import XMLParserFacade as RSUParser
 
-from addons.RSUPAC2019Importer.writers import dbwriter
+from addons.RSUPAC2019Converter.writers import dbwriter
 reload(dbwriter)
 
-from addons.RSUPAC2019Importer.writers.dbwriter import create_writer as create_writer_db
-#from addons.RSUPAC2019Importer.writers.csvwriter import CSVWriter
-from addons.RSUPAC2019Importer.writers.shpwriter import create_writer as create_writer_shp
-from addons.RSUPAC2019Importer.writers.writerfacade import create_writer as create_writer_facade
+from addons.RSUPAC2019Converter.writers.dbwriter import create_writer as create_writer_db
+#from addons.RSUPAC2019Converter.writers.csvwriter import CSVWriter
+from addons.RSUPAC2019Converter.writers.shpwriter import create_writer as create_writer_shp
+from addons.RSUPAC2019Converter.writers.writerfacade import create_writer as create_writer_facade
 
 
 class ImportDialog(FormPanel, Observer):

@@ -11,8 +11,8 @@ from org.gvsig.tools import ToolsLocator
 
 import traceback
 
-from addons.RSUPAC2019Importer.writers.rsuwriter import RSUWriter
-from addons.RSUPAC2019Importer.trace import trace, trace_format, trace_remove
+from addons.RSUPAC2019Converter.writers.rsuwriter import RSUWriter
+from addons.RSUPAC2019Converter.trace import trace, trace_format, trace_remove
 
 def create_writer(status, target):
   return SHPWriter(status, target)
@@ -304,8 +304,8 @@ class SHPWriter(RSUWriter):
 def test():
   import os
   from java.io import File
-  #from addons.RSUPAC2019Importer.parsers.xmlparserfacade import create_parser
-  from addons.RSUPAC2019Importer.parsers.xmlparser0 import create_parser
+  #from addons.RSUPAC2019Converter.parsers.xmlparserfacade import create_parser
+  from addons.RSUPAC2019Converter.parsers.xmlparser0 import create_parser
 
   trace_remove()
   try:

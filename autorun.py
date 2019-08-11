@@ -3,7 +3,7 @@
 import gvsig
 
 
-from addons.RSUPAC2019Importer import actions 
+from addons.RSUPAC2019Converter import actions 
 
 def main(*args):
   actions.selfRegister()

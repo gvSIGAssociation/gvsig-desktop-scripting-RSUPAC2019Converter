@@ -15,8 +15,8 @@ from org.gvsig.tools import ToolsLocator
 from org.gvsig.fmap.geom import GeometryUtils
 from org.gvsig.fmap.crs import CRSFactory
 
-from addons.RSUPAC2019Importer.parsers.rsuparser import RSUParser
-from addons.RSUPAC2019Importer.trace import trace, trace_remove
+from addons.RSUPAC2019Converter.parsers.rsuparser import RSUParser
+from addons.RSUPAC2019Converter.trace import trace, trace_remove
 
 def create_parser(status):
   return XmlParser2(status)
@@ -499,11 +499,11 @@ def test():
   import os
   from java.io import File
 
-  #from addons.RSUPAC2019Importer.parsers.xmlparser0 import create_parser
-  #from addons.RSUPAC2019Importer.parsers.xmlparserfacade import create_parser
+  #from addons.RSUPAC2019Converter.parsers.xmlparser0 import create_parser
+  #from addons.RSUPAC2019Converter.parsers.xmlparserfacade import create_parser
 
-  #from addons.RSUPAC2019Importer.writers.shpwriter import create_writer
-  from addons.RSUPAC2019Importer.writers.writerfacade import create_writer
+  #from addons.RSUPAC2019Converter.writers.shpwriter import create_writer
+  from addons.RSUPAC2019Converter.writers.writerfacade import create_writer
 
   trace_remove()
   try:

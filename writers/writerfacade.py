@@ -4,8 +4,8 @@ import gvsig
 
 from org.gvsig.tools import ToolsLocator
 
-from addons.RSUPAC2019Importer.writers.rsuwriter import RSUWriter
-from addons.RSUPAC2019Importer.trace import trace, trace_format, trace_remove
+from addons.RSUPAC2019Converter.writers.rsuwriter import RSUWriter
+from addons.RSUPAC2019Converter.trace import trace, trace_format, trace_remove
 
 def create_writer(status=None):
   return WriterFacade(status)
@@ -38,11 +38,11 @@ def test():
   import os
   from java.io import File
 
-  #from addons.RSUPAC2019Importer.parsers.xmlparser0 import create_parser
-  from addons.RSUPAC2019Importer.parsers.xmlparserfacade import create_parser
+  #from addons.RSUPAC2019Converter.parsers.xmlparser0 import create_parser
+  from addons.RSUPAC2019Converter.parsers.xmlparserfacade import create_parser
 
-  #from addons.RSUPAC2019Importer.writers.shpwriter import create_writer
-  #from addons.RSUPAC2019Importer.writers.writerfacade import create_writer
+  #from addons.RSUPAC2019Converter.writers.shpwriter import create_writer
+  #from addons.RSUPAC2019Converter.writers.writerfacade import create_writer
 
   trace_remove()
   try:

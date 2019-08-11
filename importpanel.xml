@@ -24,8 +24,8 @@
     </at>
     <at name="componentclass">com.jeta.forms.gui.form.FormComponent</at>
    </super>
-   <at name="id">/home/jjdelcerro/gvSIG/plugins/org.gvsig.scripting.app.mainplugin/2.5.0/scripts/addons/RSUPAC2019Importer/importpanel.xml</at>
-   <at name="path">addons/RSUPAC2019Importer/importpanel.xml</at>
+   <at name="id">/home/jjdelcerro/gvSIG/plugins/org.gvsig.scripting.app.mainplugin/2.5.0/scripts/addons/RSUPAC2019Converter/importpanel.xml</at>
+   <at name="path">addons/RSUPAC2019Converter/importpanel.xml</at>
    <at name="rowspecs">CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE</at>
    <at name="colspecs">FILL:DEFAULT:NONE,FILL:8DLU:NONE,FILL:DEFAULT:NONE,FILL:DEFAULT:NONE,FILL:DEFAULT:GROW(1.0),FILL:DEFAULT:NONE,FILL:DEFAULT:NONE,FILL:DEFAULT:NONE</at>
    <at name="components">
@@ -47,7 +47,7 @@
          </at>
          <at name="componentclass">com.jeta.forms.gui.form.FormComponent</at>
         </super>
-        <at name="id">embedded.1491813709</at>
+        <at name="id">embedded.617968820</at>
         <at name="rowspecs">CENTER:MAX(12DLU;DEFAULT):NONE,CENTER:MAX(12DLU;DEFAULT):NONE,CENTER:MAX(12DLU;DEFAULT):NONE</at>
         <at name="colspecs">FILL:DEFAULT:GROW(1.0)</at>
         <at name="components">
@@ -97,7 +97,7 @@
                   </object>
                  </at>
                  <at name="name">lblTaskTitle</at>
-                 <at name="width">906</at>
+                 <at name="width">974</at>
                  <at name="fill">
                   <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
                    <at name="name">fill</at>
@@ -156,7 +156,7 @@
                   </object>
                  </at>
                  <at name="name">lblTaskMessage</at>
-                 <at name="width">906</at>
+                 <at name="width">974</at>
                  <at name="fill">
                   <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
                    <at name="name">fill</at>
@@ -215,7 +215,7 @@
                   </object>
                  </at>
                  <at name="name">pgbTaskProgress</at>
-                 <at name="width">906</at>
+                 <at name="width">974</at>
                  <at name="percentComplete">0.25</at>
                  <at name="value">25</at>
                  <at name="height">14</at>
@@ -331,7 +331,7 @@
          </at>
          <at name="componentclass">com.jeta.forms.gui.form.FormComponent</at>
         </super>
-        <at name="id">embedded.63014563</at>
+        <at name="id">embedded.820970068</at>
         <at name="rowspecs">CENTER:DEFAULT:NONE</at>
         <at name="colspecs">FILL:DEFAULT:GROW(1.0),FILL:DEFAULT:NONE,FILL:DEFAULT:NONE,FILL:DEFAULT:NONE,FILL:DEFAULT:NONE,FILL:DEFAULT:NONE</at>
         <at name="components">
@@ -574,8 +574,8 @@
               </at>
              </object>
             </at>
-            <at name="name"></at>
-            <at name="width">911</at>
+            <at name="width">979</at>
+            <at name="name"/>
             <at name="text">Conversor Registro de Solicitud Unica, RSU PAC 2019</at>
             <at name="fill">
              <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
@@ -635,7 +635,7 @@
              </object>
             </at>
             <at name="name">txtSource</at>
-            <at name="width">690</at>
+            <at name="width">758</at>
             <at name="height">20</at>
            </object>
           </at>
@@ -680,7 +680,6 @@
                   <object classname="com.jeta.forms.store.properties.EmptyBorderProperty">
                    <super classname="com.jeta.forms.store.properties.BorderProperty">
                     <at name="name">border</at>
-                    <at name="title"></at>
                    </super>
                    <at name="top">2</at>
                    <at name="left">2</at>
@@ -757,7 +756,7 @@
              </object>
             </at>
             <at name="name">rdbShape</at>
-            <at name="width">871</at>
+            <at name="width">939</at>
             <at name="text">Shape</at>
             <at name="height">16</at>
            </object>
@@ -812,7 +811,7 @@
              </object>
             </at>
             <at name="name">txtTargetShape</at>
-            <at name="width">690</at>
+            <at name="width">758</at>
             <at name="height">20</at>
            </object>
           </at>
@@ -857,7 +856,6 @@
                   <object classname="com.jeta.forms.store.properties.EmptyBorderProperty">
                    <super classname="com.jeta.forms.store.properties.BorderProperty">
                     <at name="name">border</at>
-                    <at name="title"></at>
                    </super>
                    <at name="top">2</at>
                    <at name="left">2</at>
@@ -934,7 +932,7 @@
              </object>
             </at>
             <at name="name">rdbDDBB</at>
-            <at name="width">871</at>
+            <at name="width">939</at>
             <at name="text">Base de datos</at>
             <at name="height">16</at>
            </object>
@@ -989,7 +987,7 @@
              </object>
             </at>
             <at name="name">cboTarget</at>
-            <at name="width">690</at>
+            <at name="width">758</at>
             <at name="items">
              <object classname="com.jeta.forms.store.properties.ItemsProperty">
               <at name="name">items</at>
@@ -1039,7 +1037,6 @@
                   <object classname="com.jeta.forms.store.properties.EmptyBorderProperty">
                    <super classname="com.jeta.forms.store.properties.BorderProperty">
                     <at name="name">border</at>
-                    <at name="title"></at>
                    </super>
                    <at name="top">2</at>
                    <at name="left">2</at>
@@ -1056,8 +1053,8 @@
             <at name="icon">
              <object classname="com.jeta.forms.store.properties.IconProperty">
               <at name="embedded">false</at>
-              <at name="path">addons/RSUPAC2019Importer/images/rsupac2019-importer-database.png</at>
-              <at name="description">rsupac2019-importer-database.png</at>
+              <at name="path">addons/RSUPAC2019Converter/images/rsupac2019-converter-database.png</at>
+              <at name="description">rsupac2019-converter-database.png</at>
               <at name="width">16</at>
               <at name="height">16</at>
              </object>
@@ -1116,8 +1113,8 @@
               </at>
              </object>
             </at>
-            <at name="name"></at>
             <at name="width">147</at>
+            <at name="name"/>
             <at name="text">Base de datos de destino</at>
             <at name="fill">
              <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
@@ -1176,8 +1173,8 @@
               </at>
              </object>
             </at>
-            <at name="name"></at>
             <at name="width">147</at>
+            <at name="name"/>
             <at name="text">Fichero de destino</at>
             <at name="fill">
              <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
@@ -1236,8 +1233,8 @@
               </at>
              </object>
             </at>
-            <at name="name"></at>
-            <at name="width">871</at>
+            <at name="width">939</at>
+            <at name="name"/>
             <at name="text">Destino</at>
             <at name="fill">
              <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
@@ -1296,8 +1293,8 @@
               </at>
              </object>
             </at>
-            <at name="name"></at>
-            <at name="width">871</at>
+            <at name="width">939</at>
+            <at name="name"/>
             <at name="text">Origen</at>
             <at name="fill">
              <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
@@ -1356,8 +1353,8 @@
               </at>
              </object>
             </at>
-            <at name="name"></at>
             <at name="width">147</at>
+            <at name="name"/>
             <at name="text">Fichero RSUPAC (XML)</at>
             <at name="fill">
              <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
@@ -1389,7 +1386,7 @@
          </at>
         </object>
        </at>
-       <at name="name"></at>
+       <at name="name"/>
        <at name="fill">
         <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
          <at name="name">fill</at>

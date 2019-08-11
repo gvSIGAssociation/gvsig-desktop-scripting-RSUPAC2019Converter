@@ -1,0 +1,22 @@
+#
+#Sun Aug 11 13:24:37 CEST 2019
+owner=Asociacion gvSIG
+code=RSUPAC2019Converter
+download-url=https\://github.com/gvSIGAssociation/gvsig-desktop-scripting-RSUPAC2019Converter/releases/download/1.0.0-0/gvSIG-desktop-2.5.0-RSUPAC2019Converter-1.0.0-0-testing-all-all-j1_7.gvspkg
+java-version=j1_7
+operating-system=all
+description=Convierte uno a varios ficheros XML procedentes de RSU PAC 2019 a shape o los carga en una BBDD de datos personal (H2).
+official=true
+type=Script
+web-url=
+version=1.0.0-0
+buildNumber=0
+owner-url=http\://www.gvsig.com
+dependencies=
+sources-url=https\://github.com/gvSIGAssociation/gvsig-desktop-scripting-RSUPAC2019Converter
+name=Tools\: Conversor RSU PAC 2019
+gvSIG-version=2.5.0
+state=testing
+categories=
+model-version=1.0.1
+architecture=all

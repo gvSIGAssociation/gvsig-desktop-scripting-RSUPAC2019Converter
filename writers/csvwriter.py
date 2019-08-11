@@ -9,7 +9,7 @@ from org.gvsig.fmap.dal.feature import FeatureStore
 
 import traceback
 
-from addons.RSUPAC2019Importer.writer.rsuwriter import RSUWriter
+from addons.RSUPAC2019Converter.writer.rsuwriter import RSUWriter
 
 def create_writer(status, target):
   return CSVWriter(status, target)
