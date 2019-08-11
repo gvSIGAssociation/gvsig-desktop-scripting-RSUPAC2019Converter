@@ -10,3 +10,4 @@ Cuando se convierten a formato shape, solo se carga en el shape parte de la info
 Si se indica como fichero de entrada un fichero xml que su nombre termina en "_001.XML", automaticamente se buscaran junto a el los ficheros "_002.XML", "_003.XML"... y se pocesaran todos ellos.
 
 
+.. figure:: images/captura-1.png
